@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <!-- Head -->
+  <head>
+    {% if page.redirect %}
+      {% if page.redirect == true %}
+        {% assign redirect = site.baseurl | append: '/' %}
+      {% elsif page.redirect contains '://' %}
+        {% assign redirect = page.redirect %}
+      {% else %}
+        {% assign redirect = page.redirect | relative_url %}
+      {% endif %}
+      <meta http-equiv="refresh" content="3; url={{ redirect }}">
+    {% endif %}
+    {% include head.liquid %}
+
+    <!-- Site-wide color & font overrides (edit values here) -->
+    <style>
+      :root {
+        --global-bg-color: #faf8f5;
+        --global-text-color: #2c2c2c;
+        --global-text-color-light: #6b6b6b;
+        --global-theme-color: #00369f;
+        --global-hover-color: #002b7f;
+        --global-hover-text-color: #ffffff;
+        --global-footer-bg-color: #2c2c2c;
+        --global-footer-text-color: #e8e8e8;
+        --global-footer-link-color: #faf8f5;
+        --global-divider-color: rgba(44, 44, 44, 0.12);
+        --global-card-bg-color: #ffffff;
+        --global-code-bg-color: rgba(0, 54, 159, 0.06);
+      }
+      body, p, li, span, div, a {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: "Roboto Slab", serif;
+        font-weight: 500;
+      }
+      strong, b {
+        font-weight: 700;
+      }
+      .navbar .nav-item.active > .nav-link {
+        font-weight: normal;
+      }
+      .toggle-container .nav-link {
+        color: var(--global-text-color) !important;
+      }
+      .toggle-container .nav-link:hover {
+        color: var(--global-hover-color) !important;
+      }
+    </style>
+    {% if page.lang == 'zh' %}
+    <style>
+      body, p, li, span, div, a {
+        font-family: "Roboto", "Ma Shan Zheng", sans-serif;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: "Roboto Slab", "Ma Shan Zheng", serif;
+      }
+    </style>
+    {% endif %}
+  </head>
+
+  <!-- Body -->
+  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
+    <!-- Header -->
+    {% include header.liquid %}
+
+    <!-- Content -->
+    <div class="container mt-5" role="main">
+      {% if page.toc and page.toc.sidebar %}
+        {% assign toc_collapse = page.toc.collapse | default: 'expanded' %}
+        {% assign toc_collapse_depth = page.toc.collapse_depth | default: '' %}
+        {% if page.toc.sidebar == 'right' %}
+          <div class="row">
+            <!-- main content area -->
+            <div class="col-sm-9">{{ content }}</div>
+            <!-- sidebar, which will move to the top on a small screen -->
+            <div class="col-sm-3">
+              <nav
+                id="toc-sidebar"
+                class="sticky-top toc toc-sidebar"
+                aria-label="Table of contents"
+                data-toc-collapse="{{ toc_collapse }}"
+                data-toc-collapse-depth="{{ toc_collapse_depth }}"
+              ></nav>
+            </div>
+          </div>
+        {% else %}
+          <div class="row">
+            <!-- sidebar, which will move to the top on a small screen -->
+            <div class="col-sm-3">
+              <nav
+                id="toc-sidebar"
+                class="sticky-top toc toc-sidebar"
+                aria-label="Table of contents"
+                data-toc-collapse="{{ toc_collapse }}"
+                data-toc-collapse-depth="{{ toc_collapse_depth }}"
+              ></nav>
+            </div>
+            <!-- main content area -->
+            <div class="col-sm-9">{{ content }}</div>
+          </div>
+        {% endif %}
+      {% else %}
+        {{ content }}
+      {% endif %}
+    </div>
+
+    <!-- Footer -->
+    {% include footer.liquid %}
+
+    <!-- JavaScripts -->
+    {% include scripts.liquid %}
+  </body>
+</html>
