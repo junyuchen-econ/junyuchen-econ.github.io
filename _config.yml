@@ -196,7 +196,7 @@ third_party_libraries:
   # Browse fonts at https://fonts.google.com
   google_fonts:
     url:
-      fonts: "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@300;400;500;700&family=Ma+Shan+Zheng&family=Material+Icons&display=swap"
+      fonts: "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@300;400;500;700&family=Material+Icons&display=swap"
   highlightjs:
     integrity:
       css:

@@ -21,10 +21,17 @@ _styles: |
 - [Weining Wang](https://sites.google.com/site/weiningwanghu/) (U Bristol) 
     - Econometrics, machine learning methods, high dimensional statistics
 
+<br>
+---
 
 #### Mathematics Genealogy
 
 My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the full advisor chain on the [Mathematics Genealogy Project](https://www.mathgenealogy.org/id.php?id=167612).
+
+<img src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy" style="max-width: 40%;">
+
+<br>
+---
 
 #### Personal
 

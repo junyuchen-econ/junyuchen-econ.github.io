@@ -18,7 +18,6 @@ _styles: |
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5047947){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
 <br>
-
 ---
 
 #### Work in Progress
@@ -28,7 +27,6 @@ _styles: |
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>
 
 <br>
-
 ---
 
 #### Published

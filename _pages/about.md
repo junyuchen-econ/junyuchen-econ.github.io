@@ -45,7 +45,7 @@ My research lies in Financial Econometrics and Machine Learning. Specifically, I
 I hold an M.Sc. and a B.Sc. in Industrial Engineering from Technische Universität Berlin, Germany. Before my PhD, I gained several industry experiences. For example, I worked as a financial engineer intern at Deloitte Risk Advisory and as a consultant intern at the leading European consulting company d-fine.
 
 You can find my CV here:
-<a href="/assets/pdf/resume.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank">Download CV (PDF)</a>
+<a href="/assets/pdf/resume.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="border: 1px solid var(--global-theme-color); color: var(--global-theme-color); border-radius: 4px; padding: 6px 16px; font-size: 0.85rem;"><i class="fa-solid fa-download"></i>&nbsp; Download CV (PDF)</a>
 
 <style>
   .profile { width: 210px !important; }

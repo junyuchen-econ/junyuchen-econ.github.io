@@ -11,7 +11,7 @@ profile:
   image_circular: true
   more_info: >
     <div style="font-size: 0.8rem; text-align: center;">
-    <p>商学与经济学院</p>
+    <p>经济与商学院</p><br>
     <p>荷兰格罗宁根大学</p>
     <p><a href="mailto:junyu.chen@rug.nl">junyu.chen at rug.nl</a></p>
     <div style="margin-top: 0.5rem;">
@@ -41,13 +41,13 @@ announcements:
 
 我的研究方向处于金融计量经济学与机器学习的交叉领域，具体关注：
   - 金融预测中的多模态学习
-  - 基于 Transformer 和 Diffision models (去噪扩散模型)的方法
+  - 基于 Transformer 和 Diffision models (去噪扩散模型) 的方法
   - 时间序列预测等
 
 我在德国柏林工业大学获得了工业工程硕士学位和学士学位。攻读博士之前，我积累了一些行业经验，曾在德勤风险咨询部门担任金融工程师实习生，并在欧洲领先的咨询公司 d-fine 担任顾问实习生。
 
 简历下载：
-<a href="/assets/pdf/resume.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank">下载简历 (PDF)</a>
+<a href="/assets/pdf/resume.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="border: 1px solid var(--global-theme-color); color: var(--global-theme-color); border-radius: 4px; padding: 6px 16px; font-size: 0.85rem;"><i class="fa-solid fa-download"></i>&nbsp; 下载简历 (PDF)</a>
 
 <style>
   .profile { width: 210px !important; }
