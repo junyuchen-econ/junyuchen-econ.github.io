@@ -11,8 +11,9 @@ profile:
   image_circular: true
   more_info: >
     <div style="font-size: 0.8rem; text-align: center;">
+    <p style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem;">陈 俊宇</p><br>
     <p>经济与商学院</p><br>
-    <p>荷兰格罗宁根大学</p>
+    <p>荷兰格罗宁根大学</p><br>
     <p><a href="mailto:junyu.chen@rug.nl">junyu.chen at rug.nl</a></p>
     <div style="margin-top: 0.5rem;">
       <a href="https://scholar.google.com/citations?user=A_4P1F8AAAAJ" title="Google Scholar" target="_blank"><i class="ai ai-google-scholar"></i></a>
@@ -50,8 +51,6 @@ announcements:
 <a href="/assets/pdf/resume.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="border: 1px solid var(--global-theme-color); color: var(--global-theme-color); border-radius: 4px; padding: 6px 16px; font-size: 0.85rem;"><i class="fa-solid fa-download"></i>&nbsp; 下载简历 (PDF)</a>
 
 <style>
-  .profile { width: 210px !important; }
-  .more-info { text-align: center; }
   .more-info a i { font-size: 1.3rem; }
   .post article .clearfix { text-align: justify; }
 </style>

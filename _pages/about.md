@@ -11,8 +11,9 @@ profile:
   image_circular: true
   more_info: >
     <div style="font-size: 0.8rem; text-align: center;">
-    <p>Faculty of Business and Economics</p>
-    <p>University of Groningen</p>
+    <p style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem;">Junyu Chen</p><br>
+    <p>Faculty of Business and Economics</p><br>
+    <p>University of Groningen</p><br>
     <p>The Netherlands</p><br>
     <p><a href="mailto:junyu.chen@rug.nl">junyu.chen at rug.nl</a></p>
     <div style="margin-top: 0.5rem;">
@@ -48,8 +49,6 @@ You can find my CV here:
 <a href="/assets/pdf/resume.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="border: 1px solid var(--global-theme-color); color: var(--global-theme-color); border-radius: 4px; padding: 6px 16px; font-size: 0.85rem;"><i class="fa-solid fa-download"></i>&nbsp; Download CV (PDF)</a>
 
 <style>
-  .profile { width: 210px !important; }
-  .more-info { text-align: center; }
   .more-info a i { font-size: 1.3rem; }
   .post article .clearfix { text-align: justify; }
 </style>

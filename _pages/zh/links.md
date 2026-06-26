@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 其他链接
+title: 链接
 permalink: /zh/links/
 nav: false
 lang: zh
