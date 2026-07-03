@@ -1,6 +1,6 @@
 ---
 layout: about
-title: 关于
+title: 陈俊宇 经济学
 permalink: /zh/
 lang: zh
 lang_url: /
