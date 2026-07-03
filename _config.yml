@@ -8,7 +8,7 @@
 # 1. IDENTITY
 # ─────────────────────────────────────────────────────────────────────────────
 
-title:            # leave blank → site uses "First Last" as the title
+title: "Junyu Chen | Economist"
 first_name: Junyu
 last_name: Chen
 email: junyu.chen at rug.nl
@@ -55,7 +55,7 @@ lazy_loading_images: true
 search_enabled: false
 
 serve_og_meta: true
-serve_schema_org: false
+serve_schema_org: true
 og_image:
 
 permalink: /blog/:year/:title/
