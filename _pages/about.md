@@ -1,6 +1,7 @@
 ---
 layout: about
 title: Junyu Chen Econ
+nav_title: About
 permalink: /
 lang: en
 lang_url: /zh/
