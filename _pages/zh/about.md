@@ -11,7 +11,7 @@ profile:
   image_circular: true
   more_info: >
     <div style="font-size: 0.8rem; text-align: center;">
-    <p style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem;">陈 俊宇</p><br>
+    <p style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem;">陈 俊 宇</p><br>
     <p>经济与商学院</p><br>
     <p>荷兰格罗宁根大学</p><br>
     <p><a href="mailto:junyu.chen@rug.nl">junyu.chen at rug.nl</a></p>

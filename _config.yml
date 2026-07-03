@@ -24,7 +24,7 @@ footer_text: >
 
 icon: JC
 
-keywords: economics, financial econometrics, machine learning, research
+keywords: economics, financial econometrics, machine learning, research, Groningen, Netherlands
 
 lang: en
 
@@ -49,7 +49,7 @@ enable_video_embedding: false
 enable_cookie_consent: false
 
 back_to_top: true
-last_updated: false
+last_updated: true
 lazy_loading_images: true
 
 search_enabled: false

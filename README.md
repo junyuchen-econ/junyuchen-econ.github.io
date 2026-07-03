@@ -1,95 +1,33 @@
-# junyuchen-econ.github.io
+# Junyu Chen — Personal Academic Website
 
-Personal academic website built with [al-folio](https://github.com/alshedivat/al-folio) v1.0.
-
-Live at: **https://junyuchen-econ.github.io**
+**[https://junyuchen-econ.github.io](https://junyuchen-econ.github.io)**
 
 ---
 
-## Quick-start: what to edit
+## About
 
-| What you want to change | File to edit |
-|---|---|
-| Name, email, institution, links | `_config.yml` — Section 1 (IDENTITY) |
-| Social media / academic profile IDs | `_config.yml` — Section 2 (SOCIAL & ACADEMIC IDs) |
-| Homepage bio and profile photo | `_pages/about.md` + `assets/img/prof_pic.jpg` |
-| Papers and working papers | `_bibliography/papers.bib` |
-| CV PDF download | drop `cv.pdf` in `assets/pdf/` |
-| Projects | add/edit `.md` files in `_projects/` |
-| News / announcements | add `.md` files to `_news/` |
-| Links (advisors, genealogy) | `_pages/links.md` |
+I am **Junyu Chen (陈俊宇)**, a PhD candidate in Economics at the Department of Economics, Econometrics and Finance (EEF), University of Groningen (RUG), the Netherlands.
 
----
+My research lies at the intersection of **Financial Econometrics** and **Machine Learning**. Specifically, I focus on:
 
-## GitHub setup (do this before pushing)
+- Multimodal Learning in financial prediction
+- Transformer-based models and Diffusion-based models
+- Time series prediction
 
-1. **Push this code** to `main`:
-   ```sh
-   git add .
-   git commit -m "Initial site setup"
-   git push
-   ```
+I hold an M.Sc. and a B.Sc. in Industrial Engineering from Technische Universität Berlin, Germany. Before my PhD, I gained industry experience as a financial engineer intern at Deloitte Risk Advisory and as a consultant intern at d-fine, a leading European consulting company.
 
-2. **Wait for the deploy workflow** (~4 minutes)
-   - Repo → **Actions** tab → watch the "Deploy site" workflow finish
-
-3. **Configure GitHub Pages**
-   - Repo → **Settings** → **Pages** → **Build and deployment**
-   - Set **Source** to **Deploy from a branch**
-   - Set **Branch** to `gh-pages` (NOT `main`)
-   - Click **Save**
-
-4. Your site will be live at `https://junyuchen-econ.github.io` within ~1 minute.
+📧 junyu.chen at rug.nl  
+🔗 [Google Scholar](https://scholar.google.com/citations?user=A_4P1F8AAAAJ) · [ORCID](https://orcid.org/0009-0002-8056-6129) · [LinkedIn](https://www.linkedin.com/in/junyu-chen-academic/)
 
 ---
 
-## Navbar pages
+## Site
 
-| Page | URL | Visible |
-|---|---|---|
-| About (homepage) | `/` | always |
-| Research | `/research/` | yes |
-| Projects | `/projects/` | yes |
-| Links | `/links/` | yes |
-| News | `/news/` | yes |
-
----
-
-## Adding papers
-
-Open `_bibliography/papers.bib` and add a BibTeX entry per paper:
-
-```bibtex
-@article{chen2024mytitle,
-  title    = {Your Paper Title},
-  author   = {Chen, Junyu},
-  journal  = {Working Paper},
-  year     = {2024},
-  abstract = {Abstract text here.},
-  pdf      = {/assets/pdf/chen2024mytitle.pdf},
-  selected = {true},
-  abbr     = {WP},
-}
-```
-
-PDFs placed in `assets/pdf/` are served automatically.
-
----
-
-## Developing locally (optional)
-
-Requires Ruby and Bundler.
+Built with [al-folio](https://github.com/alshedivat/al-folio) v1.0. To develop locally:
 
 ```sh
 bundle install
 bundle exec jekyll serve
 ```
 
-Open http://localhost:4000 in your browser. Changes are reflected in real time.
-
----
-
-## Theme
-
-Built on [al-folio](https://github.com/alshedivat/al-folio) v1.0.
-For full documentation see the [al-folio docs](https://github.com/alshedivat/al-folio/blob/main/docs/README.md).
+Open http://localhost:4000 in your browser.
