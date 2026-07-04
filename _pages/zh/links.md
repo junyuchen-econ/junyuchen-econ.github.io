@@ -36,3 +36,5 @@ _styles: |
 #### 个人
 
 我和妻子张心怡（电气工程博士）拥有两只小猫。
+
+<img src="/assets/img/cats.jpg" alt="我们的两只猫" style="max-width: 40%; margin-top: 0.8rem;">
