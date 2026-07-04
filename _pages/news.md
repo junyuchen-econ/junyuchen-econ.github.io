@@ -37,6 +37,6 @@ _styles: |
 
 #### 2024
 
-- **September 01**: Started my PhD in Economics at the U Groningen. On the very first day, I attended the workshop on [Causal Inference and Machine Learning](www.groningenmetricsmeet.com).
+- **September 01**: Started my PhD in Economics at the U Groningen. On the very first day, I attended the workshop on [Causal Inference and Machine Learning](https://www.groningenmetricsmeet.com).
 
 - **Feburary**: I graduated my Master at TU Berlin under the supervision of [Prof. Dr. Axel Werwatz](https://www.tu.berlin/statistik/ueber-uns/leitung/prof-axel-werwatz-phd).

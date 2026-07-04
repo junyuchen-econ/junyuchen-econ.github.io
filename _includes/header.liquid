@@ -116,12 +116,16 @@
 
           <!-- Language toggle -->
           {% if page.lang_url %}
-            <li class="toggle-container">
-              {% if page.lang == 'zh' %}
-                <a class="nav-link" href="{{ page.lang_url | relative_url }}" title="Switch to English">EN</a>
-              {% else %}
-                <a class="nav-link" href="{{ page.lang_url | relative_url }}" title="切换到中文">中文</a>
-              {% endif %}
+            <li class="toggle-container" style="display:flex;align-items:center;margin-left:1rem;">
+              <a href="{{ page.lang_url | relative_url }}"
+                 title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
+                 style="display:inline-flex;align-items:center;padding:3px 10px;border:1px solid currentColor;border-radius:4px;font-size:0.82rem;letter-spacing:0.02em;text-decoration:none;line-height:1.4;opacity:0.85;white-space:nowrap;">
+                {% if page.lang == 'zh' %}
+                  <span style="font-weight:600;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="opacity:0.45;font-weight:400;">EN</span>
+                {% else %}
+                  <span style="opacity:0.45;font-weight:400;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="font-weight:600;">EN</span>
+                {% endif %}
+              </a>
             </li>
           {% endif %}
 
