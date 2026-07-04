@@ -15,7 +15,7 @@ _styles: |
 **Transformer-based CoVaR: Systemic Risk in Textual Information**  
 <small>Junyu Chen, Tom Boot, Lingwei Kong, Weining Wang</small>    
 <small>*R&R, Journal of Financial Econometrics*</small>  
-<small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5047947){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
+<small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
 **Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>Junyu Chen, Feng Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U) </small>  

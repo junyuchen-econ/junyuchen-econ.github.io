@@ -15,7 +15,7 @@ _styles: |
 <small>(基于Transformer的CoVaR模型：文本信息在系统性风险度量中的应用)</small>  
 <small>Junyu Chen，Tom Boot，Lingwei Kong，Weining Wang</small>  
 <small>*外审 (R&R)，《金融计量经济学杂志》（Journal of Financial Econometrics）*</small>  
-<small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5047947){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
+<small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
 **Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>(基于条件扩散模型的限价订单薄预测)</small>  
