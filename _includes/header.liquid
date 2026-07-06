@@ -5,6 +5,18 @@
       <a class="navbar-brand title" style="font-size: inherit; font-weight: normal;" href="{% if page.lang == 'zh' %}{{ '/zh/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">
         {% if page.lang == 'zh' %}陈俊宇{% else %}Junyu Chen{% endif %}
       </a>
+      <!-- Language toggle -->
+      {% if page.lang_url %}
+        <a href="{{ page.lang_url | relative_url }}"
+           title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
+           style="display:inline-flex;align-items:center;padding:3px 10px;border:1px solid currentColor;border-radius:4px;font-size:0.82rem;letter-spacing:0.02em;text-decoration:none;line-height:1.4;opacity:0.85;white-space:nowrap;margin-left:0.75rem;">
+          {% if page.lang == 'zh' %}
+            <span style="font-weight:600;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="opacity:0.45;font-weight:400;">EN</span>
+          {% else %}
+            <span style="opacity:0.45;font-weight:400;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="font-weight:600;">EN</span>
+          {% endif %}
+        </a>
+      {% endif %}
       <!-- Navbar Toggle -->
       <button
         class="navbar-toggler collapsed navbar-toggler-main"
@@ -112,21 +124,6 @@
                 {% endif %}
               {% endif %}
             {% endfor %}
-          {% endif %}
-
-          <!-- Language toggle -->
-          {% if page.lang_url %}
-            <li class="toggle-container" style="display:flex;align-items:center;margin-left:1rem;">
-              <a href="{{ page.lang_url | relative_url }}"
-                 title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
-                 style="display:inline-flex;align-items:center;padding:3px 10px;border:1px solid currentColor;border-radius:4px;font-size:0.82rem;letter-spacing:0.02em;text-decoration:none;line-height:1.4;opacity:0.85;white-space:nowrap;">
-                {% if page.lang == 'zh' %}
-                  <span style="font-weight:600;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="opacity:0.45;font-weight:400;">EN</span>
-                {% else %}
-                  <span style="opacity:0.45;font-weight:400;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="font-weight:600;">EN</span>
-                {% endif %}
-              </a>
-            </li>
           {% endif %}
 
         </ul>

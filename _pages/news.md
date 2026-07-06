@@ -19,7 +19,7 @@ _styles: |
 
 #### 2026
 
-- **June 16-19**: Presented *Transformer-based CoVaR* at [the 18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session).
+- **June 16-19**: Presented *Transformer-based CoVaR* at [the 18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session). Prof. Robert F. Engle, a Nobel laureate, attended my talk : )
 
 - **May 23**: Our Work *Limit Order Book Forecasting with Conditional Diffusion Models* is accepted by [ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling](https://spigmworkshop2026.github.io/).
 

@@ -18,7 +18,7 @@ _styles: |
 
 #### 2026
 
-- **六月 16-19日**：在澳门举行的[第18届金融计量经济学学会（SoFiE）年会](https://fba.um.edu.mo/sofie2026/)上报告了 *Transformer-based CoVaR*（主会场）。
+- **六月 16-19日**：在澳门举行的[第18届金融计量经济学学会（SoFiE）年会](https://fba.um.edu.mo/sofie2026/)上报告了 *Transformer-based CoVaR*（主会场）。诺贝尔经济学奖得主 Robert F. Engle 教授旁听了我的报告 : ）
 
 - **五月 23日**：论文 *Limit Order Book Forecasting with Conditional Diffusion Models* 被 [ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling](https://spigmworkshop2026.github.io/) 接收。
 
