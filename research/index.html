@@ -18,45 +18,264 @@
   :root {
     --max-content-width: 930px;
   }
-</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;family=Roboto+Slab:wght@300;400;500;700&amp;family=Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;JC&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=9278fad11fbb7f97e25b00cf0f4948af"> <link rel="canonical" href="https://junyuchen-econ.github.io/research/"> <style>
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&amp;family=Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;JC&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=9278fad11fbb7f97e25b00cf0f4948af"> <link rel="canonical" href="https://junyuchen-econ.github.io/research/"> <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap"> <style>
       :root {
-        --global-bg-color: #faf8f5;
-        --global-text-color: #2c2c2c;
-        --global-text-color-light: #6b6b6b;
-        --global-theme-color: #00369f;
-        --global-hover-color: #002b7f;
+        --global-bg-color: #f5f6f4;
+        --global-text-color: #1e241f;
+        --global-text-color-light: #5a635c;
+        --global-theme-color: #2d6a4f;
+        --global-hover-color: #1b4332;
         --global-hover-text-color: #ffffff;
-        --global-footer-bg-color: #2c2c2c;
-        --global-footer-text-color: #e8e8e8;
-        --global-footer-link-color: #faf8f5;
-        --global-divider-color: rgba(44, 44, 44, 0.12);
+        --global-footer-bg-color: #1e241f;
+        --global-footer-text-color: #d4d9d4;
+        --global-footer-link-color: #e8ebe8;
+        --global-divider-color: rgba(30, 36, 31, 0.12);
         --global-card-bg-color: #ffffff;
-        --global-code-bg-color: rgba(0, 54, 159, 0.06);
+        --global-code-bg-color: rgba(45, 106, 79, 0.07);
+        --font-sans: "Source Sans 3", "LXGW WenKai Screen", sans-serif;
+        --font-serif: "Source Serif 4", "LXGW WenKai Screen", serif;
+        --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       }
-      body, p, li, span, div, a {
-        font-family: "Roboto", sans-serif;
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-sans);
         font-weight: 400;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        letter-spacing: 0.01em;
+        color: var(--global-text-color);
+        background-color: var(--global-bg-color);
+        background-image:
+          radial-gradient(ellipse 90% 55% at 8% -10%, rgba(45, 106, 79, 0.09), transparent 55%),
+          radial-gradient(ellipse 70% 45% at 92% 8%, rgba(27, 67, 50, 0.06), transparent 50%),
+          linear-gradient(180deg, #f7f8f6 0%, var(--global-bg-color) 28%, #f3f5f2 100%);
+        background-attachment: fixed;
       }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: "Roboto Slab", serif;
+
+      p, li, span, div, a {
+        font-family: var(--font-sans);
+      }
+
+      h1, h2, h3, h4, h5, h6,
+      .navbar-brand.title {
+        font-family: var(--font-serif);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--global-text-color);
+      }
+
+      h1 { font-size: 1.85rem; }
+      h2 { font-size: 1.45rem; margin-top: 2rem; }
+      h3, h4 { font-size: 1.2rem; }
+
+      strong, b {
+        font-weight: 600;
+      }
+
+      a {
+        color: var(--global-theme-color);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+        transition: color 0.2s var(--ease-out), text-decoration-color 0.2s var(--ease-out);
+      }
+
+      a:hover {
+        color: var(--global-hover-color);
+      }
+
+      /* Navbar */
+      #navbar.navbar {
+        background: rgba(245, 246, 244, 0.82) !important;
+        backdrop-filter: blur(12px) saturate(1.2);
+        -webkit-backdrop-filter: blur(12px) saturate(1.2);
+        border-bottom: 1px solid var(--global-divider-color);
+        box-shadow: none !important;
+        padding-top: 0.55rem;
+        padding-bottom: 0.55rem;
+        transition: background 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+      }
+
+      .navbar-brand.title {
+        font-size: 1.15rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.015em;
+        color: var(--global-text-color) !important;
+        transition: color 0.2s var(--ease-out);
+      }
+
+      .navbar-brand.title:hover {
+        color: var(--global-theme-color) !important;
+      }
+
+      .navbar .nav-link {
+        font-family: var(--font-sans);
+        font-size: 0.92rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: var(--global-text-color-light) !important;
+        padding: 0.35rem 0.55rem !important;
+        position: relative;
+        transition: color 0.2s var(--ease-out);
+      }
+
+      .navbar .nav-link:hover,
+      .navbar .nav-item.active > .nav-link {
+        color: var(--global-theme-color) !important;
         font-weight: 500;
       }
-      strong, b {
-        font-weight: 700;
+
+      .navbar .nav-item.active > .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0.55rem;
+        right: 0.55rem;
+        bottom: 0.1rem;
+        height: 1.5px;
+        background: var(--global-theme-color);
+        border-radius: 1px;
+        transform-origin: center;
+        animation: nav-underline 0.35s var(--ease-out);
       }
-      .navbar .nav-item.active > .nav-link {
-        font-weight: normal;
+
+      @keyframes nav-underline {
+        from { transform: scaleX(0); opacity: 0; }
+        to { transform: scaleX(1); opacity: 1; }
       }
+
+      .lang-toggle {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 0.85rem;
+        padding: 0.22rem 0.65rem;
+        border: 1px solid rgba(45, 106, 79, 0.35);
+        border-radius: 999px;
+        font-family: var(--font-sans);
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        color: var(--global-text-color-light);
+        text-decoration: none !important;
+        line-height: 1.4;
+        white-space: nowrap;
+        transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+      }
+
+      .lang-toggle:hover {
+        color: var(--global-theme-color);
+        border-color: var(--global-theme-color);
+        background: rgba(45, 106, 79, 0.06);
+      }
+
+      .lang-toggle .on { font-weight: 600; color: var(--global-theme-color); }
+      .lang-toggle .sep { margin: 0 0.2rem; opacity: 0.4; }
+      .lang-toggle .off { opacity: 0.55; font-weight: 400; }
+
+      /* Main content */
+      .container[role="main"] {
+        animation: rise-in 0.55s var(--ease-out);
+      }
+
+      @keyframes rise-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .container[role="main"],
+        .navbar .nav-item.active > .nav-link::after {
+          animation: none;
+        }
+      }
+
+      /* Content figures (cats, genealogy, etc.) */
+      .site-figure {
+        display: block;
+        max-width: min(420px, 100%);
+        width: 100%;
+        height: auto;
+        margin: 1rem 0 0.35rem;
+        border-radius: 14px;
+        border: 1px solid rgba(45, 106, 79, 0.14);
+        box-shadow:
+          0 1px 2px rgba(30, 36, 31, 0.04),
+          0 10px 26px rgba(30, 36, 31, 0.09);
+        background: var(--global-card-bg-color);
+        object-fit: cover;
+      }
+
+      .site-figure--portrait {
+        max-width: min(280px, 70%);
+      }
+
+      .site-figure--wide {
+        max-width: min(480px, 100%);
+      }
+      .cv-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.35rem;
+        padding: 0.45rem 1.05rem;
+        border: 1.5px solid var(--global-theme-color);
+        border-radius: 2px;
+        background: transparent;
+        color: var(--global-theme-color) !important;
+        font-family: var(--font-sans);
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-decoration: none !important;
+        transition: background 0.22s var(--ease-out), color 0.22s var(--ease-out), transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out);
+      }
+
+      .cv-btn:hover {
+        background: var(--global-theme-color);
+        color: #fff !important;
+        box-shadow: 0 6px 18px rgba(45, 106, 79, 0.22);
+        transform: translateY(-1px);
+      }
+
+      /* Research / news reading polish */
+      .post article,
+      .post .clearfix {
+        max-width: 42rem;
+      }
+
+      .post hr {
+        border: 0;
+        border-top: 1px solid var(--global-divider-color);
+        margin: 1.75rem 0;
+        opacity: 1;
+      }
+
+      /* Footer */
+      footer.fixed-bottom,
+      footer.sticky-bottom {
+        background: var(--global-footer-bg-color) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+      }
+
+      /* Progress bar */
+      #progress {
+        accent-color: var(--global-theme-color);
+      }
+
       .toggle-container .nav-link {
         color: var(--global-text-color) !important;
       }
+
       .toggle-container .nav-link:hover {
         color: var(--global-hover-color) !important;
       }
-    </style> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title" style="font-size: inherit; font-weight: normal;" href="/"> Junyu Chen </a> <a href="/zh/research/" title="切换到中文" style="display:inline-flex;align-items:center;padding:3px 10px;border:1px solid currentColor;border-radius:4px;font-size:0.82rem;letter-spacing:0.02em;text-decoration:none;line-height:1.4;opacity:0.85;white-space:nowrap;margin-left:0.75rem;"> <span style="opacity:0.45;font-weight:400;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="font-weight:600;">EN</span> </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">About </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">News </a> </li> <li class="nav-item active"> <a class="nav-link" href="/research/">Research <span class="sr-only">(current)</span> </a> </li> <li class="nav-item "> <a class="nav-link" href="/links/">Links </a> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <style type="text/css">
+    </style> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title" style="font-size: inherit; font-weight: normal;" href="/"> Junyu Chen </a> <a class="lang-toggle" href="/zh/research/" title="切换到中文"> <span class="off">中文</span><span class="sep">/</span><span class="on">EN</span> </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">About </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">News </a> </li> <li class="nav-item active"> <a class="nav-link" href="/research/">Research <span class="sr-only">(current)</span> </a> </li> <li class="nav-item "> <a class="nav-link" href="/links/">Links </a> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <style type="text/css">
     .post-header { display: none; }
 
-  </style> <div class="post"> <header class="post-header"> <h1 class="post-title">Research</h1> <p class="post-description"></p> </header> <article> <h4 id="working-papers">Working Papers</h4> <p><strong>Transformer-based CoVaR: Systemic Risk in Textual Information</strong><br> <small>Junyu Chen, Tom Boot, Lingwei Kong, Weining Wang</small> <br> <small><em>R&amp;R, Journal of Financial Econometrics</em></small><br> <small><a href="https://arxiv.org/abs/2602.12490" target="_blank" rel="external nofollow noopener">arXiv</a>  ·  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278" target="_blank" rel="external nofollow noopener">SSRN</a>  ·  <a href="https://doi.org/10.48550/arXiv.2602.12490" target="_blank" rel="external nofollow noopener">DOI</a></small></p> <p><strong>Limit Order Book Forecasting with Conditional Diffusion Models</strong><br> <small>Junyu Chen, Feng Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U) </small><br> <small><em>Accepted, ICML 2026 Workshop on Structured Probabilistic Inference &amp; Generative Modeling</em></small></p> <h2><br></h2> <h4 id="work-in-progress">Work in Progress</h4> <p><strong>Extension on Transformer-based CoVaR</strong></p> <p><strong>Study on Diffusion models more deeply</strong></p> <h2 id="-1"><br></h2> <h4 id="published">Published</h4> <p><em>(None yet)</em></p> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Junyu Chen. Last updated: July 08, 2026. </div> </footer> <script>
+  </style> <div class="post"> <header class="post-header"> <h1 class="post-title">Research</h1> <p class="post-description"></p> </header> <article> <h4 id="working-papers">Working Papers</h4> <p><strong>Transformer-based CoVaR: Systemic Risk in Textual Information</strong><br> <small>Junyu Chen, Tom Boot, Lingwei Kong, Weining Wang</small> <br> <small><em>R&amp;R, Journal of Financial Econometrics</em></small><br> <small><a href="https://arxiv.org/abs/2602.12490" target="_blank" rel="external nofollow noopener">arXiv</a>  ·  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278" target="_blank" rel="external nofollow noopener">SSRN</a>  ·  <a href="https://doi.org/10.48550/arXiv.2602.12490" target="_blank" rel="external nofollow noopener">DOI</a></small></p> <p><strong>Limit Order Book Forecasting with Conditional Diffusion Models</strong><br> <small>Junyu Chen, Feng Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U) </small><br> <small><em>Accepted, ICML 2026 Workshop on Structured Probabilistic Inference &amp; Generative Modeling</em></small></p> <h2><br></h2> <h4 id="work-in-progress">Work in Progress</h4> <p><strong>Extension on Transformer-based CoVaR</strong></p> <p><strong>Study on Diffusion models more deeply</strong></p> <h2 id="-1"><br></h2> <h4 id="published">Published</h4> <p><em>(None yet)</em></p> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Junyu Chen. Last updated: July 14, 2026. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
