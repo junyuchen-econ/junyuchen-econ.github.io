@@ -1,24 +1,21 @@
 ---
 layout: default
 ---
-<div class="post">
+<div class="post about-page">
   <article>
     {% if page.profile %}
       <div class="profile profile-top">
         {% if page.profile.image %}
           {% assign profile_image_path = page.profile.image | prepend: 'assets/img/' %}
-          {% if page.profile.image_circular %}
-            {% assign profile_image_class = 'img-fluid z-depth-1 rounded-circle' %}
-          {% else %}
-            {% assign profile_image_class = 'img-fluid z-depth-1
-      rounded' %}
-          {% endif %}
+          {% assign profile_image_class = 'img-fluid profile-img' %}
           {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.3}}px, (min-width: 576px)
       30vw, 95vw"{% endcapture %}
-          {%
-            include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image
-            cache_bust=true
-          %}
+          <div class="profile-photo">
+            {%
+              include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image
+              cache_bust=true
+            %}
+          </div>
         {% endif %}
         {% if page.profile.more_info %}
           <div class="more-info">{{ page.profile.more_info }}</div>
@@ -26,7 +23,7 @@ layout: default
       </div>
     {% endif %}
 
-    <div class="clearfix">{{ content }}</div>
+    <div class="clearfix about-body">{{ content }}</div>
 
     <!-- News -->
     {% if page.announcements and page.announcements.enabled %}
@@ -72,35 +69,126 @@ layout: default
 </div>
 
 <style>
-  /* Place the profile photo at the top with the info block to its right */
+  .about-page article {
+    max-width: none;
+  }
+
   .profile.profile-top {
     float: none;
     width: auto !important;
     max-width: 100%;
-    margin: 0 auto 1.5rem auto;
+    margin: 0.25rem auto 2.25rem auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.75rem;
+    gap: 2rem;
     flex-wrap: wrap;
+    text-align: center;
   }
-  .profile.profile-top figure {
+
+  .profile-photo {
     flex: 0 0 auto;
-    width: 250px;
-    max-width: 100%;
-    margin: 0;
+    width: 210px;
+    max-width: 55vw;
+    padding: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--global-card-bg-color);
+    border: 1px solid rgba(45, 106, 79, 0.16);
+    box-shadow:
+      0 1px 2px rgba(30, 36, 31, 0.04),
+      0 12px 28px rgba(30, 36, 31, 0.1);
   }
-  .profile.profile-top figure img {
+
+  .profile-photo figure {
+    margin: 0;
+    width: 100%;
+    line-height: 0;
+  }
+
+  .profile-photo figure img,
+  .profile-photo img {
     display: block;
     width: 100%;
     height: auto;
+    border-radius: 0;
+    box-shadow: none;
   }
+
   .profile.profile-top .more-info {
-    flex: 0 0 auto;
+    flex: 0 1 16rem;
     text-align: center;
     margin: 0;
   }
-  .profile.profile-top .more-info > div {
-    text-align: center !important;
+
+  .profile.profile-top .more-info .profile-card {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--global-text-color-light);
+  }
+
+  .profile.profile-top .more-info .profile-card > p {
+    display: block !important;
+  }
+
+  .profile.profile-top .more-info .profile-card > p.profile-name {
+    font-family: var(--font-serif);
+    font-size: 1.85rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--global-text-color);
+    margin: 0 0 0.65rem 0 !important;
+    line-height: 1.2;
+  }
+
+  .profile.profile-top .more-info .profile-card > p.profile-meta {
+    margin: 0.2rem 0 !important;
+  }
+
+  .profile.profile-top .more-info .profile-card > p.profile-email {
+    margin: 0.85rem 0 0.55rem 0 !important;
+    padding-top: 0;
+  }
+
+  .profile.profile-top .more-info .profile-email a {
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .profile.profile-top .more-info .profile-email a:hover {
+    text-decoration: underline;
+  }
+
+  .profile.profile-top .more-info .profile-social {
+    display: flex;
+    justify-content: center;
+    gap: 0.95rem;
+    margin-top: 0.35rem;
+  }
+
+  .profile.profile-top .more-info .profile-social a,
+  .profile.profile-top .more-info .profile-social span {
+    color: var(--global-text-color-light);
+    font-size: 1.35rem;
+    transition: color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+    display: inline-flex;
+  }
+
+  .profile.profile-top .more-info .profile-social a:hover {
+    color: var(--global-theme-color);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .profile.profile-top .more-info .profile-wechat {
+    margin: 0.45rem 0 0;
+    font-size: 0.78rem;
+    opacity: 0.85;
+  }
+
+  .about-body {
+    max-width: 40rem;
+    margin: 0 auto;
+    font-size: 1.05rem;
   }
 </style>

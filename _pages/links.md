@@ -28,7 +28,7 @@ _styles: |
 
 My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the full advisor chain on the [Mathematics Genealogy Project](https://www.mathgenealogy.org/id.php?id=167612).
 
-<img src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy" style="max-width: 40%;">
+<img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy">
 
 <br>
 ---
@@ -37,4 +37,4 @@ My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the
 
 My wife Xinyi Zhang (PhD in Electrical Engineering) and I have two cats.
 
-<img src="/assets/img/cats.jpg" alt="Our two cats" style="max-width: 40%; margin-top: 0.8rem;">
+<img class="site-figure site-figure--portrait" src="/assets/img/cats.jpg" alt="Our two cats">

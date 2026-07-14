@@ -28,7 +28,7 @@ _styles: |
 我的学术传承通过 Weining Wang 追溯至高斯。
 完整的导师链见[数学族谱项目](https://www.mathgenealogy.org/id.php?id=167612)。
 
-<img src="/assets/img/math_genealogy_cn.jpeg" alt="数学族谱" style="max-width: 40%;">
+<img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_cn.jpeg" alt="数学族谱">
 
 <br>
 ---
@@ -37,4 +37,4 @@ _styles: |
 
 我和妻子张心怡（电气工程博士）拥有两只小猫。
 
-<img src="/assets/img/cats.jpg" alt="我们的两只猫" style="max-width: 40%; margin-top: 0.8rem;">
+<img class="site-figure site-figure--portrait" src="/assets/img/cats.jpg" alt="我们的两只猫">

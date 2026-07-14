@@ -7,13 +7,12 @@
       </a>
       <!-- Language toggle -->
       {% if page.lang_url %}
-        <a href="{{ page.lang_url | relative_url }}"
-           title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
-           style="display:inline-flex;align-items:center;padding:3px 10px;border:1px solid currentColor;border-radius:4px;font-size:0.82rem;letter-spacing:0.02em;text-decoration:none;line-height:1.4;opacity:0.85;white-space:nowrap;margin-left:0.75rem;">
+        <a class="lang-toggle" href="{{ page.lang_url | relative_url }}"
+           title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}">
           {% if page.lang == 'zh' %}
-            <span style="font-weight:600;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="opacity:0.45;font-weight:400;">EN</span>
+            <span class="on">中文</span><span class="sep">/</span><span class="off">EN</span>
           {% else %}
-            <span style="opacity:0.45;font-weight:400;">中文</span><span style="margin:0 2px;opacity:0.45;">/</span><span style="font-weight:600;">EN</span>
+            <span class="off">中文</span><span class="sep">/</span><span class="on">EN</span>
           {% endif %}
         </a>
       {% endif %}
