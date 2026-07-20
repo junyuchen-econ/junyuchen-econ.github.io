@@ -22,16 +22,16 @@ _styles: |
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>
 
 <br>
----
 
 #### Work in Progress
+
+**Stochastic Gradient Descent (SGD) related machine learning theory**
 
 **Extension on Transformer-based CoVaR** 
 
 **Study on Diffusion models more deeply** 
 
 <br>
----
 
 #### Published
 

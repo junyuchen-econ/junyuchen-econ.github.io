@@ -5,33 +5,8 @@
       <a class="navbar-brand title" style="font-size: inherit; font-weight: normal;" href="{% if page.lang == 'zh' %}{{ '/zh/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">
         {% if page.lang == 'zh' %}陈俊宇{% else %}Junyu Chen{% endif %}
       </a>
-      <!-- Language toggle -->
-      {% if page.lang_url %}
-        <a class="lang-toggle" href="{{ page.lang_url | relative_url }}"
-           title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}">
-          {% if page.lang == 'zh' %}
-            <span class="on">中文</span><span class="sep">/</span><span class="off">EN</span>
-          {% else %}
-            <span class="off">中文</span><span class="sep">/</span><span class="on">EN</span>
-          {% endif %}
-        </a>
-      {% endif %}
-      <!-- Navbar Toggle -->
-      <button
-        class="navbar-toggler collapsed navbar-toggler-main"
-        type="button"
-        data-nav-toggle="navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar top-bar"></span>
-        <span class="icon-bar middle-bar"></span>
-        <span class="icon-bar bottom-bar"></span>
-      </button>
 
-      <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav">
+      <div class="navbar-collapse navbar-collapse-main" id="navbarNav">
         <ul class="navbar-nav navbar-menu-list flex-nowrap">
 
           {% if page.lang == 'zh' %}
@@ -127,6 +102,16 @@
 
         </ul>
       </div>
+
+      <!-- Language toggle (far right) -->
+      {% if page.lang_url %}
+        <a class="lang-toggle" href="{{ page.lang_url | relative_url }}"
+           title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
+           aria-label="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}">
+          <i class="fa-solid fa-globe" aria-hidden="true"></i>
+          <span class="lang-toggle-label">{% if page.lang == 'zh' %}EN{% else %}中{% endif %}</span>
+        </a>
+      {% endif %}
     </div>
   </nav>
   {% if site.enable_progressbar %}

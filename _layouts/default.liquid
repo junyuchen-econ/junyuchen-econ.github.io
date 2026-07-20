@@ -146,32 +146,92 @@
         to { transform: scaleX(1); opacity: 1; }
       }
 
+      /* Always-expanded navbar: show all links on every screen size,
+         hide the hamburger, and keep the language toggle on the far right. */
+      #navbar > .container {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+      }
+
+      #navbar .navbar-toggler-main {
+        display: none !important;
+      }
+
+      #navbar .navbar-collapse-main {
+        display: flex !important;
+        flex-basis: auto !important;
+        width: auto !important;
+        flex-grow: 1;
+        text-align: left;
+      }
+
+      #navbar .navbar-menu-list {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-left: 0;
+        width: auto;
+      }
+
       .lang-toggle {
         display: inline-flex;
         align-items: center;
-        margin-left: 0.85rem;
-        padding: 0.22rem 0.65rem;
-        border: 1px solid rgba(45, 106, 79, 0.35);
+        gap: 0.3rem;
+        flex-shrink: 0;
+        margin-left: auto;
+        padding: 0.28rem 0.5rem;
+        border: none;
         border-radius: 999px;
         font-family: var(--font-sans);
-        font-size: 0.78rem;
-        letter-spacing: 0.04em;
+        font-size: 0.85rem;
+        font-weight: 500;
         color: var(--global-text-color-light);
         text-decoration: none !important;
-        line-height: 1.4;
+        line-height: 1;
         white-space: nowrap;
-        transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+        transition: color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+      }
+
+      .lang-toggle i {
+        font-size: 0.95rem;
+        opacity: 0.85;
       }
 
       .lang-toggle:hover {
         color: var(--global-theme-color);
-        border-color: var(--global-theme-color);
-        background: rgba(45, 106, 79, 0.06);
+        background: rgba(45, 106, 79, 0.08);
       }
 
-      .lang-toggle .on { font-weight: 600; color: var(--global-theme-color); }
-      .lang-toggle .sep { margin: 0 0.2rem; opacity: 0.4; }
-      .lang-toggle .off { opacity: 0.55; font-weight: 400; }
+      /* Compact navbar on small phones so every link stays visible */
+      @media (max-width: 575.98px) {
+        #navbar.navbar {
+          padding-top: 0.4rem;
+          padding-bottom: 0.4rem;
+        }
+
+        #navbar > .container {
+          padding-left: 0.75rem;
+          padding-right: 0.75rem;
+        }
+
+        .navbar-brand.title {
+          font-size: 1rem !important;
+          margin-right: 0.4rem;
+        }
+
+        .navbar .nav-link {
+          font-size: 0.82rem;
+          padding: 0.3rem 0.35rem !important;
+        }
+
+        .lang-toggle {
+          margin-left: 0.4rem;
+          gap: 0.22rem;
+          padding: 0.24rem 0.4rem;
+          font-size: 0.8rem;
+        }
+      }
 
       /* Main content */
       .container[role="main"] {
@@ -188,6 +248,35 @@
         .navbar .nav-item.active > .nav-link::after {
           animation: none;
         }
+      }
+
+      /* Elegant fading underline beneath every content heading */
+      .container[role="main"] h1,
+      .container[role="main"] h2,
+      .container[role="main"] h3,
+      .container[role="main"] h4,
+      .container[role="main"] h5,
+      .container[role="main"] h6 {
+        margin-bottom: 0.9rem;
+      }
+
+      .container[role="main"] h1::after,
+      .container[role="main"] h2::after,
+      .container[role="main"] h3::after,
+      .container[role="main"] h4::after,
+      .container[role="main"] h5::after,
+      .container[role="main"] h6::after {
+        content: "";
+        display: block;
+        height: 1px;
+        margin-top: 0.35rem;
+        border-radius: 1px;
+        background: linear-gradient(
+          to right,
+          rgba(45, 106, 79, 0.45),
+          rgba(45, 106, 79, 0.12) 42%,
+          transparent 90%
+        );
       }
 
       /* Content figures (cats, genealogy, etc.) */

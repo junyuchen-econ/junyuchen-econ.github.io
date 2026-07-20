@@ -13,6 +13,8 @@ _styles: |
 
 #### Upcoming
 
+- **December**：Will be Visiting Tshinghua University in Beijing.
+
 - **July**: I will be visiting [Prof. Wei Cui](https://sites.google.com/site/weicuiweb/) at University College London, UK.
 
 #### 2026

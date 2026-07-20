@@ -22,7 +22,6 @@ _styles: |
     - Econometrics, machine learning methods, high dimensional statistics
 
 <br>
----
 
 #### Mathematics Genealogy
 
@@ -31,7 +30,6 @@ My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the
 <img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy">
 
 <br>
----
 
 #### Personal
 

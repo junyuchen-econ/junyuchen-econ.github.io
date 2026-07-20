@@ -21,7 +21,6 @@ _styles: |
     - 计量经济学、机器学习方法、高维统计
 
 <br>
----
 
 #### 数学族谱
 
@@ -31,7 +30,6 @@ _styles: |
 <img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_cn.jpeg" alt="数学族谱">
 
 <br>
----
 
 #### 个人
 
