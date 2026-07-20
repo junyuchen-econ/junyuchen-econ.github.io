@@ -147,10 +147,10 @@
 
       .navbar .nav-link {
         font-family: var(--font-sans);
-        font-size: 0.78rem;
+        font-size: 1.05rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.08em;
         color: var(--global-text-color) !important;
         padding: 0.35rem 0.6rem !important;
         position: relative;
@@ -180,11 +180,11 @@
         to { transform: scaleX(1); opacity: 1; }
       }
 
-      /* Always-expanded navbar: show all links on every screen size,
-         hide the hamburger, and keep the language toggle on the far right. */
+      /* Stacked masthead: nameplate + language toggle on top, section
+         links centered on their own full-width row below (all widths). */
       #navbar > .container {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         align-items: center;
       }
 
@@ -193,24 +193,31 @@
       }
 
       #navbar .navbar-collapse-main {
+        order: 3;
         display: flex !important;
-        flex-basis: auto !important;
-        width: auto !important;
-        flex-grow: 1;
-        text-align: left;
+        flex-basis: 100% !important;
+        width: 100% !important;
+        flex-grow: 0;
+        margin-top: 0.4rem;
+        padding-top: 0.35rem;
+        border-top: 1px solid var(--ink-rule-soft);
+        text-align: center;
       }
 
       #navbar .navbar-menu-list {
         flex-direction: row !important;
         flex-wrap: wrap;
         align-items: center;
+        justify-content: center;
+        gap: 0.4rem 1.4rem;
         margin-left: 0;
-        width: auto;
+        width: 100%;
       }
 
       .lang-toggle {
         display: inline-flex;
         align-items: center;
+        order: 2;
         gap: 0.3rem;
         flex-shrink: 0;
         margin-left: auto;
@@ -237,34 +244,54 @@
         background: rgba(26, 26, 23, 0.07);
       }
 
-      /* Compact navbar on small phones so every link stays visible */
+      /* On phones: masthead wraps — title + toggle on top, section
+         links on their own full-width row below (like a newspaper). */
       @media (max-width: 575.98px) {
         #navbar.navbar {
           padding-top: 0.4rem;
-          padding-bottom: 0.4rem;
+          padding-bottom: 0.3rem;
         }
 
         #navbar > .container {
+          flex-wrap: wrap;
           padding-left: 0.75rem;
           padding-right: 0.75rem;
         }
 
         .navbar-brand.title {
-          font-size: 1.1rem !important;
+          font-size: 1.25rem !important;
           margin-right: 0.3rem;
         }
 
-        .navbar .nav-link {
-          font-size: 0.64rem;
-          letter-spacing: 0.05em;
-          padding: 0.28rem 0.26rem !important;
-        }
-
         .lang-toggle {
-          margin-left: 0.3rem;
+          order: 2;
+          margin-left: auto;
           gap: 0.2rem;
           padding: 0.22rem 0.32rem;
-          font-size: 0.75rem;
+          font-size: 0.78rem;
+        }
+
+        #navbar .navbar-collapse-main {
+          order: 3;
+          flex-basis: 100% !important;
+          width: 100% !important;
+          flex-grow: 0;
+          margin-top: 0.35rem;
+          padding-top: 0.3rem;
+          border-top: 1px solid var(--ink-rule-soft);
+        }
+
+        #navbar .navbar-menu-list {
+          width: 100%;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 0.3rem 1rem;
+        }
+
+        .navbar .nav-link {
+          font-size: 1rem;
+          letter-spacing: 0.05em;
+          padding: 0.2rem 0.25rem !important;
         }
 
         .container[role="main"] {
@@ -279,6 +306,17 @@
           text-align: left;
           hyphens: none;
           -webkit-hyphens: none;
+        }
+      }
+
+      /* Keep visible paper margins when the window is narrower than the
+         max content width (otherwise the sheet spans edge-to-edge). */
+      @media (min-width: 576px) and (max-width: 991.98px) {
+        .container[role="main"] {
+          width: auto;
+          max-width: none;
+          margin-left: 1.75rem;
+          margin-right: 1.75rem;
         }
       }
 
