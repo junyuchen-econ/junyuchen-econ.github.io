@@ -90,14 +90,14 @@ layout: default
     flex: 0 0 auto;
     width: 210px;
     max-width: 55vw;
-    padding: 0;
-    border-radius: 18px;
+    padding: 6px;
+    border-radius: 2px;
     overflow: hidden;
-    background: var(--global-card-bg-color);
-    border: 1px solid rgba(45, 106, 79, 0.16);
+    background: var(--paper-sheet-color, #faf7ee);
+    border: 1px solid var(--ink-rule, rgba(26, 26, 23, 0.85));
     box-shadow:
-      0 1px 2px rgba(30, 36, 31, 0.04),
-      0 12px 28px rgba(30, 36, 31, 0.1);
+      0 1px 2px rgba(26, 26, 23, 0.06),
+      0 12px 28px rgba(26, 26, 23, 0.12);
   }
 
   .profile-photo figure {
@@ -132,13 +132,13 @@ layout: default
   }
 
   .profile.profile-top .more-info .profile-card > p.profile-name {
-    font-family: var(--font-serif);
-    font-size: 1.85rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display, "Playfair Display", serif);
+    font-size: 2.7rem;
+    font-weight: 800;
+    letter-spacing: 0;
     color: var(--global-text-color);
     margin: 0 0 0.65rem 0 !important;
-    line-height: 1.2;
+    line-height: 1.05;
   }
 
   .profile.profile-top .more-info .profile-card > p.profile-meta {
@@ -161,7 +161,7 @@ layout: default
 
   .profile.profile-top .more-info .profile-social {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.95rem;
     margin-top: 0.35rem;
   }
@@ -175,7 +175,7 @@ layout: default
   }
 
   .profile.profile-top .more-info .profile-social a:hover {
-    color: var(--global-theme-color);
+    color: var(--accent-color, #8a1a12);
     transform: translateY(-2px);
     text-decoration: none;
   }

@@ -14,26 +14,33 @@
     {% endif %}
     {% include head.liquid %}
 
-    <!-- Source Serif / Sans (overrides config until Jekyll reloads _config.yml) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
+    <!-- Source Serif / Sans + Playfair Display masthead (overrides config until Jekyll reloads _config.yml) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
 
     <!-- Site-wide Soft Forest design system -->
     <style>
       :root {
-        --global-bg-color: #f5f6f4;
-        --global-text-color: #1e241f;
-        --global-text-color-light: #5a635c;
-        --global-theme-color: #2d6a4f;
-        --global-hover-color: #1b4332;
-        --global-hover-text-color: #ffffff;
-        --global-footer-bg-color: #1e241f;
-        --global-footer-text-color: #d4d9d4;
-        --global-footer-link-color: #e8ebe8;
-        --global-divider-color: rgba(30, 36, 31, 0.12);
-        --global-card-bg-color: #ffffff;
-        --global-code-bg-color: rgba(45, 106, 79, 0.07);
+        --global-bg-color: #f3efe4;
+        --global-text-color: #1a1a17;
+        --global-text-color-light: #565248;
+        --global-theme-color: #8a1a12;
+        --global-hover-color: #5f110b;
+        --global-hover-text-color: #f3efe4;
+        --global-footer-bg-color: #1a1a17;
+        --global-footer-text-color: #d9d4c6;
+        --global-footer-link-color: #f0ebdd;
+        --global-divider-color: rgba(26, 26, 23, 0.22);
+        --global-card-bg-color: #faf7ee;
+        --global-code-bg-color: rgba(26, 26, 23, 0.06);
+        --paper-color: #f3efe4;
+        --paper-sheet-color: #faf7ee;
+        --ink-color: #1a1a17;
+        --ink-rule: rgba(26, 26, 23, 0.85);
+        --ink-rule-soft: rgba(26, 26, 23, 0.22);
+        --accent-color: #8a1a12;
         --font-sans: "Source Sans 3", "LXGW WenKai Screen", sans-serif;
-        --font-serif: "Source Serif 4", "LXGW WenKai Screen", serif;
+        --font-serif: "Source Serif 4", "LXGW WenKai Screen", Georgia, serif;
+        --font-display: "Playfair Display", "Source Serif 4", "LXGW WenKai Screen", Georgia, serif;
         --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       }
 
@@ -42,44 +49,59 @@
       }
 
       body {
-        font-family: var(--font-sans);
+        font-family: var(--font-serif);
         font-weight: 400;
         font-size: 1.05rem;
-        line-height: 1.7;
-        letter-spacing: 0.01em;
+        line-height: 1.6;
+        letter-spacing: 0;
         color: var(--global-text-color);
-        background-color: var(--global-bg-color);
+        background-color: var(--paper-color);
         background-image:
-          radial-gradient(ellipse 90% 55% at 8% -10%, rgba(45, 106, 79, 0.09), transparent 55%),
-          radial-gradient(ellipse 70% 45% at 92% 8%, rgba(27, 67, 50, 0.06), transparent 50%),
-          linear-gradient(180deg, #f7f8f6 0%, var(--global-bg-color) 28%, #f3f5f2 100%);
+          linear-gradient(180deg, #f6f2e8 0%, var(--paper-color) 30%, #efeadd 100%);
         background-attachment: fixed;
       }
 
-      p, li, span, div, a {
-        font-family: var(--font-sans);
+      p, li, blockquote {
+        font-family: var(--font-serif);
       }
 
-      h1, h2, h3, h4, h5, h6,
-      .navbar-brand.title {
-        font-family: var(--font-serif);
-        font-weight: 600;
-        letter-spacing: -0.02em;
+      h1, h2 {
+        font-family: var(--font-display);
+        font-weight: 800;
+        letter-spacing: 0;
+        line-height: 1.12;
         color: var(--global-text-color);
       }
 
-      h1 { font-size: 1.85rem; }
-      h2 { font-size: 1.45rem; margin-top: 2rem; }
-      h3, h4 { font-size: 1.2rem; }
+      h3, h4, h5, h6 {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.13em;
+        color: var(--global-text-color);
+      }
+
+      .navbar-brand.title {
+        font-family: var(--font-display);
+        font-weight: 800;
+        letter-spacing: 0;
+        color: var(--global-text-color);
+      }
+
+      h1 { font-size: 2.1rem; }
+      h2 { font-size: 1.6rem; margin-top: 2rem; }
+      h3 { font-size: 1.05rem; }
+      h4 { font-size: 0.95rem; }
+      h5, h6 { font-size: 0.85rem; }
 
       strong, b {
-        font-weight: 600;
+        font-weight: 700;
       }
 
       a {
         color: var(--global-theme-color);
         text-decoration-thickness: 1px;
-        text-underline-offset: 0.18em;
+        text-underline-offset: 0.16em;
         transition: color 0.2s var(--ease-out), text-decoration-color 0.2s var(--ease-out);
       }
 
@@ -87,56 +109,68 @@
         color: var(--global-hover-color);
       }
 
-      /* Navbar */
+      /* Body / content links read as ink with a subtle rule, accent on hover */
+      .container[role="main"] a {
+        color: var(--ink-color);
+        text-decoration: underline;
+        text-decoration-color: var(--ink-rule-soft);
+      }
+
+      .container[role="main"] a:hover {
+        color: var(--accent-color);
+        text-decoration-color: var(--accent-color);
+      }
+
+      /* Masthead */
       #navbar.navbar {
-        background: rgba(245, 246, 244, 0.82) !important;
-        backdrop-filter: blur(12px) saturate(1.2);
-        -webkit-backdrop-filter: blur(12px) saturate(1.2);
-        border-bottom: 1px solid var(--global-divider-color);
+        background: var(--paper-color) !important;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-bottom: 3px double var(--ink-rule);
         box-shadow: none !important;
-        padding-top: 0.55rem;
-        padding-bottom: 0.55rem;
-        transition: background 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        transition: border-color 0.25s var(--ease-out);
       }
 
       .navbar-brand.title {
-        font-size: 1.15rem !important;
-        font-weight: 600 !important;
-        letter-spacing: -0.015em;
+        font-size: 1.5rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0 !important;
         color: var(--global-text-color) !important;
         transition: color 0.2s var(--ease-out);
       }
 
       .navbar-brand.title:hover {
-        color: var(--global-theme-color) !important;
+        color: var(--accent-color) !important;
       }
 
       .navbar .nav-link {
         font-family: var(--font-sans);
-        font-size: 0.92rem;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        color: var(--global-text-color-light) !important;
-        padding: 0.35rem 0.55rem !important;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--global-text-color) !important;
+        padding: 0.35rem 0.6rem !important;
         position: relative;
         transition: color 0.2s var(--ease-out);
       }
 
       .navbar .nav-link:hover,
       .navbar .nav-item.active > .nav-link {
-        color: var(--global-theme-color) !important;
-        font-weight: 500;
+        color: var(--accent-color) !important;
       }
 
       .navbar .nav-item.active > .nav-link::after {
         content: "";
         position: absolute;
-        left: 0.55rem;
-        right: 0.55rem;
-        bottom: 0.1rem;
-        height: 1.5px;
-        background: var(--global-theme-color);
-        border-radius: 1px;
+        left: 0.6rem;
+        right: 0.6rem;
+        bottom: 0.05rem;
+        height: 2px;
+        background: var(--ink-color);
+        border-radius: 0;
         transform-origin: center;
         animation: nav-underline 0.35s var(--ease-out);
       }
@@ -199,8 +233,8 @@
       }
 
       .lang-toggle:hover {
-        color: var(--global-theme-color);
-        background: rgba(45, 106, 79, 0.08);
+        color: var(--accent-color);
+        background: rgba(26, 26, 23, 0.07);
       }
 
       /* Compact navbar on small phones so every link stays visible */
@@ -216,26 +250,45 @@
         }
 
         .navbar-brand.title {
-          font-size: 1rem !important;
-          margin-right: 0.4rem;
+          font-size: 1.1rem !important;
+          margin-right: 0.3rem;
         }
 
         .navbar .nav-link {
-          font-size: 0.82rem;
-          padding: 0.3rem 0.35rem !important;
+          font-size: 0.64rem;
+          letter-spacing: 0.05em;
+          padding: 0.28rem 0.26rem !important;
         }
 
         .lang-toggle {
-          margin-left: 0.4rem;
-          gap: 0.22rem;
-          padding: 0.24rem 0.4rem;
-          font-size: 0.8rem;
+          margin-left: 0.3rem;
+          gap: 0.2rem;
+          padding: 0.22rem 0.32rem;
+          font-size: 0.75rem;
+        }
+
+        .container[role="main"] {
+          width: auto;
+          margin-left: 0.85rem;
+          margin-right: 0.85rem;
+          padding: 1.4rem 1.15rem 1.6rem;
+        }
+
+        /* Left-align on narrow screens to avoid justified word gaps */
+        .container[role="main"] p {
+          text-align: left;
+          hyphens: none;
+          -webkit-hyphens: none;
         }
       }
 
-      /* Main content */
+      /* Main content — a sheet of newsprint */
       .container[role="main"] {
         animation: rise-in 0.55s var(--ease-out);
+        background: var(--paper-sheet-color);
+        border: 1px solid var(--ink-rule-soft);
+        padding: 2.4rem 2.6rem 2.6rem;
+        box-shadow: 0 1px 0 rgba(26, 26, 23, 0.05), 0 14px 34px rgba(26, 26, 23, 0.08);
       }
 
       @keyframes rise-in {
@@ -250,7 +303,15 @@
         }
       }
 
-      /* Elegant fading underline beneath every content heading */
+      /* Justified newspaper columns */
+      .container[role="main"] p {
+        text-align: justify;
+        text-justify: inter-word;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+      }
+
+      /* Section headings with hairline rules */
       .container[role="main"] h1,
       .container[role="main"] h2,
       .container[role="main"] h3,
@@ -258,26 +319,17 @@
       .container[role="main"] h5,
       .container[role="main"] h6 {
         margin-bottom: 0.9rem;
+        padding-bottom: 0.32rem;
+        border-bottom: 1px solid var(--ink-rule);
       }
 
-      .container[role="main"] h1::after,
-      .container[role="main"] h2::after,
-      .container[role="main"] h3::after,
-      .container[role="main"] h4::after,
-      .container[role="main"] h5::after,
-      .container[role="main"] h6::after {
-        content: "";
-        display: block;
-        height: 1px;
-        margin-top: 0.35rem;
-        border-radius: 1px;
-        background: linear-gradient(
-          to right,
-          rgba(45, 106, 79, 0.45),
-          rgba(45, 106, 79, 0.12) 42%,
-          transparent 90%
-        );
+      /* Big display headlines get a heavier double rule */
+      .container[role="main"] h1,
+      .container[role="main"] h2 {
+        border-bottom: 3px double var(--ink-rule);
+        padding-bottom: 0.4rem;
       }
+
 
       /* Content figures (cats, genealogy, etc.) */
       .site-figure {
@@ -286,12 +338,11 @@
         width: 100%;
         height: auto;
         margin: 1rem 0 0.35rem;
-        border-radius: 14px;
-        border: 1px solid rgba(45, 106, 79, 0.14);
-        box-shadow:
-          0 1px 2px rgba(30, 36, 31, 0.04),
-          0 10px 26px rgba(30, 36, 31, 0.09);
-        background: var(--global-card-bg-color);
+        border-radius: 2px;
+        border: 1px solid var(--ink-rule);
+        padding: 5px;
+        box-shadow: 0 1px 2px rgba(26, 26, 23, 0.06), 0 10px 24px rgba(26, 26, 23, 0.1);
+        background: var(--paper-sheet-color);
         object-fit: cover;
       }
 
@@ -308,22 +359,23 @@
         gap: 0.4rem;
         margin-top: 0.35rem;
         padding: 0.45rem 1.05rem;
-        border: 1.5px solid var(--global-theme-color);
-        border-radius: 2px;
+        border: 1.5px solid var(--ink-color);
+        border-radius: 0;
         background: transparent;
-        color: var(--global-theme-color) !important;
+        color: var(--ink-color) !important;
         font-family: var(--font-sans);
-        font-size: 0.88rem;
-        font-weight: 600;
-        letter-spacing: 0.03em;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
         text-decoration: none !important;
         transition: background 0.22s var(--ease-out), color 0.22s var(--ease-out), transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out);
       }
 
       .cv-btn:hover {
-        background: var(--global-theme-color);
-        color: #fff !important;
-        box-shadow: 0 6px 18px rgba(45, 106, 79, 0.22);
+        background: var(--ink-color);
+        color: var(--paper-sheet-color) !important;
+        box-shadow: 0 6px 18px rgba(26, 26, 23, 0.22);
         transform: translateY(-1px);
       }
 
@@ -333,9 +385,10 @@
         max-width: 42rem;
       }
 
-      .post hr {
+      .post hr,
+      .container[role="main"] hr {
         border: 0;
-        border-top: 1px solid var(--global-divider-color);
+        border-top: 1px solid var(--ink-rule);
         margin: 1.75rem 0;
         opacity: 1;
       }
@@ -344,8 +397,8 @@
       footer.fixed-bottom,
       footer.sticky-bottom {
         background: var(--global-footer-bg-color) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
-        font-size: 0.85rem;
+        border-top: 3px double rgba(240, 235, 221, 0.35);
+        font-size: 0.72rem;
         letter-spacing: 0.02em;
       }
 

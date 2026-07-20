@@ -48,7 +48,7 @@ enable_tooltips: false
 enable_video_embedding: false
 enable_cookie_consent: false
 
-back_to_top: true
+back_to_top: false
 last_updated: true
 lazy_loading_images: true
 
