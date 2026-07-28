@@ -18,8 +18,8 @@ _styles: |
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
 **Limit Order Book Forecasting with Conditional Diffusion Models**  
-<small>(基于条件扩散模型的限价订单薄预测)</small>  
-<small>Junyu Chen, Feng Liu (芝加哥大学), Moshu Xu (清华大学), Lijian Yang (清华大学)</small>  
+<small>(基于条件扩散模型的限价订单簿预测)</small>  
+<small>Junyu Chen, Franklin Liu (芝加哥大学), Moshu Xu (清华大学), Lijian Yang (清华大学)</small>  
 <small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>
 
 <br>
@@ -27,13 +27,15 @@ _styles: |
 #### 正在进行中
 
 **Stochastic Gradient Descent (SGD) related machine learning theory**  
-<small>(随机梯度下降（SGD）相关的机器学习理论)</small> 
+<small>(随机梯度下降（SGD）相关的机器学习理论)</small>  
+<small>Junyu Chen, Ziyang Wei (芝加哥大学), Weining Wang (布里斯托大学), Wei-Biao Wu (芝加哥大学)</small>
+
+**Diffusion Models with Images**  
+<small>(基于图像的扩散模型)</small>  
+<small>Junyu Chen, Andres Pinchao Rosero (德州农工大学)</small>
 
 **Extension on Transformer-based CoVaR**  
-<small>(拓展基于 Transformer 的 CoVaR 模型)</small> 
-
-**Extension on Diffusion models**  
-<small>(研究去噪扩散模型)</small> 
+<small>(拓展基于 Transformer 的 CoVaR 模型)</small>
 
 <br>
 

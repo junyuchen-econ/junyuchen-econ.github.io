@@ -12,9 +12,13 @@ _styles: |
 
 #### 即将到来
 
-- **十二月**：将前往清华大学进行学术访问。
+- **十二月 – 次年二月**：将前往清华大学进行学术访问。
 
-- **七月**：将前往英国伦敦大学学院访问[崔巍教授](https://sites.google.com/site/weicuiweb/)。
+- **九月十三日**：将参加西南财经大学宏观金融会议，成都。
+
+- **八月二十八日**：将在 [COMPSTAT 2026（第27届国际计算统计学大会）](https://www.compstat2026.org/) 上就 Transformer 做报告。
+
+- **七月 – 八月**：在英国伦敦大学学院（UCL）访问[崔巍教授](https://sites.google.com/site/weicuiweb/)。
 
 #### 2026
 
@@ -30,7 +34,9 @@ _styles: |
 
 - **五月三日**：结婚了，完成了一件人生大事！！
 
-- **二月十三日**：新工作论文：*Transformer-based CoVaR* 已发布于 arXiv 和 SSRN 。
+- **四月八日**：与同事 Martijn de Werd 一同代表格罗宁根大学参加了[第26届 Econometric Game ](https://wceconometrics.com/)竞赛！
+
+- **二月十三日**：新工作论文：*Transformer-based CoVaR* 已发布于 arXiv 和 SSRN。
 
 #### 2025
 

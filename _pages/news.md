@@ -13,9 +13,13 @@ _styles: |
 
 #### Upcoming
 
-- **December**：Will be Visiting Tshinghua University in Beijing.
+- **December – February 2027**: Will be visiting Tsinghua University, Beijing.
 
-- **July**: I will be visiting [Prof. Wei Cui](https://sites.google.com/site/weicuiweb/) at University College London, UK.
+- **September 13**: Will attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
+
+- **August 28**: Will give a talk on Transformers at [COMPSTAT 2026 (The 27th International Conference on Computational Statistics)](https://www.compstat2026.org/).
+
+- **July – August**: Visiting [Prof. Wei Cui](https://sites.google.com/site/weicuiweb/) at University College London (UCL), UK.
 
 #### 2026
 
@@ -25,17 +29,19 @@ _styles: |
 
 - **June 16**: Presented *Transformer-based CoVaR* at [the 18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session). Prof. Robert F. Engle, a Nobel laureate, attended my talk : )
 
-- **May 23**: Our Work *LOB Diffusion Models* is accepted by [ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling](https://spigmworkshop2026.github.io/).
+- **May 23**: Our work *LOB Diffusion Models* was accepted by the [ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling](https://spigmworkshop2026.github.io/).
 
 - **May 21**: Poster presentation of *LOB Diffusion Models* at the [NESG Workshop](https://sbe.maastrichtuniversity.nl/nesg/) at Tilburg University.
 
 - **May 03**: Got married, a big life milestone!
 
+- **April 08**: Represented Groningen and participated in the [26th Econometric Game](https://wceconometrics.com/) competition with my colleague Martijn de Werd!
+
 - **February 13**: Working paper posted on arXiv and SSRN: *Transformer-based CoVaR*.
 
 #### 2025
 
-- **July**: Visited [Prof. Wei-Biao Wu](https://scholar.google.com/citations?user=RrILMIoAAAAJ&hl=en) at the Department of Statistics, University of Chicago, for two months.
+- **July - September**: Visited [Prof. Wei-Biao Wu](https://scholar.google.com/citations?user=RrILMIoAAAAJ&hl=en) at the Department of Statistics, University of Chicago.
 - **May 23**: Presented a poster on *Transformer-based CoVaR* at the [NESG Workshop](https://sbe.maastrichtuniversity.nl/nesg/) at KU Leuven.
 - **May 21**: Gave a Brownbag seminar at the Faculty of Economics and Business, U Groningen.
 
@@ -43,4 +49,4 @@ _styles: |
 
 - **September 01**: Started my PhD in Economics at the U Groningen. On the very first day, I attended the workshop on [Causal Inference and Machine Learning](https://www.groningenmetricsmeet.com).
 
-- **Feburary**: I graduated my Master at TU Berlin under the supervision of [Prof. Dr. Axel Werwatz](https://www.tu.berlin/statistik/ueber-uns/leitung/prof-axel-werwatz-phd).
+- **February**: Graduated with my Master's degree from TU Berlin under the supervision of [Prof. Dr. Axel Werwatz](https://www.tu.berlin/statistik/ueber-uns/leitung/prof-axel-werwatz-phd).

@@ -18,18 +18,20 @@ _styles: |
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
 **Limit Order Book Forecasting with Conditional Diffusion Models**  
-<small>Junyu Chen, Feng Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U) </small>  
+<small>Junyu Chen, Franklin Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U)</small>  
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>
 
 <br>
 
 #### Work in Progress
 
-**Stochastic Gradient Descent (SGD) related machine learning theory**
+**Stochastic Gradient Descent (SGD) related machine learning theory**  
+<small>Junyu Chen, Ziyang Wei (U Chicago), Weining Wang (U Bristol), Wei-Biao Wu (U Chicago)</small>
 
-**Extension on Transformer-based CoVaR** 
+**Diffusion Models with Images**  
+<small>Junyu Chen, Andres Pinchao Rosero (Texas A&M)</small>
 
-**Study on Diffusion models more deeply** 
+**Extension on Transformer-based CoVaR**
 
 <br>
 
