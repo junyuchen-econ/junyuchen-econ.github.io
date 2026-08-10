@@ -36,3 +36,7 @@ My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the
 My wife Xinyi Zhang (PhD in Electrical Engineering) and I have two cats.
 
 <img class="site-figure site-figure--portrait" src="/assets/img/cats.jpg" alt="Our two cats">
+
+#### Hobbies
+
+Tennis, Korean dramas

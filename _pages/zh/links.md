@@ -36,3 +36,8 @@ _styles: |
 我和妻子张心怡（电气工程博士）拥有两只小猫。
 
 <img class="site-figure site-figure--portrait" src="/assets/img/cats.jpg" alt="我们的两只猫">
+
+#### 爱好
+
+网球，韩剧
+
