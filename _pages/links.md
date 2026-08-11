@@ -39,4 +39,4 @@ My wife Xinyi Zhang (PhD in Electrical Engineering) and I have two cats.
 
 #### Hobbies
 
-Tennis, Korean dramas
+Tennis, and recently I like the Korean dramas on Netflix.
