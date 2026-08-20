@@ -13,21 +13,23 @@ _styles: |
 
 #### Upcoming
 
-- **December – February 2027**: Will be visiting Tsinghua University, Beijing.
+- **December 2026 – February 2027**: Will be visiting Tsinghua University, Beijing.
+
+- **November 12**: Invited by [Prof. Julia schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
 
 - **September 13**: Will attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
 
 - **August 28**: Will give a talk on Transformers at [COMPSTAT 2026 (The 27th International Conference on Computational Statistics)](https://www.compstat2026.org/).
 
-- **July – August**: Visiting [Prof. Wei Cui](https://sites.google.com/site/weicuiweb/) at University College London (UCL), UK.
-
 #### 2026
 
-- **July**: Visiting my PhD supervisor [Prof. Weining Wang](https://sites.google.com/site/weiningwanghu/) at the U Bristol, UK.
+- **July – August**: Visited [Prof. Wei Cui](https://sites.google.com/site/weicuiweb/) at University College London (UCL), UK.
 
-- **July 08**: Attending the [Bristol Econometric Study Group Annual Conference](https://www.econometricstudygroup.org/), where I will present our *Transformer-based CoVaR* work.
+- **July**: Visited my PhD supervisor [Prof. Weining Wang](https://sites.google.com/site/weiningwanghu/) at U Bristol, UK.
 
-- **June 16**: Presented *Transformer-based CoVaR* at [the 18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session). Prof. Robert F. Engle, a Nobel laureate, attended my talk : )
+- **July 08**: Attended the [Bristol Econometric Study Group Annual Conference](https://www.econometricstudygroup.org/), where I presented our *Transformer-based CoVaR* work.
+
+- **June 16**: Presented *Transformer-based CoVaR* at the [18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session). Nobel laureate Prof. Robert F. Engle attended my talk : )
 
 - **May 23**: Our work *LOB Diffusion Models* was accepted by the [ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling](https://spigmworkshop2026.github.io/).
 
@@ -35,7 +37,7 @@ _styles: |
 
 - **May 03**: Got married, a big life milestone!
 
-- **April 08**: Represented Groningen and participated in the [26th Econometric Game](https://wceconometrics.com/) competition with my colleague Martijn de Werd!
+- **April 08**: Represented Groningen in the [26th Econometric Game](https://wceconometrics.com/) with my colleague Martijn de Werd!
 
 - **February 13**: Working paper posted on arXiv and SSRN: *Transformer-based CoVaR*.
 
