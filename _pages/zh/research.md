@@ -20,8 +20,9 @@ _styles: |
 **Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>(基于条件扩散模型的限价订单簿预测)</small>  
 <small>Junyu Chen, Franklin Liu (芝加哥大学), Moshu Xu (清华大学), Lijian Yang (清华大学)</small>  
-<small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>
-
+<small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
+<small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
+ 
 <br>
 
 #### 正在进行中

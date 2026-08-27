@@ -19,7 +19,8 @@ _styles: |
 
 **Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>Junyu Chen, Franklin Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U)</small>  
-<small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>
+<small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>  
+<small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
 
 <br>
 
