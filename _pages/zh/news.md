@@ -18,9 +18,9 @@ _styles: |
 
 - **九月十三日**：将参加西南财经大学（成都）宏观金融会议。
 
-- **八月二十八日**：将在 [COMPSTAT 2026（第27届国际计算统计学大会）](https://www.compstat2026.org/) 上就 Transformer 做报告。
-
 #### 2026
+
+- **八月二十八日**：在 [COMPSTAT 2026（第27届国际计算统计学大会）](https://www.compstat2026.org/) 上就 Transformer 做报告。
 
 - **七月 – 八月**：在英国伦敦大学学院（UCL）访问了[崔巍教授](https://sites.google.com/site/weicuiweb/)。
 

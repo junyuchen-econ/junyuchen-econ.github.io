@@ -19,9 +19,9 @@ _styles: |
 
 - **September 13**: Will attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
 
-- **August 28**: Will give a talk on Transformers at [COMPSTAT 2026 (The 27th International Conference on Computational Statistics)](https://www.compstat2026.org/).
-
 #### 2026
+
+- **August 28**: Talked about Transformers at [COMPSTAT 2026 (The 27th International Conference on Computational Statistics)](https://www.compstat2026.org/).
 
 - **July – August**: Visited [Prof. Wei Cui](https://sites.google.com/site/weicuiweb/) at University College London (UCL), UK.
 
