@@ -13,7 +13,7 @@ _styles: |
 
 **Transformer-based CoVaR: Systemic Risk in Textual Information**   
 <small>(基于 Transformer 的 CoVaR 模型：文本信息在系统性风险度量中的应用)</small>  
-<small>Junyu Chen, Tom Boot, Lingwei Kong, Weining Wang</small>  
+<small>Junyu Chen, Tom Boot (格罗宁根大学), Lingwei Kong (格罗宁根大学), Weining Wang (布里斯托大学)</small>  
 <small>*外审 (R&R)，《金融计量经济学杂志》（Journal of Financial Econometrics）*</small>  
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
@@ -23,13 +23,13 @@ _styles: |
 <small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
 <small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
  
+ **Attention to Quantiles: Statistical Theory for Regularized SGD**  
+<small>(面向分位数的注意力机制：正则化随机梯度下降的统计理论)</small>  
+<small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>
+
 <br>
 
 #### 正在进行中
-
-**Stochastic Gradient Descent (SGD) related machine learning theory**  
-<small>(随机梯度下降（SGD）相关的机器学习理论)</small>  
-<small>Junyu Chen, Ziyang Wei (芝加哥大学), Weining Wang (布里斯托大学), Wei-Biao Wu (芝加哥大学)</small>
 
 **Diffusion Models with Images**  
 <small>(基于图像的扩散模型)</small>  

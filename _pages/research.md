@@ -13,7 +13,7 @@ _styles: |
 #### Working Papers
 
 **Transformer-based CoVaR: Systemic Risk in Textual Information**  
-<small>Junyu Chen, Tom Boot, Lingwei Kong, Weining Wang</small>    
+<small>Junyu Chen, Tom Boot (U Groningen), Lingwei Kong (U Groningen), Weining Wang (U Bristol)</small>    
 <small>*R&R, Journal of Financial Econometrics*</small>  
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
@@ -22,12 +22,12 @@ _styles: |
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>  
 <small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
 
+**Attention to Quantiles: Statistical Theory for Regularized SGD**  
+<small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>
+
 <br>
 
 #### Work in Progress
-
-**Stochastic Gradient Descent (SGD) related machine learning theory**  
-<small>Junyu Chen, Ziyang Wei (U Chicago), Weining Wang (U Bristol), Wei-Biao Wu (U Chicago)</small>
 
 **Diffusion Models with Images**  
 <small>Junyu Chen, Andres Pinchao Rosero (Texas A&M)</small>
