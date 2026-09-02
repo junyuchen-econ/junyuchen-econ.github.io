@@ -15,7 +15,7 @@ _styles: |
 
 - **December 2026 – February 2027**: Will be visiting Tsinghua University, Beijing.
 
-- **November 12**: Invited by [Prof. Julia schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
+- **November 12**: Invited by [Prof. Julia Schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
 
 - **September 13**: Will attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
 

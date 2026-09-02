@@ -29,6 +29,8 @@ _styles: |
 
 <img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_cn.jpeg" alt="数学族谱">
 
+通过 Tom 和 Lingwei 追溯至扬·廷贝亨。
+
 <br>
 
 #### 个人

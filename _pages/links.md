@@ -29,6 +29,7 @@ My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the
 
 <img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy">
 
+Traces through Tom and Lingwei to Jan Tinbergen.
 <br>
 
 #### Personal
