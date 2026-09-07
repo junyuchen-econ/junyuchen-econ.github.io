@@ -23,8 +23,8 @@ _styles: |
 <small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
 <small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
  
- **Attention to Quantiles: Statistical Theory for Regularized SGD**  
-<small>(面向分位数的注意力机制：正则化随机梯度下降的统计理论)</small>  
+ **Quantiles: Statistical Theory for Regularized SGD**  
+<small>(分位数：正则化随机梯度下降的统计理论)</small>  
 <small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>
 
 <br>
@@ -34,6 +34,10 @@ _styles: |
 **Diffusion Models with Images**  
 <small>(基于图像的扩散模型)</small>  
 <small>Junyu Chen, Andres Pinchao Rosero (德州农工大学)</small>
+
+**Patching the Transformer**  
+<small>(时序分块 Transformer)</small>  
+<small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>
 
 **Extension on Transformer-based CoVaR**  
 <small>(拓展基于 Transformer 的 CoVaR 模型)</small>

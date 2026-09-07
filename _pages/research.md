@@ -22,7 +22,7 @@ _styles: |
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>  
 <small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
 
-**Attention to Quantiles: Statistical Theory for Regularized SGD**  
+**Quantiles: Statistical Theory for Regularized SGD**  
 <small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>
 
 <br>
@@ -31,6 +31,9 @@ _styles: |
 
 **Diffusion Models with Images**  
 <small>Junyu Chen, Andres Pinchao Rosero (Texas A&M)</small>
+
+**Patching the Transformer**
+<small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>
 
 **Extension on Transformer-based CoVaR**
 

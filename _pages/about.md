@@ -33,11 +33,23 @@ announcements:
   limit: 3
 ---
 
-Welcome! I am a PhD candidate in Economics at the Department of Economics, Econometrics and Finance (EEF), University of Groningen (RUG), the Netherlands (NL).
+Welcome! I am a PhD candidate in Economics at the University of Groningen (RUG), the Netherlands (NL).
 
-My research lies in Financial Econometrics and Machine Learning. Specifically, I focus on Multimodal Learning in financial prediction, Transformer-based models, Diffusion-based models.
+#### Research Interests
 
-I hold an M.Sc. and a B.Sc. in Industrial Engineering from Technische Universität Berlin, Germany. Before my PhD, I gained several industry experiences. For example, I worked as a financial engineer intern at Deloitte Risk Advisory and as a consultant intern at the leading European consulting company d-fine.
+Financial Econometrics and Machine Learning.
+
+#### Previous Education
+
+- M.Sc. in Industrial Engineering, Technische Universität Berlin
+- B.Sc. in Industrial Engineering, Technische Universität Berlin
+
+#### Research Visits
+
+- School of Economics, University College London (2026)
+- School of Economics, University of Bristol (2026)
+- Department of Statistics, University of Chicago (2025)
+
 
 You can find my CV here:  
 <a href="/assets/pdf/resume.pdf" class="cv-btn" role="button" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> Download CV (PDF)</a>
