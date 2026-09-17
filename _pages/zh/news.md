@@ -16,9 +16,9 @@ _styles: |
 
 - **十一月十二日**： [Julia Schaumburg 教授](https://juliaschaumburg.com/) 邀请我去阿姆斯特丹自由大学就我的 Diffusion LOBGrad 模型做研讨报告。
 
-- **九月十三日**：将参加西南财经大学（成都）宏观金融会议。
-
 #### 2026
+
+- **九月十三日**：参加西南财经大学（成都）宏观金融会议。
 
 - **八月二十八日**：在 [COMPSTAT 2026（第27届国际计算统计学大会）](https://www.compstat2026.org/) 上就 Transformer 做报告。
 

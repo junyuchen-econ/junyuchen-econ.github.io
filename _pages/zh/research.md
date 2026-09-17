@@ -23,8 +23,8 @@ _styles: |
 <small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
 <small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
  
- **Quantiles: Statistical Theory for Regularized SGD**  
-<small>(分位数：正则化随机梯度下降的统计理论)</small>  
+ **Statistical Theory for SGD**  
+<small>(随机梯度下降的统计理论)</small>  
 <small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>
 
 <br>

@@ -25,7 +25,7 @@ _styles: |
 
 #### Mathematics Genealogy
 
-My academic lineage traces through Weining Wang to Carl Friedrich Gauss. See the full advisor chain on the [Mathematics Genealogy Project](https://www.mathgenealogy.org/id.php?id=167612).
+My academic lineage can trace through Weining Wang to Carl Friedrich Gauss. See the full advisor chain on the [Mathematics Genealogy Project](https://www.mathgenealogy.org/id.php?id=167612).
 
 <img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy">
 

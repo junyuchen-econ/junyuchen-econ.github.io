@@ -17,9 +17,9 @@ _styles: |
 
 - **November 12**: Invited by [Prof. Julia Schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
 
-- **September 13**: Will attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
-
 #### 2026
+
+- **September 13**: Attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
 
 - **August 28**: Talked about Transformers at [COMPSTAT 2026 (The 27th International Conference on Computational Statistics)](https://www.compstat2026.org/).
 
