@@ -8,7 +8,7 @@ lang_url: /zh/
 
 profile:
   align: right
-  image: foto.jpeg
+  image: foto.jpg
   image_circular: false
   more_info: >
     <div class="profile-card">
