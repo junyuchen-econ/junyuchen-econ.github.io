@@ -16,13 +16,6 @@ _styles: |
 <small>Junyu Chen, Tom Boot (格罗宁根大学), Lingwei Kong (格罗宁根大学), Weining Wang (布里斯托大学)</small>  
 <small>*外审 (R&R)，《金融计量经济学杂志》（Journal of Financial Econometrics）*</small>  
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
-
-**Limit Order Book Forecasting with Conditional Diffusion Models**  
-<small>(基于条件扩散模型的限价订单簿预测)</small>  
-<small>Junyu Chen, Franklin Liu (芝加哥大学), Moshu Xu (清华大学), Lijian Yang (清华大学)</small>  
-<small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
-<small>*将出现在 2026年 ACM International Conference on AI in Finance (ICAIF) 会议论文集中*</small>  
-<small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
  
  **Statistical Theory for SGD**  
 <small>(随机梯度下降的统计理论)</small>  
@@ -47,4 +40,9 @@ _styles: |
 
 #### 已发表
 
-*（暂无）*
+**Limit Order Book Forecasting with Conditional Diffusion Models**  
+<small>(基于条件扩散模型的限价订单簿预测)</small>  
+<small>Junyu Chen, Franklin Liu (芝加哥大学), Moshu Xu (清华大学), Lijian Yang (清华大学)</small>  
+<small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
+<small>*将收录在 2026年 ACM International Conference on AI in Finance (ICAIF) 会议论文集中*</small>  
+<small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"}</small>
