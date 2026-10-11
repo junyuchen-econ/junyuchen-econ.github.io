@@ -32,6 +32,10 @@ _styles: |
 <small>(随机梯度下降的统计理论)</small>  
 <small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>
 
+**Patching the Transformer**  
+<small>(时序分块 Transformer)</small>  
+<small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>
+
 <br>
 
 #### 正在进行中
@@ -39,10 +43,6 @@ _styles: |
 **Diffusion Models with Images**  
 <small>(基于图像的扩散模型)</small>  
 <small>Junyu Chen, Andres Pinchao Rosero (德州农工大学)</small>
-
-**Patching the Transformer**  
-<small>(时序分块 Transformer)</small>  
-<small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>
 
 **Extension on Transformer-based CoVaR**  
 <small>(拓展基于 Transformer 的 CoVaR 模型)</small>

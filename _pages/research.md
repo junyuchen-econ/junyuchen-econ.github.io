@@ -30,15 +30,15 @@ _styles: |
 **Statistical Theory for SGD**  
 <small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>
 
+**Patching the Transformer**  
+<small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>
+
 <br>
 
 #### Work in Progress
 
 **Diffusion Models with Images**  
 <small>Junyu Chen, Andres Pinchao Rosero (Texas A&M)</small>
-
-**Patching the Transformer**  
-<small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>
 
 **Extension on Transformer-based CoVaR**
 
