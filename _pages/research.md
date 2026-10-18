@@ -28,10 +28,12 @@ _styles: |
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
 
 **Statistical Theory for SGD**  
-<small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>
+<small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>   
+<small>*submitted*</small>  
 
 **Patching the Transformer**  
-<small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>
+<small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>  
+<small>*submitted*</small>  
 
 <br>
 

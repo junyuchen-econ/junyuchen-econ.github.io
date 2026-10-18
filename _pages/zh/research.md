@@ -31,10 +31,12 @@ _styles: |
  **Statistical Theory for SGD**  
 <small>(随机梯度下降的统计理论)</small>  
 <small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>
+<small>已投稿</small>  
 
 **Patching the Transformer**  
 <small>(时序分块 Transformer)</small>  
-<small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>
+<small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>   
+<small>已投稿</small>  
 
 <br>
 
