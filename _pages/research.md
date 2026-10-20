@@ -12,11 +12,11 @@ _styles: |
 
 #### Published
 
-**Limit Order Book Forecasting with Conditional Diffusion Models**  
+**Probabilistic Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>Junyu Chen, Franklin Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U)</small>  
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>  
 <small>*To appear in the proceedings of the 2026 ACM International Conference on AI in Finance (ICAIF)*</small>  
-<small>[ICML](https://icml.cc/virtual/2026/74197){:target="_blank"} &nbsp;·&nbsp; [GitHub](https://github.com/junyuchen-econ/LOBGrad){:target="_blank"}</small>
+<small>[arXiv](https://arxiv.org/abs/2610.25495v1){:target="_blank"} &nbsp;·&nbsp; [ICML](https://icml.cc/virtual/2026/74197){:target="_blank"} &nbsp;·&nbsp; [GitHub](https://github.com/junyuchen-econ/LOBGrad){:target="_blank"}</small>
 
 <br>
 
