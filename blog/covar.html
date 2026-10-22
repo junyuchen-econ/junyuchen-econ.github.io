@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CoVaR</title>
+<meta name="description" content="An interactive, intuitive guide to CoVaR, the risk of the financial system when one institution is in distress: from Value-at-Risk to CoVaR and ΔCoVaR, estimation by quantile regression, and two decades of research.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap">
+<script>
+window.MathJax={tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]},svg:{fontCache:"global"},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code","template"]}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+/* Layout: an essay column (about 66ch) with a margin rail for side notes on wide screens;
+   each interactive plate breaks out to the full width, figures on the left and a step-by-step walkthrough on the right.
+   Colour roles are fixed across the whole post, printed in the site's inks: the system and fitted lines = black ink,
+   distress and CoVaR = red, the normal (median) day and true quantiles = gold, individual days = grey. */
+:root{
+  --bg:#f4f0e4; --surface:#fdfbf6; --ink:#1d1a16; --muted:#5a5246; --rule:#dcd5c5; --grid:#ebe5d7; --line:rgba(60,90,160,.16); --shade:rgba(23,33,44,.05);
+  --fn:#1d1a16; --fn-soft:rgba(29,26,22,.18);
+  --ball:#b22a1f; --ball-fill:rgba(178,42,31,.10); --ball-soft:rgba(178,42,31,.5);
+  --mag:#a8751a; --mag-fill:rgba(168,117,26,.12);
+  --data:#8a8275; --accent:#b22a1f; --accent-soft:rgba(178,42,31,.16);
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"IBM Plex Sans","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#191813; --surface:#211f1a; --ink:#ece6d8; --muted:#a39d92; --rule:#38352d; --grid:#2a2822; --line:rgba(140,170,230,.08); --shade:rgba(228,233,239,.05);
+  --fn:#ece6d8; --fn-soft:rgba(236,230,216,.22);
+  --ball:#e8705f; --ball-fill:rgba(232,112,95,.14); --ball-soft:rgba(232,112,95,.6);
+  --mag:#d9a64a; --mag-fill:rgba(217,166,74,.15);
+  --data:#9a9284; --accent:#e8705f; --accent-soft:rgba(232,112,95,.2);
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#191813; --surface:#211f1a; --ink:#ece6d8; --muted:#a39d92; --rule:#38352d; --grid:#2a2822; --line:rgba(140,170,230,.08); --shade:rgba(228,233,239,.05);
+  --fn:#ece6d8; --fn-soft:rgba(236,230,216,.22);
+  --ball:#e8705f; --ball-fill:rgba(232,112,95,.14); --ball-soft:rgba(232,112,95,.6);
+  --mag:#d9a64a; --mag-fill:rgba(217,166,74,.15);
+  --data:#9a9284; --accent:#e8705f; --accent-soft:rgba(232,112,95,.2);
+  color-scheme:dark; }
+
+[hidden]{display:none!important;}
+/* telegram paper: warm newsprint with faint blue typing rules */
+body{margin:0;background-color:var(--bg);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--line) 27px,var(--line) 28px);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;font-optical-sizing:auto;-webkit-font-smoothing:antialiased;}
+.page{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:44px 80px;display:grid;gap:56px;}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px;}
+a:hover{text-decoration-thickness:2px;}
+
+/* masthead */
+.masthead{display:grid;gap:16px;max-width:780px;}
+.eyebrow{font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0;}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.4vw,54px);line-height:1.08;letter-spacing:-.012em;margin:0;text-wrap:balance;}
+.byline{font-family:var(--sans);font-size:13.5px;color:var(--muted);margin:0;display:flex;flex-wrap:wrap;gap:4px 14px;}
+.back{justify-self:start;margin-bottom:8px;font-family:var(--sans);font-size:13.5px;color:var(--muted);text-decoration:none;}
+.back:hover{color:var(--accent);text-decoration:underline;}
+
+/* essay rows: prose + side note */
+.part{display:grid;gap:30px;scroll-margin-top:24px;}
+.row{display:grid;grid-template-columns:minmax(0,680px) minmax(0,1fr);column-gap:52px;row-gap:18px;align-items:start;}
+.prose{display:grid;gap:18px;min-width:0;}
+.prose p{margin:0;}
+.side{font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--muted);border-top:2px solid var(--accent);padding-top:10px;display:grid;gap:8px;min-width:0;max-width:340px;}
+.side p{margin:0;}
+.side b{color:var(--ink);font-weight:600;}
+@media (max-width:1000px){
+  .row{grid-template-columns:minmax(0,1fr);}
+  .side{max-width:680px;border-top:0;border-left:2px solid var(--accent);padding:2px 0 2px 14px;}
+}
+h2{font-family:var(--serif);font-weight:500;font-size:clamp(27px,3.4vw,34px);line-height:1.18;letter-spacing:-.006em;margin:0;text-wrap:balance;display:flex;gap:14px;align-items:baseline;}
+h2 .num{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 7px;line-height:1.6;transform:translateY(-4px);}
+h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.3;margin:6px 0 0;text-wrap:balance;}
+.mjx-d{overflow-x:auto;overflow-y:hidden;padding:4px 0;text-align:center;max-width:100%;}
+.mjx-d svg{max-width:none;}
+.mjx-d mjx-container[display="true"]{margin:0!important;}
+.prose ol,.prose ul{margin:0;padding-left:1.3em;display:grid;gap:10px;}
+
+/* plates */
+.plate{margin:0;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px;display:grid;gap:16px;}
+.plate-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-family:var(--sans);}
+.plate-title{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+.plate-hint{font-size:12.5px;color:var(--muted);}
+.lab{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(0,1fr);gap:20px;align-items:start;}
+@media (max-width:900px){.lab{grid-template-columns:minmax(0,1fr);}}
+.figs{display:grid;gap:14px;min-width:0;}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:end;}
+@media (max-width:560px){.pair{grid-template-columns:minmax(0,1fr);}}
+.fig{display:grid;gap:4px;min-width:0;transition:opacity .35s ease;}
+.fig.dim{opacity:.3;}
+@media (prefers-reduced-motion:reduce){.fig{transition:none;}}
+.fig-cap{font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--muted);}
+.fig-cap b{color:var(--ink);font-weight:600;}
+svg.plot{display:block;}
+.fig svg.plot{width:100%;height:auto;overflow:visible;}
+.fig svg.plot.narrow{max-width:440px;}
+/* wide diagrams keep a readable size on phones and scroll sideways instead */
+.hscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
+.hscroll>svg.plot{min-width:540px;}
+svg text{font-family:var(--sans);}
+svg .mono{font-family:var(--mono);}
+svg .it{font-family:var(--serif);font-style:italic;}
+svg text.halo{paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round;}
+svg .hit{cursor:pointer;fill:transparent;}
+svg .hit:focus{outline:none;}
+svg .hit:focus-visible{stroke:var(--accent);stroke-width:2;}
+.key{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--sans);font-size:12.5px;color:var(--muted);}
+.key>span{display:inline-flex;align-items:center;gap:6px;}
+.key i{display:inline-block;width:18px;height:0;border-top:2.5px solid currentColor;}
+.key i.dash{border-top-style:dashed;}
+.key i.dot{width:8px;height:8px;border:0;border-radius:50%;background:currentColor;}
+.key i.sq{width:11px;height:11px;border:1.5px solid currentColor;background:var(--ball-fill);}
+.key i.dia{width:9px;height:9px;border:0;background:currentColor;transform:rotate(45deg);}
+.controls{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;font-family:var(--sans);font-size:13.5px;padding-top:12px;border-top:1px solid var(--rule);}
+.ctl{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
+.ctl input[type=range]{width:150px;max-width:44vw;accent-color:var(--accent);}
+.ctl output{font-family:var(--mono);font-size:13px;min-width:4em;font-variant-numeric:tabular-nums;}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:5px;overflow:hidden;}
+.seg button{border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;padding:5px 11px;cursor:pointer;}
+.seg button+button{border-left:1px solid var(--rule);}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface);}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--sans);font-size:13.5px;}
+.readout b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;}
+.c-fn{color:var(--fn);} .c-ball{color:var(--ball);} .c-mag{color:var(--mag);} .c-data{color:var(--data);} .c-ink{color:var(--ink);}
+@media (max-width:560px){
+  .ctl{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:2px;}
+  .ctl>label,.ctl>span:first-child{grid-column:1/-1;}
+  .ctl input[type=range]{width:100%;max-width:none;}
+}
+
+/* walkthrough */
+.steps{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start;}
+@media (min-width:901px){.steps{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));}}
+.steps-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--sans);}
+.steps-count{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.04em;}
+.dots{display:flex;gap:6px;flex-wrap:wrap;}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--muted);background:transparent;padding:0;cursor:pointer;}
+.dots button[aria-current="step"]{background:var(--accent);border-color:var(--accent);}
+.steps h4{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.35;margin:0;text-wrap:balance;}
+.steps .body{display:grid;gap:10px;font-size:16.5px;line-height:1.58;min-width:0;}
+.steps .body p{margin:0;}
+.steps .mjx-d{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
+.nav{display:flex;gap:8px;font-family:var(--sans);}
+.btn{font:inherit;font-size:13.5px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:5px;padding:6px 14px;cursor:pointer;}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface);}
+.btn:disabled{opacity:.4;cursor:default;}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* closing */
+.summary{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:22px 24px;display:grid;gap:12px;max-width:760px;}
+.summary h2{font-size:clamp(23px,2.8vw,28px);}
+.summary p{margin:0;}
+footer{font-family:var(--sans);font-size:12.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;max-width:760px;display:grid;gap:6px;}
+footer p{margin:0;}
+/* literature timeline, newest first */
+.lit{list-style:none;margin:0;padding:0;max-width:820px;display:grid;}
+.lit li{display:grid;grid-template-columns:4.4rem minmax(0,1fr);}
+.lit-year{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent);padding-top:3px;}
+.lit-body{position:relative;display:grid;gap:4px;padding:0 0 28px 24px;border-left:1px solid var(--rule);min-width:0;}
+.lit-body::before{content:"";position:absolute;left:-5px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--accent);}
+.lit li:last-child .lit-body{padding-bottom:4px;}
+.lit-tag{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);}
+.lit-title{font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.35;color:var(--ink);text-decoration:none;}
+.lit-title:hover{color:var(--accent);text-decoration:underline;}
+.lit-meta{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--muted);}
+.lit-body p{margin:4px 0 0;font-size:16.5px;line-height:1.58;}
+@media (max-width:560px){.lit li{grid-template-columns:3.4rem minmax(0,1fr);}.lit-body{padding-left:18px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <a class="back" id="back-link" href="/#learning-blog">← Back to the Learning Blog</a>
+  <script>(function(){try{if(/\/zh\//.test(document.referrer)){var a=document.getElementById("back-link");a.href="/zh/#%E5%AD%A6%E4%B9%A0%E5%8D%9A%E5%AE%A2";a.textContent="← 返回学习博客";}}catch(e){}})();</script>
+  <p class="eyebrow">Financial econometrics</p>
+  <h1>CoVaR</h1>
+  <p class="byline"><span>Junyu Chen</span><span>23 October 2026</span></p>
+</header>
+
+<section class="part" aria-labelledby="mot-title">
+  <div class="row">
+    <div class="prose">
+      <h2 id="mot-title">A motivating example</h2>
+      <p>In September 2008 Lehman Brothers failed, and within days the trouble spread to other banks, money-market funds and insurers. Before the crisis, risk was mostly measured bank by bank. But a bank can look safe on its own and still drag the whole system down when it gets into trouble.</p>
+      <p>CoVaR, proposed by Tobias Adrian and Markus Brunnermeier, measures exactly this: the risk of the financial system <i>given that</i> one institution is in distress. The difference between that risk and the system's risk on a normal day, called ΔCoVaR, is the institution's contribution to systemic risk.</p>
+      <h3>The setup</h3>
+      <p>Let \(X^i\) be the daily return of institution \(i\), say a bank, and \(X^{\text{sys}}\) the return of the financial system, for example an index of all financial firms. Returns are in percent, so losses are negative numbers. Throughout, \(q\) is a small probability such as 5%.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 1 ======================== -->
+<section class="part" id="s1">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">1</span>Value-at-Risk: one bank on its own</h2>
+      <p>The Value-at-Risk of the bank is the return that is beaten on all but the worst \(q\) share of days:</p>
+      <div class="mjx-d">\[ \Pr\bigl(X^i\le \text{VaR}^i_q\bigr)=q. \]</div>
+      <p>In words, it is the \(q\)-quantile of the bank's returns. With \(q=5\%\), the bank loses more than its VaR on one day in twenty.</p>
+    </div>
+    <aside class="side">
+      <p><b>Why 5%?</b> Regulators traditionally look at \(q=1\%\). The figures use 5% so that the tail contains enough days to see; the slider goes down to 1%.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="f1-title">
+    <div class="plate-head"><span class="plate-title" id="f1-title">Figure 1 · The worst days of one bank</span><span class="plate-hint">Use the walkthrough, or drag the slider</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="fig">
+          <div class="key"><span class="c-data"><i class="sq" style="background:var(--shade)"></i><span>days per return range</span></span><span class="c-ball"><i class="sq"></i><span>the worst q of days</span></span><span class="c-fn"><i class="dash"></i><span>model density</span></span></div>
+          <svg id="f1-hist" class="plot" viewBox="0 0 560 300" role="img" aria-label="Histogram of the bank's daily returns with its Value-at-Risk"></svg>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="f1-q">Tail probability <span style="font-style:italic;font-family:var(--serif)">q</span></label><input id="f1-q" type="range" min="1" max="10" step="1" value="5"><output id="f1-qout" for="f1-q">5%</output></div>
+        </div>
+        <div class="readout">
+          <span>VaR of the bank <b id="f1-var" class="c-ball"></b></span>
+          <span>days below it <b id="f1-n" class="c-ink"></b></span>
+        </div>
+      </div>
+      <div class="steps" id="f1-steps"></div>
+    </div>
+  </figure>
+
+  <template id="f1-steps-t">
+    <div class="step" data-title="A thousand trading days">
+      <p>These are 1,000 daily returns of one bank, about four years of trading. Each bar counts the days with a return in that range.</p>
+    </div>
+    <div class="step" data-title="The worst 5% of days">
+      <p>The red bars are the worst 5% of days, about 50 of the 1,000.</p>
+    </div>
+    <div class="step" data-title="VaR is the cut-off">
+      <p>VaR is the return that separates those days from the rest:</p>
+      <div class="mjx-d">\[ \Pr\bigl(X^i\le \text{VaR}^i_q\bigr)=q. \]</div>
+      <p>Here \(\text{VaR}^i_{5\%}\approx-3.3\%\): on one day in twenty, the bank loses more than 3.3%.</p>
+    </div>
+    <div class="step" data-title="VaR looks at one bank alone">
+      <p>VaR describes the bank's own bad days. It says nothing about whether those are also bad days for everyone else, and that is the question for systemic risk.</p>
+    </div>
+  </template>
+</section>
+
+<!-- ======================== PART 2 ======================== -->
+<section class="part" id="s2">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">2</span>CoVaR: the system when one bank is in trouble</h2>
+      <p>CoVaR is the VaR of the system, computed only over the days on which the bank is in distress, that is, at its own VaR:</p>
+      <div class="mjx-d">\[ \Pr\bigl(X^{\text{sys}}\le \text{CoVaR}^{\text{sys}|i}_q \;\big|\; X^i=\text{VaR}^i_q\bigr)=q. \]</div>
+      <p>To isolate what the bank adds, compare it with the same quantity on a normal day, when the bank is at its median return:</p>
+      <div class="mjx-d">\[ \Delta\text{CoVaR}^{\text{sys}|i}_q=\text{CoVaR}^{\text{sys}\,|\,X^i=\text{VaR}^i_q}_q-\text{CoVaR}^{\text{sys}\,|\,X^i=\text{Median}^i}_q. \]</div>
+      <p>The more negative ΔCoVaR, the more the system suffers when this bank is in trouble.</p>
+    </div>
+    <aside class="side">
+      <p><b>Risky is not the same as systemic.</b> A bank with a large VaR need not have a large ΔCoVaR, and the other way round. Adrian and Brunnermeier find that across institutions the two are only loosely related, which is why supervising each bank's own risk is not enough.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="f2-title">
+    <div class="plate-head"><span class="plate-title" id="f2-title">Figure 2 · From VaR to CoVaR and ΔCoVaR</span><span class="plate-hint">Use the walkthrough, or drag the sliders</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="fig">
+          <div class="key"><span class="c-data"><i class="dot"></i><span>a day</span></span><span class="c-fn"><i class="dash"></i><span>VaR of the system</span></span><span class="c-ball"><i></i><span>CoVaR, bank in distress</span></span><span class="c-mag"><i></i><span>CoVaR, normal day</span></span></div>
+          <svg id="f2-scat" class="plot" viewBox="0 0 560 380" role="img" aria-label="Scatter plot of the bank's and the system's daily returns with VaR, CoVaR and ΔCoVaR"></svg>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="f2-q">Tail probability <span style="font-style:italic;font-family:var(--serif)">q</span></label><input id="f2-q" type="range" min="1" max="10" step="1" value="5"><output id="f2-qout" for="f2-q">5%</output></div>
+          <div class="ctl"><label for="f2-lam">Link between bank and system</label><input id="f2-lam" type="range" min="0" max="1" step="0.05" value="1"><output id="f2-lamout" for="f2-lam">strong</output></div>
+          <div class="ctl"><span>Distress means</span><span class="seg" role="group" aria-label="Definition of distress"><button id="f2-eq" type="button" aria-pressed="true">at its VaR</button><button id="f2-le" type="button" aria-pressed="false">at or below its VaR</button></span></div>
+        </div>
+        <div class="readout">
+          <span>VaR of the bank <b id="f2-vari" class="c-ink"></b></span>
+          <span>VaR of the system <b id="f2-vars" class="c-fn"></b></span>
+          <span>CoVaR <b id="f2-covar" class="c-ball"></b></span>
+          <span>ΔCoVaR <b id="f2-delta" class="c-ball"></b></span>
+        </div>
+      </div>
+      <div class="steps" id="f2-steps"></div>
+    </div>
+  </figure>
+
+  <template id="f2-steps-t">
+    <div class="step" data-title="Each dot is a day">
+      <p>Each dot shows one day: the bank's return across, the system's return up. The two tend to move together, and on the bank's worst days the system's returns also spread out further.</p>
+    </div>
+    <div class="step" data-title="The system's own VaR">
+      <p>The dashed line is the system's VaR: on 5% of all days the system does worse.</p>
+    </div>
+    <div class="step" data-title="Days when the bank is in distress">
+      <p>Now keep only the days on which the bank is at its VaR, the red band.</p>
+    </div>
+    <div class="step" data-title="CoVaR">
+      <p>CoVaR is the system's 5% quantile on those days only (the red bar):</p>
+      <div class="mjx-d">\[ \Pr\bigl(X^{\text{sys}}\le \text{CoVaR}\;\big|\;X^i=\text{VaR}^i_q\bigr)=q. \]</div>
+      <p>It lies well below the system's ordinary VaR: when this bank is in trouble, the system is too.</p>
+    </div>
+    <div class="step" data-title="ΔCoVaR: distress minus a normal day">
+      <p>The gold bar is the same quantile on days when the bank is at its median, a normal day. ΔCoVaR is the distance between the two bars: how much worse the system's tail becomes because of this bank's distress.</p>
+    </div>
+    <div class="step" data-title="No link, no contribution">
+      <p>With the link set to zero, the bank's own VaR is unchanged, but its distress tells us nothing about the system: CoVaR equals the system's VaR, and ΔCoVaR is zero.</p>
+      <p>A risky bank need not be a systemic one.</p>
+    </div>
+    <div class="step" data-title="A stricter idea of distress">
+      <p>Conditioning on the bank being <i>exactly</i> at its VaR is a single, knife-edge event. Girardi and Ergün condition instead on the bank being at or below its VaR, all of the red region.</p>
+      <p>That includes the bank's very worst days, so CoVaR falls further. Mainik and Schaanning show that this version also behaves better when the link becomes stronger (see the literature below).</p>
+    </div>
+  </template>
+</section>
+
+<!-- ======================== PART 3 ======================== -->
+<section class="part" id="s3">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">3</span>Estimating CoVaR with quantile regression</h2>
+      <p>In real data there are hardly any days on which a bank is exactly at its VaR, so CoVaR cannot be read off a band of days. Adrian and Brunnermeier estimate it with quantile regression: a line through the cloud with a share \(q\) of the days below it,</p>
+      <div class="mjx-d">\[ (\hat\alpha_q,\hat\beta_q)=\arg\min_{\alpha,\beta}\;\sum_{t=1}^{T}\rho_q\bigl(X^{\text{sys}}_t-\alpha-\beta X^i_t\bigr),\qquad \rho_q(u)=u\,\bigl(q-\mathbb 1\{u<0\}\bigr). \]</div>
+      <p>Then CoVaR is the line evaluated at the bank's VaR.</p>
+    </div>
+    <aside class="side">
+      <p><b>Why not least squares?</b> Least squares finds the average of the system's return for each bank return. Risk managers need the tail, and the tilted loss \(\rho_q\) moves the line down until only a share \(q\) of the days lies below it.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="f3-title">
+    <div class="plate-head"><span class="plate-title" id="f3-title">Figure 3 · A quantile line through the cloud</span><span class="plate-hint">Use the walkthrough, or drag the slider</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="pair">
+          <div class="fig">
+            <div class="key"><span class="c-fn"><i></i><span>quantile line</span></span><span class="c-mag"><i class="dash"></i><span>true quantile</span></span><span class="c-ball"><i class="dot"></i><span>days below the line</span></span></div>
+            <svg id="f3-scat" class="plot" viewBox="0 0 340 340" role="img" aria-label="Scatter plot with the fitted quantile regression line"></svg>
+          </div>
+          <div class="fig">
+            <div class="key"><span class="c-fn"><i></i><span>tilted loss ρ<sub>q</sub></span></span></div>
+            <svg id="f3-loss" class="plot" viewBox="0 0 300 340" role="img" aria-label="The tilted check loss of quantile regression"></svg>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="f3-q">Tail probability <span style="font-style:italic;font-family:var(--serif)">q</span></label><input id="f3-q" type="range" min="1" max="10" step="1" value="5"><output id="f3-qout" for="f3-q">5%</output></div>
+        </div>
+        <div class="readout">
+          <span>fitted line <b id="f3-line" class="c-fn"></b></span>
+          <span>days below it <b id="f3-share" class="c-ink"></b></span>
+          <span>CoVaR from the line <b id="f3-hat" class="c-ball"></b></span>
+          <span>true CoVaR <b id="f3-true" class="c-mag"></b></span>
+        </div>
+      </div>
+      <div class="steps" id="f3-steps"></div>
+    </div>
+  </figure>
+
+  <template id="f3-steps-t">
+    <div class="step" data-title="A tilted loss">
+      <p>Quantile regression charges each day by its distance from the line, but unevenly (right panel). With \(q=5\%\), a day below the line costs 0.95 per unit of distance, a day above it only 0.05.</p>
+      <p>The cheapest line therefore sits low, with 5% of the days below it.</p>
+    </div>
+    <div class="step" data-title="The 5% quantile line">
+      <p>The black line minimises the tilted loss. The red dots are the days below it: 5% of them, as the readout shows.</p>
+    </div>
+    <div class="step" data-title="Read off CoVaR">
+      <p>Plug the bank's VaR into the line:</p>
+      <div class="mjx-d">\[ \widehat{\text{CoVaR}}=\hat\alpha_q+\hat\beta_q\,\text{VaR}^i_q,\qquad \widehat{\Delta\text{CoVaR}}=\hat\beta_q\bigl(\text{VaR}^i_q-\text{Median}^i\bigr). \]</div>
+      <p>With a straight line, ΔCoVaR is just the slope times the distance between a bad and a normal day.</p>
+    </div>
+    <div class="step" data-title="A straight line can miss the tail">
+      <p>In this example the true quantile (gold, dashed) bends: when the bank falls hard, the system's risk grows faster than a straight line allows.</p>
+      <p>At the bank's VaR the line gives a CoVaR that is too mild, so it understates the danger exactly where it matters.</p>
+    </div>
+    <div class="step" data-title="Towards flexible models">
+      <p>Real systems add more complications: many institutions at once, state variables such as volatility, and information in news. This is why the literature moved to non-linear, high-dimensional and machine-learning versions of quantile regression.</p>
+      <p>A flexible model can fit noise as well as signal; the <a href="covering-numbers.html">post on covering numbers</a> explains how to tell when it can be trusted.</p>
+    </div>
+  </template>
+
+  <div class="row">
+    <div class="prose">
+      <p>In practice Adrian and Brunnermeier also let the line depend on lagged state variables \(M_{t-1}\), such as market volatility and credit spreads, so that CoVaR moves with market conditions:</p>
+      <div class="mjx-d">\[ X^{\text{sys}}_t=\alpha_q+\beta_q X^i_t+\gamma_q^{\top}M_{t-1}+\varepsilon_t . \]</div>
+      <p>Replacing the straight line by a single-index model, a neural network or a <a href="transformer.html">Transformer</a> that also reads the news gives the methods in the second half of the timeline below.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 4 ======================== -->
+<section class="part" id="s4">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">4</span>Two decades of CoVaR research</h2>
+      <p>The main steps, from the newest to the original paper. Each entry says what it changed: the definition of distress, the way CoVaR is estimated, or the way forecasts are checked.</p>
+    </div>
+  </div>
+
+  <ol class="lit">
+    <li>
+      <span class="lit-year">2026</span>
+      <div class="lit-body">
+        <span class="lit-tag">text and Transformers</span>
+        <a class="lit-title" href="https://arxiv.org/abs/2602.12490">Transformer-based CoVaR: Systemic risk in textual information</a>
+        <span class="lit-meta">J. Chen, T. Boot, L. Kong and W. Wang · arXiv 2602.12490, revise and resubmit at the <i>Journal of Financial Econometrics</i></span>
+        <p>Estimates CoVaR with a Transformer that reads financial news alongside market data, using text embeddings from a large language model instead of ready-made sentiment scores. Error bounds show that the estimator can work with small samples, and with Reuters news from 2006 to 2013 the text improves out-of-sample CoVaR forecasts, most of all in times of market stress.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2026</span>
+      <div class="lit-body">
+        <span class="lit-tag">dynamic models</span>
+        <a class="lit-title" href="https://doi.org/10.1080/07350015.2025.2590126">Dynamic CoVaR modeling and estimation</a>
+        <span class="lit-meta">T. Dimitriadis and Y. Hoga · <i>Journal of Business &amp; Economic Statistics</i></span>
+        <p>Builds dynamic models, called CoCAViaR, that forecast VaR and CoVaR together as market conditions change, and proves that their two-step estimator is consistent and asymptotically normal. For large US banks the forecasts beat existing benchmarks.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2024</span>
+      <div class="lit-body">
+        <span class="lit-tag">checking forecasts</span>
+        <a class="lit-title" href="https://doi.org/10.1080/07350015.2023.2200514">Backtesting systemic risk forecasts using multi-objective elicitability</a>
+        <span class="lit-meta">T. Fissler and Y. Hoga · <i>Journal of Business &amp; Economic Statistics</i> 42(2), 485–498</span>
+        <p>Shows that CoVaR cannot be backtested with a single scoring function, as is done for VaR, and introduces multi-objective elicitability to compare and validate CoVaR forecasts, including a traffic-light test.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2022</span>
+      <div class="lit-body">
+        <span class="lit-tag">neural networks</span>
+        <a class="lit-title" href="https://doi.org/10.1007/s00181-021-02035-1">Modelling systemic risk using neural network quantile regression</a>
+        <span class="lit-meta">G. Keilbar and W. Wang · <i>Empirical Economics</i> 62(1), 93–118</span>
+        <p>Estimates CoVaR with neural network quantile regression and builds networks of risk spillovers from its marginal effects. Out of sample it beats a linear benchmark, a sign that non-linearity matters.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2018</span>
+      <div class="lit-body">
+        <span class="lit-tag">many covariates</span>
+        <a class="lit-title" href="https://doi.org/10.1080/07350015.2016.1180990">Single-index-based CoVaR with very high-dimensional covariates</a>
+        <span class="lit-meta">Y. Fan, W. K. Härdle, W. Wang and L. Zhu · <i>Journal of Business &amp; Economic Statistics</i> 36(2), 212–226</span>
+        <p>Lets CoVaR depend on a very large number of covariates by projecting them onto a single index, and shows good backtesting results for the US financial sector.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2016</span>
+      <div class="lit-body">
+        <span class="lit-tag">networks</span>
+        <a class="lit-title" href="https://doi.org/10.1016/j.jeconom.2016.02.013">TENET: Tail-event driven network risk</a>
+        <span class="lit-meta">W. K. Härdle, W. Wang and L. Yu · <i>Journal of Econometrics</i> 192(2), 499–513</span>
+        <p>Estimates tail spillovers among many US financial institutions with single-index quantile regression and variable selection, and turns them into a network that ranks institutions as emitters and receivers of systemic risk.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2014</span>
+      <div class="lit-body">
+        <span class="lit-tag">definition</span>
+        <a class="lit-title" href="https://doi.org/10.1515/strm-2013-1164">On dependence consistency of CoVaR and some other systemic risk measures</a>
+        <span class="lit-meta">G. Mainik and E. Schaanning · <i>Statistics &amp; Risk Modeling</i> 31(1), 49–77</span>
+        <p>Shows that when distress means being exactly at the VaR, CoVaR does not always rise as the dependence between institution and system increases, even for normally distributed returns. Defining distress as being at the VaR or worse fixes this.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2013</span>
+      <div class="lit-body">
+        <span class="lit-tag">definition</span>
+        <a class="lit-title" href="https://doi.org/10.1016/j.jbankfin.2013.02.027">Systemic risk measurement: Multivariate GARCH estimation of CoVaR</a>
+        <span class="lit-meta">G. Girardi and A. T. Ergün · <i>Journal of Banking &amp; Finance</i> 37(8), 3169–3180</span>
+        <p>Redefines distress as the institution being at or below its VaR rather than exactly at it, estimates CoVaR with a multivariate GARCH model, and makes the resulting forecasts testable against data.</p>
+      </div>
+    </li>
+    <li>
+      <span class="lit-year">2008</span>
+      <div class="lit-body">
+        <span class="lit-tag">the original</span>
+        <a class="lit-title" href="https://doi.org/10.1257/aer.20120555">CoVaR</a>
+        <span class="lit-meta">T. Adrian and M. K. Brunnermeier · first circulated as Federal Reserve Bank of New York Staff Report 348 (2008); <i>American Economic Review</i> 106(7), 1705–1741 (2016)</span>
+        <p>Defines CoVaR and ΔCoVaR, estimates them with quantile regressions on market data and state variables, and shows that ΔCoVaR is only loosely related to an institution's own VaR. Leverage, size, maturity mismatch and asset-price booms help predict it.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="summary" aria-labelledby="sum-title">
+  <h2 id="sum-title">In short</h2>
+  <p>VaR measures how badly one institution can do on its worst days. CoVaR measures how badly the whole financial system does on the days that institution is in distress, and ΔCoVaR, the gap to a normal day, is the institution's contribution to systemic risk. A risky bank need not be a systemic one: what matters is how strongly its bad days are tied to everyone else's. CoVaR is estimated with quantile regression, a line or curve with a share q of the days below it, and the research since 2008 has refined the definition of distress, made the regression flexible enough for many institutions, non-linear tails and news text, and developed ways to check the forecasts.</p>
+</section>
+
+<footer>
+  <p>The figures use simulated returns: the bank's return is normal with a standard deviation of 2%, and the system follows the bank more closely, and with more spread, on the bank's bad days. Because the model is known, the "true" quantiles in Figures 2 and 3 are exact.</p>
+</footer>
+</div>
+<script>
+(function(){
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+function E(tag,attrs,parent){const e=document.createElementNS(NS,tag);let st="";if(attrs)for(const k in attrs){const v=String(attrs[k]);if((k==="fill"||k==="stroke")&&v.indexOf("var(")>=0)st+=k+":"+v+";";else e.setAttribute(k,v);}if(st)e.setAttribute("style",st);if(parent)parent.appendChild(e);return e;}
+function TX(parent,x,y,txt,attrs){const t=E("text",Object.assign({x:x,y:y,fill:"var(--muted)","font-size":"11.5"},attrs||{}),parent);t.textContent=txt;return t;}
+function lin(d0,d1,r0,r1){return function(v){return r0+(v-d0)/(d1-d0)*(r1-r0);};}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function minus(s){return String(s).replace(/-/g,"−");}
+function pct(v){return minus(v.toFixed(2))+"%";}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(rng){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+
+/* axes: frame, grid, ticks and titles from one pair of scales */
+function axes(svg,o){
+  const X0=o.xs(o.x0),X1=o.xs(o.x1),Y0=o.ys(o.y0),Y1=o.ys(o.y1);
+  (o.yt||[]).forEach(function(t){E("line",{x1:X0,x2:X1,y1:o.ys(t[0]),y2:o.ys(t[0]),stroke:"var(--grid)"},svg);});
+  (o.xt||[]).forEach(function(t){E("line",{x1:o.xs(t[0]),x2:o.xs(t[0]),y1:Y0,y2:Y1,stroke:"var(--grid)"},svg);});
+  E("line",{x1:X0,x2:X1,y1:Y0,y2:Y0,stroke:"var(--muted)"},svg);
+  E("line",{x1:X0,x2:X0,y1:Y0,y2:Y1,stroke:"var(--muted)"},svg);
+  (o.xt||[]).forEach(function(t){E("line",{x1:o.xs(t[0]),x2:o.xs(t[0]),y1:Y0,y2:Y0+5,stroke:"var(--muted)"},svg);TX(svg,o.xs(t[0]),Y0+18,t[1],{"text-anchor":"middle",class:"mono","font-size":"11"});});
+  (o.yt||[]).forEach(function(t){E("line",{x1:X0-5,x2:X0,y1:o.ys(t[0]),y2:o.ys(t[0]),stroke:"var(--muted)"},svg);TX(svg,X0-8,o.ys(t[0])+4,t[1],{"text-anchor":"end",class:"mono","font-size":"11"});});
+  if(o.xtitle)TX(svg,(X0+X1)/2,Y0+(o.xtitleDy||36),o.xtitle,{"text-anchor":"middle",fill:"var(--ink)","font-size":"12"});
+  if(o.ytitle)TX(svg,4,Y1-12,o.ytitle,{"text-anchor":"start",fill:"var(--ink)","font-size":"12"});
+}
+
+/* typeset maths that a step inserts after MathJax has started */
+function typeset(el){const M=window.MathJax;if(M&&M.typesetPromise&&M.startup&&M.startup.promise){M.startup.promise.then(function(){return M.typesetPromise([el]);}).catch(function(){});}}
+
+/* stepper: reads its steps from a <template>, calls apply(i) on every change */
+function makeStepper(rootId,tplId,applies){
+  const root=document.getElementById(rootId);
+  const steps=Array.from(document.getElementById(tplId).content.querySelectorAll(".step"));
+  let i=0;
+  root.innerHTML='<div class="steps-top"><span class="steps-count"></span><div class="dots"></div></div><h4></h4><div class="body"></div><div class="nav"><button class="btn prev" type="button">Previous</button><button class="btn primary next" type="button">Next</button></div>';
+  const cnt=root.querySelector(".steps-count"),dots=root.querySelector(".dots"),h=root.querySelector("h4"),body=root.querySelector(".body"),prev=root.querySelector(".prev"),next=root.querySelector(".next");
+  steps.forEach(function(s,k){const b=document.createElement("button");b.type="button";b.setAttribute("aria-label","Step "+(k+1)+": "+s.dataset.title);b.addEventListener("click",function(){go(k);});dots.appendChild(b);});
+  function go(k){
+    i=Math.max(0,Math.min(steps.length-1,k));const s=steps[i];
+    cnt.textContent="Step "+(i+1)+" of "+steps.length;h.textContent=s.dataset.title;
+    body.replaceChildren.apply(body,Array.from(s.childNodes).map(function(n){return n.cloneNode(true);}));
+    typeset(body);
+    Array.from(dots.children).forEach(function(b,j){if(j===i)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+    prev.disabled=i===0;next.disabled=i===steps.length-1;applies[i]();
+  }
+  prev.addEventListener("click",function(){go(i-1);});next.addEventListener("click",function(){go(i+1);});
+  go(0);
+}
+
+/* =================== the model: a bank and the system =================== */
+/* bank return X ~ N(0, 2^2); system return Y = lam*0.45*X + s(X)*eps, s(X) = 1 + lam*0.5*max(0, -X), eps ~ N(0,1) */
+const SX=2;
+function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x));}
+function Phi(x){return 0.5*(1+erf(x/Math.SQRT2));}
+function invPhi(p){
+  const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+  const b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
+  const c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+  const d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
+  let q,r;
+  if(p<0.02425){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p<=0.97575){q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+  q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+}
+function mean(x,lam){return lam*0.45*x;}
+function spread(x,lam){return 1+lam*0.5*Math.max(0,-x);}
+function condQ(x,q,lam){return mean(x,lam)+spread(x,lam)*invPhi(q);}           /* q-quantile of Y given X = x */
+const XG=[],WG=[];(function(){let s=0;for(let k=0;k<=800;k++){const x=-14+28*k/800,w=Math.exp(-x*x/(2*SX*SX));XG.push(x);WG.push(w);s+=w;}for(let k=0;k<WG.length;k++)WG[k]/=s;})();
+function sysCdf(v,lam,xmax){let num=0,den=0;for(let k=0;k<XG.length;k++){if(XG[k]>xmax)break;num+=WG[k]*Phi((v-mean(XG[k],lam))/spread(XG[k],lam));den+=WG[k];}return num/den;}
+function solve(f,target){let lo=-40,hi=20;for(let it=0;it<60;it++){const mid=(lo+hi)/2;if(f(mid)<target)lo=mid;else hi=mid;}return (lo+hi)/2;}
+function sysVaR(q,lam){return solve(function(v){return sysCdf(v,lam,Infinity);},q);}
+function covarLE(q,lam){return solve(function(v){return sysCdf(v,lam,SX*invPhi(q));},q);}   /* distress = at or below VaR */
+
+const N=1000,Z1=[],Z2=[];(function(){const rng=mulberry32(20080915);for(let i=0;i<N;i++){Z1.push(gauss(rng));Z2.push(gauss(rng));}})();
+function sample(lam){return Z1.map(function(z,i){const x=SX*z;return [x,mean(x,lam)+spread(x,lam)*Z2[i]];});}
+
+/* =================== FIGURE 1: VaR =================== */
+(function(){
+  const S=document.getElementById("f1-hist"),slider=document.getElementById("f1-q");
+  let q=0.05,mode={};
+  const xs=lin(-8,8,48,548),ys=lin(0,0.24,250,24),BW=0.5;
+  const X=Z1.map(function(z){return SX*z;});
+  function draw(){
+    const v=SX*invPhi(q);
+    clear(S);
+    axes(S,{xs:xs,ys:ys,x0:-8,x1:8,y0:0,y1:0.24,xt:[[-8,"−8"],[-6,"−6"],[-4,"−4"],[-2,"−2"],[0,"0"],[2,"2"],[4,"4"],[6,"6"],[8,"8"]],yt:[[0,"0"],[0.1,"0.1"],[0.2,"0.2"]],xtitle:"bank's daily return (%)",xtitleDy:36,ytitle:"share of days per 1%"});
+    const cnt=new Array(32).fill(0);X.forEach(function(x){const b=Math.floor((x+8)/BW);if(b>=0&&b<32)cnt[b]++;});
+    let below=0;X.forEach(function(x){if(x<=v)below++;});
+    cnt.forEach(function(c,b){if(!c)return;const lo=-8+b*BW,dv=c/(N*BW),tail=mode.tail&&lo+BW<=v+1e-9;
+      E("rect",{x:xs(lo)+0.5,y:ys(dv),width:xs(BW)-xs(0)-1,height:ys(0)-ys(dv),fill:tail?"var(--ball-fill)":"var(--shade)",stroke:tail?"var(--ball)":"var(--data)","stroke-width":1},S);});
+    let d="";for(let k=0;k<=200;k++){const x=-8+16*k/200;d+=(k?"L":"M")+xs(x).toFixed(1)+","+ys(Math.exp(-x*x/8)/(SX*Math.sqrt(2*Math.PI))).toFixed(1);}
+    E("path",{d:d,fill:"none",stroke:"var(--fn)","stroke-width":1.6,"stroke-dasharray":"6 4"},S);
+    if(mode.cut){E("line",{x1:xs(v),x2:xs(v),y1:ys(0),y2:ys(0.24),stroke:"var(--ball)","stroke-width":2.2},S);
+      TX(S,xs(v)-6,ys(0.22),"VaR = "+pct(v),{"text-anchor":"end",fill:"var(--ball)","font-weight":"600","font-size":"12.5",class:"halo"});}
+    if(mode.tail)TX(S,xs(-6.6),ys(0.06),"worst "+Math.round(q*100)+"% of days",{"text-anchor":"middle",fill:"var(--ball)","font-size":"11.5",class:"halo"});
+    document.getElementById("f1-qout").textContent=Math.round(q*100)+"%";
+    document.getElementById("f1-var").textContent=pct(v);
+    document.getElementById("f1-n").textContent=below+" of "+N.toLocaleString("en-US");
+  }
+  function setQ(v){q=v;slider.value=Math.round(v*100);}
+  slider.addEventListener("input",function(){q=+slider.value/100;mode={tail:true,cut:true};draw();});
+  makeStepper("f1-steps","f1-steps-t",[
+    function(){mode={};setQ(0.05);draw();},
+    function(){mode={tail:true};setQ(0.05);draw();},
+    function(){mode={tail:true,cut:true};setQ(0.05);draw();},
+    function(){mode={tail:true,cut:true};draw();}
+  ]);
+})();
+
+/* =================== FIGURE 2: CoVaR and ΔCoVaR =================== */
+(function(){
+  const S=document.getElementById("f2-scat"),qs=document.getElementById("f2-q"),ls=document.getElementById("f2-lam");
+  let q=0.05,lam=1,cond="eq",mode={};
+  const xs=lin(-7.5,6.5,56,544),ys=lin(-11,6,332,20),BAND=0.35;
+  function lamWord(l){return l===0?"none":l<0.35?"weak":l<0.75?"medium":"strong";}
+  function draw(){
+    const vi=SX*invPhi(q),vs=sysVaR(q,lam),cEq=condQ(vi,q,lam),cMed=condQ(0,q,lam),cLe=covarLE(q,lam),pts=sample(lam);
+    const co=cond==="eq"?cEq:cLe;
+    clear(S);
+    axes(S,{xs:xs,ys:ys,x0:-7.5,x1:6.5,y0:-11,y1:6,xt:[[-6,"−6"],[-4,"−4"],[-2,"−2"],[0,"0"],[2,"2"],[4,"4"],[6,"6"]],yt:[[-10,"−10"],[-8,"−8"],[-6,"−6"],[-4,"−4"],[-2,"−2"],[0,"0"],[2,"2"],[4,"4"]],xtitle:"bank's daily return (%)",xtitleDy:38,ytitle:"system's daily return (%)"});
+    if(mode.band){
+      if(cond==="eq"){E("rect",{x:xs(vi-BAND),y:ys(6),width:xs(vi+BAND)-xs(vi-BAND),height:ys(-11)-ys(6),fill:"var(--ball-fill)",stroke:"var(--ball-soft)"},S);
+        TX(S,xs(vi),ys(5.2),"bank at its VaR",{"text-anchor":"middle",fill:"var(--ball)","font-size":"11.5",class:"halo"});}
+      else{E("rect",{x:xs(-7.5),y:ys(6),width:xs(vi)-xs(-7.5),height:ys(-11)-ys(6),fill:"var(--ball-fill)"},S);
+        E("line",{x1:xs(vi),x2:xs(vi),y1:ys(-11),y2:ys(6),stroke:"var(--ball-soft)"},S);
+        TX(S,(xs(-7.5)+xs(vi))/2,ys(5.2),"bank at or below its VaR",{"text-anchor":"middle",fill:"var(--ball)","font-size":"11.5",class:"halo"});}
+    }
+    if(mode.median){E("rect",{x:xs(-BAND),y:ys(6),width:xs(BAND)-xs(-BAND),height:ys(-11)-ys(6),fill:"var(--mag-fill)",stroke:"var(--mag)","stroke-opacity":0.5},S);
+      TX(S,xs(0),ys(5.2),"normal day",{"text-anchor":"middle",fill:"var(--mag)","font-size":"11.5",class:"halo"});}
+    pts.forEach(function(p){if(p[1]<-11||p[1]>6||p[0]<-7.5||p[0]>6.5)return;
+      const inBand=mode.covar&&(cond==="eq"?Math.abs(p[0]-vi)<=BAND:p[0]<=vi);
+      E("circle",{cx:xs(p[0]).toFixed(1),cy:ys(p[1]).toFixed(1),r:2.1,fill:inBand&&p[1]<=co?"var(--ball)":"var(--data)","fill-opacity":inBand?0.95:0.55},S);});
+    if(mode.sysvar){E("line",{x1:xs(-7.5),x2:xs(6.5),y1:ys(vs),y2:ys(vs),stroke:"var(--fn)","stroke-width":1.5,"stroke-dasharray":"7 4"},S);
+      TX(S,xs(6.4),ys(vs)-6,"VaR of the system "+pct(vs),{"text-anchor":"end",fill:"var(--fn)","font-size":"11.5",class:"halo"});}
+    if(mode.covar){
+      if(cond==="eq"){E("line",{x1:xs(vi-BAND-0.35),x2:xs(vi+BAND+0.35),y1:ys(co),y2:ys(co),stroke:"var(--ball)","stroke-width":3.4,"stroke-linecap":"round"},S);}
+      else{E("line",{x1:xs(-7.5),x2:xs(vi+0.35),y1:ys(co),y2:ys(co),stroke:"var(--ball)","stroke-width":2.6,"stroke-dasharray":"8 4"},S);}
+      TX(S,xs(cond==="eq"?vi-BAND-0.45:-7.3),ys(co)+(cond==="eq"?4:18),"CoVaR "+pct(co),{"text-anchor":cond==="eq"?"end":"start",fill:"var(--ball)","font-weight":"600","font-size":"12",class:"halo"});
+    }
+    if(mode.median){E("line",{x1:xs(-BAND-0.35),x2:xs(BAND+0.35),y1:ys(cMed),y2:ys(cMed),stroke:"var(--mag)","stroke-width":3.4,"stroke-linecap":"round"},S);}
+    if(mode.delta&&cond==="eq"&&Math.abs(cEq-cMed)>0.05){
+      const bx=xs(BAND+1.1);
+      E("line",{x1:xs(vi+BAND+0.35),x2:bx,y1:ys(cEq),y2:ys(cEq),stroke:"var(--ball-soft)","stroke-dasharray":"2 3"},S);
+      E("line",{x1:xs(BAND+0.35),x2:bx,y1:ys(cMed),y2:ys(cMed),stroke:"var(--mag)","stroke-dasharray":"2 3"},S);
+      E("path",{d:"M"+bx+","+ys(cMed)+"V"+ys(cEq)+"M"+(bx-5)+","+ys(cMed)+"H"+(bx+5)+"M"+(bx-5)+","+ys(cEq)+"H"+(bx+5),stroke:"var(--ball)","stroke-width":2,fill:"none"},S);
+      TX(S,bx+9,(ys(cMed)+ys(cEq))/2+4,"ΔCoVaR "+pct(cEq-cMed),{fill:"var(--ball)","font-weight":"600","font-size":"12.5",class:"halo"});
+    }
+    document.getElementById("f2-qout").textContent=Math.round(q*100)+"%";
+    document.getElementById("f2-lamout").textContent=lamWord(lam);
+    document.getElementById("f2-vari").textContent=pct(vi);
+    document.getElementById("f2-vars").textContent=pct(vs);
+    document.getElementById("f2-covar").textContent=mode.covar?pct(co):"–";
+    document.getElementById("f2-delta").textContent=mode.delta&&cond==="eq"?pct(cEq-cMed):"–";
+  }
+  function setQ(v){q=v;qs.value=Math.round(v*100);}
+  function setLam(v){lam=v;ls.value=v;}
+  function setCond(c){cond=c;document.getElementById("f2-eq").setAttribute("aria-pressed",c==="eq");document.getElementById("f2-le").setAttribute("aria-pressed",c==="le");}
+  const ALL={sysvar:true,band:true,covar:true,median:true,delta:true};
+  qs.addEventListener("input",function(){q=+qs.value/100;mode=ALL;draw();});
+  ls.addEventListener("input",function(){lam=+ls.value;mode=ALL;draw();});
+  document.getElementById("f2-eq").addEventListener("click",function(){setCond("eq");mode=ALL;draw();});
+  document.getElementById("f2-le").addEventListener("click",function(){setCond("le");mode=ALL;draw();});
+  makeStepper("f2-steps","f2-steps-t",[
+    function(){mode={};setQ(0.05);setLam(1);setCond("eq");draw();},
+    function(){mode={sysvar:true};setQ(0.05);setLam(1);setCond("eq");draw();},
+    function(){mode={sysvar:true,band:true};setQ(0.05);setLam(1);setCond("eq");draw();},
+    function(){mode={sysvar:true,band:true,covar:true};setQ(0.05);setLam(1);setCond("eq");draw();},
+    function(){mode=ALL;setQ(0.05);setLam(1);setCond("eq");draw();},
+    function(){mode=ALL;setQ(0.05);setLam(0);setCond("eq");draw();},
+    function(){mode=ALL;setQ(0.05);setLam(1);setCond("le");draw();}
+  ]);
+})();
+
+/* =================== FIGURE 3: quantile regression =================== */
+(function(){
+  const S=document.getElementById("f3-scat"),L=document.getElementById("f3-loss"),slider=document.getElementById("f3-q");
+  let q=0.05,mode={};
+  const pts=sample(1);
+  const xs=lin(-7.5,6.5,44,330),ys=lin(-11,6,300,16);
+  /* linear quantile regression: iteratively reweighted least squares for the slope, exact quantile for the intercept */
+  function fit(q){
+    let a=0,b=0.5;
+    for(let it=0;it<80;it++){
+      let sw=0,sx=0,sy=0,sxx=0,sxy=0;
+      pts.forEach(function(p){const r=p[1]-a-b*p[0],w=(r>=0?q:1-q)/Math.max(Math.abs(r),1e-3);sw+=w;sx+=w*p[0];sy+=w*p[1];sxx+=w*p[0]*p[0];sxy+=w*p[0]*p[1];});
+      const den=sw*sxx-sx*sx;b=(sw*sxy-sx*sy)/den;a=(sy-b*sx)/sw;
+    }
+    const res=pts.map(function(p){return p[1]-b*p[0];}).sort(function(u,v){return u-v;});
+    a=res[Math.max(0,Math.ceil(q*pts.length)-1)];
+    return [a,b];
+  }
+  function draw(){
+    const ab=fit(q),a=ab[0],b=ab[1],vi=SX*invPhi(q),hat=a+b*vi,tru=condQ(vi,q,1);
+    let below=0;
+    clear(S);
+    axes(S,{xs:xs,ys:ys,x0:-7.5,x1:6.5,y0:-11,y1:6,xt:[[-6,"−6"],[-4,"−4"],[-2,"−2"],[0,"0"],[2,"2"],[4,"4"],[6,"6"]],yt:[[-10,"−10"],[-6,"−6"],[-2,"−2"],[2,"2"]],xtitle:"bank's return (%)",xtitleDy:34});
+    TX(S,4,10,"system's return (%)",{fill:"var(--ink)","font-size":"12"});
+    pts.forEach(function(p){const lo=p[1]<a+b*p[0];if(lo)below++;if(p[1]<-11||p[1]>6||p[0]<-7.5||p[0]>6.5)return;
+      E("circle",{cx:xs(p[0]).toFixed(1),cy:ys(p[1]).toFixed(1),r:1.9,fill:mode.line&&lo?"var(--ball)":"var(--data)","fill-opacity":mode.line&&lo?0.95:0.5},S);});
+    if(mode.truth){let d="";for(let k=0;k<=120;k++){const x=-7.5+14*k/120;d+=(k?"L":"M")+xs(x).toFixed(1)+","+ys(Math.max(-11,condQ(x,q,1))).toFixed(1);}
+      E("path",{d:d,fill:"none",stroke:"var(--mag)","stroke-width":2.2,"stroke-dasharray":"7 4"},S);}
+    if(mode.line){E("line",{x1:xs(-7.5),x2:xs(6.5),y1:ys(a+b*-7.5),y2:ys(a+b*6.5),stroke:"var(--fn)","stroke-width":2.4},S);}
+    if(mode.covar){
+      E("line",{x1:xs(vi),x2:xs(vi),y1:ys(-11),y2:ys(6),stroke:"var(--ball-soft)","stroke-dasharray":"3 3"},S);
+      TX(S,xs(vi),ys(5.3),"bank's VaR",{"text-anchor":"middle",fill:"var(--ball)","font-size":"11",class:"halo"});
+      E("circle",{cx:xs(vi),cy:ys(hat),r:5,fill:"var(--fn)",stroke:"var(--surface)","stroke-width":1.5},S);
+      if(mode.truth)E("circle",{cx:xs(vi),cy:ys(tru),r:5,fill:"var(--mag)",stroke:"var(--surface)","stroke-width":1.5},S);
+    }
+    /* the tilted loss */
+    clear(L);
+    const ux=lin(-3,3,44,286),uy=lin(0,3,280,40);
+    axes(L,{xs:ux,ys:uy,x0:-3,x1:3,y0:0,y1:3,xt:[[-3,"−3"],[-2,"−2"],[-1,"−1"],[0,"0"],[1,"1"],[2,"2"],[3,"3"]],yt:[[0,"0"],[1,"1"],[2,"2"],[3,"3"]],xtitle:"day's distance from the line",xtitleDy:34,ytitle:"cost of the day"});
+    E("path",{d:"M"+ux(-3)+","+uy(3*(1-q))+"L"+ux(0)+","+uy(0)+"L"+ux(3)+","+uy(3*q),fill:"none",stroke:"var(--fn)","stroke-width":2.6,"stroke-linejoin":"round"},L);
+    TX(L,ux(-1.8),uy(0.75),"below the line:",{"text-anchor":"middle",fill:"var(--ball)","font-size":"11.5",class:"halo"});
+    TX(L,ux(-1.8),uy(0.45),(1-q).toFixed(2)+" per unit",{"text-anchor":"middle",fill:"var(--ball)","font-size":"11.5","font-weight":"600",class:"halo"});
+    TX(L,ux(1.6),uy(0.55),"above: "+q.toFixed(2)+" per unit",{"text-anchor":"middle",fill:"var(--ink)","font-size":"11.5",class:"halo"});
+    document.getElementById("f3-qout").textContent=Math.round(q*100)+"%";
+    document.getElementById("f3-line").textContent=mode.line?"y = "+minus(a.toFixed(2))+" + "+b.toFixed(2)+"·x":"–";
+    document.getElementById("f3-share").textContent=mode.line?(100*below/pts.length).toFixed(1)+"%":"–";
+    document.getElementById("f3-hat").textContent=mode.covar?pct(hat):"–";
+    document.getElementById("f3-true").textContent=mode.truth?pct(tru):"–";
+  }
+  function setQ(v){q=v;slider.value=Math.round(v*100);}
+  slider.addEventListener("input",function(){q=+slider.value/100;draw();});
+  makeStepper("f3-steps","f3-steps-t",[
+    function(){mode={};setQ(0.05);draw();},
+    function(){mode={line:true};setQ(0.05);draw();},
+    function(){mode={line:true,covar:true};setQ(0.05);draw();},
+    function(){mode={line:true,covar:true,truth:true};setQ(0.05);draw();},
+    function(){mode={line:true,covar:true,truth:true};draw();}
+  ]);
+})();
+})();
+</script>
+</body>
+</html>

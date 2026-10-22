@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diffusion Models</title>
+<meta name="description" content="An interactive, intuitive guide to denoising diffusion probabilistic models (DDPM), motivated by forecasting the limit order book: how data are turned into noise, how a network learns to guess the noise, and how new data are generated.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap">
+<script>
+window.MathJax={tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]},svg:{fontCache:"global"},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code","template"]}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+/* Layout: an essay column (about 66ch) with a margin rail for side notes on wide screens;
+   each interactive plate breaks out to the full width, figures on the left and a step-by-step walkthrough on the right.
+   Colour roles are fixed across the whole post, printed in the site's inks: data = grey, noise = gold,
+   the network's guess = black ink, generated samples = red. */
+:root{
+  --bg:#f4f0e4; --surface:#fdfbf6; --ink:#1d1a16; --muted:#5a5246; --rule:#dcd5c5; --grid:#ebe5d7; --line:rgba(60,90,160,.16); --shade:rgba(23,33,44,.05);
+  --fn:#1d1a16; --fn-soft:rgba(29,26,22,.18);
+  --ball:#a8751a; --ball-fill:rgba(168,117,26,.10); --ball-soft:rgba(168,117,26,.5);
+  --mag:#b22a1f; --mag-fill:rgba(178,42,31,.12);
+  --data:#8a8275; --accent:#b22a1f; --accent-soft:rgba(178,42,31,.16);
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"IBM Plex Sans","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#191813; --surface:#211f1a; --ink:#ece6d8; --muted:#a39d92; --rule:#38352d; --grid:#2a2822; --line:rgba(140,170,230,.08); --shade:rgba(228,233,239,.05);
+  --fn:#ece6d8; --fn-soft:rgba(236,230,216,.22);
+  --ball:#d9a64a; --ball-fill:rgba(217,166,74,.14); --ball-soft:rgba(217,166,74,.6);
+  --mag:#e8705f; --mag-fill:rgba(232,112,95,.15);
+  --data:#9a9284; --accent:#e8705f; --accent-soft:rgba(232,112,95,.2);
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#191813; --surface:#211f1a; --ink:#ece6d8; --muted:#a39d92; --rule:#38352d; --grid:#2a2822; --line:rgba(140,170,230,.08); --shade:rgba(228,233,239,.05);
+  --fn:#ece6d8; --fn-soft:rgba(236,230,216,.22);
+  --ball:#d9a64a; --ball-fill:rgba(217,166,74,.14); --ball-soft:rgba(217,166,74,.6);
+  --mag:#e8705f; --mag-fill:rgba(232,112,95,.15);
+  --data:#9a9284; --accent:#e8705f; --accent-soft:rgba(232,112,95,.2);
+  color-scheme:dark; }
+
+[hidden]{display:none!important;}
+/* telegram paper: warm newsprint with faint blue typing rules */
+body{margin:0;background-color:var(--bg);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--line) 27px,var(--line) 28px);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;font-optical-sizing:auto;-webkit-font-smoothing:antialiased;}
+.page{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:44px 80px;display:grid;gap:56px;}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px;}
+a:hover{text-decoration-thickness:2px;}
+
+/* masthead */
+.masthead{display:grid;gap:16px;max-width:780px;}
+.eyebrow{font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0;}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.4vw,54px);line-height:1.08;letter-spacing:-.012em;margin:0;text-wrap:balance;}
+.byline{font-family:var(--sans);font-size:13.5px;color:var(--muted);margin:0;display:flex;flex-wrap:wrap;gap:4px 14px;}
+.back{justify-self:start;margin-bottom:8px;font-family:var(--sans);font-size:13.5px;color:var(--muted);text-decoration:none;}
+.back:hover{color:var(--accent);text-decoration:underline;}
+
+/* essay rows: prose + side note */
+.part{display:grid;gap:30px;scroll-margin-top:24px;}
+.row{display:grid;grid-template-columns:minmax(0,680px) minmax(0,1fr);column-gap:52px;row-gap:18px;align-items:start;}
+.prose{display:grid;gap:18px;min-width:0;}
+.prose p{margin:0;}
+.side{font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--muted);border-top:2px solid var(--accent);padding-top:10px;display:grid;gap:8px;min-width:0;max-width:340px;}
+.side p{margin:0;}
+.side b{color:var(--ink);font-weight:600;}
+@media (max-width:1000px){
+  .row{grid-template-columns:minmax(0,1fr);}
+  .side{max-width:680px;border-top:0;border-left:2px solid var(--accent);padding:2px 0 2px 14px;}
+}
+h2{font-family:var(--serif);font-weight:500;font-size:clamp(27px,3.4vw,34px);line-height:1.18;letter-spacing:-.006em;margin:0;text-wrap:balance;display:flex;gap:14px;align-items:baseline;}
+h2 .num{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 7px;line-height:1.6;transform:translateY(-4px);}
+h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.3;margin:6px 0 0;text-wrap:balance;}
+.mjx-d{overflow-x:auto;overflow-y:hidden;padding:4px 0;text-align:center;max-width:100%;}
+.mjx-d svg{max-width:none;}
+.mjx-d mjx-container[display="true"]{margin:0!important;}
+.prose ol,.prose ul{margin:0;padding-left:1.3em;display:grid;gap:10px;}
+
+/* plates */
+.plate{margin:0;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px;display:grid;gap:16px;}
+.plate-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-family:var(--sans);}
+.plate-title{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+.plate-hint{font-size:12.5px;color:var(--muted);}
+.lab{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(0,1fr);gap:20px;align-items:start;}
+@media (max-width:900px){.lab{grid-template-columns:minmax(0,1fr);}}
+.figs{display:grid;gap:14px;min-width:0;}
+.pair{display:grid;grid-template-columns:minmax(0,340fr) minmax(0,300fr);gap:14px;align-items:end;}
+@media (max-width:560px){.pair{grid-template-columns:minmax(0,1fr);}}
+.fig{display:grid;gap:4px;min-width:0;}
+.fig-cap{font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--muted);}
+.fig-cap b{color:var(--ink);font-weight:600;}
+svg.plot{display:block;}
+.fig svg.plot{width:100%;height:auto;overflow:visible;}
+svg text{font-family:var(--sans);}
+svg .mono{font-family:var(--mono);}
+svg .it{font-family:var(--serif);font-style:italic;}
+svg text.halo{paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round;}
+.key{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--sans);font-size:12.5px;color:var(--muted);}
+.key>span{display:inline-flex;align-items:center;gap:6px;}
+.key i{display:inline-block;width:18px;height:0;border-top:2.5px solid currentColor;}
+.key i.dash{border-top-style:dashed;}
+.key i.dot{width:8px;height:8px;border:0;border-radius:50%;background:currentColor;}
+.key i.ring{width:8px;height:8px;border:1.5px solid currentColor;border-radius:50%;}
+.key i.sq{width:11px;height:11px;border:1.5px solid currentColor;background:var(--mag-fill);}
+.controls{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;font-family:var(--sans);font-size:13.5px;padding-top:12px;border-top:1px solid var(--rule);}
+.ctl{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
+.ctl input[type=range]{width:150px;max-width:44vw;accent-color:var(--accent);}
+.ctl input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;margin:0;}
+.ctl output{font-family:var(--mono);font-size:13px;min-width:4.6em;font-variant-numeric:tabular-nums;}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--sans);font-size:13.5px;}
+.readout b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;}
+.c-fn{color:var(--fn);} .c-ball{color:var(--ball);} .c-mag{color:var(--mag);} .c-data{color:var(--data);} .c-ink{color:var(--ink);}
+@media (max-width:560px){
+  .ctl{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:2px;}
+  .ctl>label,.ctl>span:first-child{grid-column:1/-1;}
+  .ctl input[type=range]{width:100%;max-width:none;}
+  .ctl.check,.ctl.btns{display:flex;}
+}
+
+/* walkthrough */
+.steps{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start;}
+@media (min-width:901px){.steps{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));}}
+.steps-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--sans);}
+.steps-count{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.04em;}
+.dots{display:flex;gap:6px;flex-wrap:wrap;}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--muted);background:transparent;padding:0;cursor:pointer;}
+.dots button[aria-current="step"]{background:var(--accent);border-color:var(--accent);}
+.steps h4{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.35;margin:0;text-wrap:balance;}
+.steps .body{display:grid;gap:10px;font-size:16.5px;line-height:1.58;min-width:0;}
+.steps .body p{margin:0;}
+.steps .mjx-d{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
+.nav{display:flex;gap:8px;font-family:var(--sans);}
+.btn{font:inherit;font-size:13.5px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:5px;padding:6px 14px;cursor:pointer;}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface);}
+.btn:disabled{opacity:.4;cursor:default;}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* closing */
+.summary{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:22px 24px;display:grid;gap:12px;max-width:760px;}
+.summary h2{font-size:clamp(23px,2.8vw,28px);}
+.summary p{margin:0;}
+footer{font-family:var(--sans);font-size:12.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;max-width:760px;display:grid;gap:6px;}
+footer p{margin:0;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <a class="back" id="back-link" href="/#learning-blog">← Back to the Learning Blog</a>
+  <script>(function(){try{if(/\/zh\//.test(document.referrer)){var a=document.getElementById("back-link");a.href="/zh/#%E5%AD%A6%E4%B9%A0%E5%8D%9A%E5%AE%A2";a.textContent="← 返回学习博客";}}catch(e){}})();</script>
+  <p class="eyebrow">Generative models</p>
+  <h1>Diffusion models</h1>
+  <p class="byline"><span>Junyu Chen</span><span>22 October 2026</span></p>
+</header>
+
+<section class="part" aria-labelledby="mot-title">
+  <div class="row">
+    <div class="prose">
+      <h2 id="mot-title">A motivating example</h2>
+      <p>A limit order book lists the prices at which traders are willing to buy and sell, and how much. For trading and risk management we would like to forecast the order book a little ahead. A single best guess is not enough: the market may stay calm, or liquidity may suddenly dry up, and the second case is the one risk managers worry about. What we want is the whole range of possible futures, with their probabilities.</p>
+      <p>In our <a href="https://arxiv.org/abs/2610.25495v1">paper on order book forecasting</a>, we produce such forecasts with a conditional diffusion model: it draws many possible future order books, each of them realistic. This post explains the model underneath, the denoising diffusion probabilistic model, or DDPM (Ho, Jain and Abbeel, 2020).</p>
+      <h3>The setup</h3>
+      <p>We have examples \(x_0\) from an unknown distribution: each \(x_0\) could be an order book, a day of returns or an image. We want a machine that produces new draws from the same distribution.</p>
+      <p>In the figures \(x_0\) has just two coordinates, a price change and a bid–ask spread (both standardised), and comes in two kinds: calm days, with small price changes and narrow spreads, and stressed days, with falling prices and wide spreads. About 30% of days are stressed.</p>
+      <p>The idea of DDPM fits in one sentence: slowly turn data into noise, then train a network to undo it, one small step at a time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 1 ======================== -->
+<section class="part" id="s1">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">1</span>Turning data into noise</h2>
+      <p>The forward process takes a data point and, over \(T\) steps, mixes in a little Gaussian noise at each step:</p>
+      <div class="mjx-d">\[ x_t=\sqrt{1-\beta_t}\;x_{t-1}+\sqrt{\beta_t}\;\varepsilon_t,\qquad \varepsilon_t\sim N(0,I),\qquad t=1,\dots,T. \]</div>
+      <p>The numbers \(\beta_t\) are small and fixed in advance. Ho et al. let them grow from 0.0001 to 0.02 over \(T=1000\) steps. The factor \(\sqrt{1-\beta_t}\) shrinks the point slightly at each step, so the spread of the points stays under control while noise is added.</p>
+    </div>
+    <aside class="side">
+      <p><b>Why add noise at all?</b> Because the end point is easy. After enough steps nothing is left of the data, and \(x_T\) is simply standard normal noise, which a computer can draw instantly.</p>
+      <p>If we can learn the way back, from noise to data, then drawing noise and walking back produces new data.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="f1-title">
+    <div class="plate-head"><span class="plate-title" id="f1-title">Figure 1 · The forward process: data to noise</span><span class="plate-hint">Use the walkthrough, or drag the slider</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="pair">
+          <div class="fig">
+            <div class="key"><span class="c-data"><i class="dot"></i><span>500 days, after t steps</span></span><span class="c-ball"><i class="dash"></i><span>standard normal</span></span></div>
+            <svg id="f1-scat" class="plot" viewBox="0 0 340 340" role="img" aria-label="Scatter plot of the data after t steps of the forward process"></svg>
+          </div>
+          <div class="fig">
+            <div class="key"><span class="c-data"><i></i><span>signal kept</span></span><span class="c-ball"><i></i><span>noise added</span></span></div>
+            <svg id="f1-sched" class="plot" viewBox="0 0 300 340" role="img" aria-label="Share of signal and noise against the step t"></svg>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="f1-t">Step <span style="font-style:italic;font-family:var(--serif)">t</span></label><input id="f1-t" type="range" min="0" max="1000" step="10" value="0"><output id="f1-tout" for="f1-t">0</output></div>
+        </div>
+        <div class="readout">
+          <span>signal kept √ᾱ<sub>t</sub> = <b id="f1-sig" class="c-ink"></b></span>
+          <span>noise added √(1−ᾱ<sub>t</sub>) = <b id="f1-noi" class="c-ball"></b></span>
+        </div>
+      </div>
+      <div class="steps" id="f1-steps"></div>
+    </div>
+  </figure>
+
+  <template id="f1-steps-t">
+    <div class="step" data-title="Two kinds of days">
+      <p>These are 500 days of data. Calm days form the large cluster on the lower right; stressed days, with falling prices and wide spreads, the smaller one on the upper left.</p>
+      <p>We want a model that can produce new, realistic days of both kinds, in the right proportions.</p>
+    </div>
+    <div class="step" data-title="A little noise">
+      <p>Each step shrinks every point slightly towards the origin and adds a little noise:</p>
+      <div class="mjx-d">\[ x_t=\sqrt{1-\beta_t}\,x_{t-1}+\sqrt{\beta_t}\,\varepsilon_t. \]</div>
+      <p>After 20 steps the picture has hardly changed.</p>
+    </div>
+    <div class="step" data-title="More and more noise">
+      <p>After 150 steps the clusters have blurred and drifted towards the centre, but you can still see two groups.</p>
+    </div>
+    <div class="step" data-title="Jump to any step">
+      <p>We never have to run the steps one by one. Any step can be reached in one jump:</p>
+      <div class="mjx-d">\[ x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\varepsilon. \]</div>
+      <p>The chart on the right shows the two weights. At step 400, less than a third of the original signal is left.</p>
+    </div>
+    <div class="step" data-title="Pure noise">
+      <p>At step 1000 the points are standard normal noise (the dashed circles mark one and two standard deviations). Nothing of the data is left.</p>
+      <p>Note that nothing was learned so far: the forward process is a fixed recipe.</p>
+    </div>
+  </template>
+
+  <div class="row">
+    <div class="prose">
+      <p>The jump in step 4 is what makes training fast. Sums of Gaussians are Gaussian, so the many small steps add up to one:</p>
+      <div class="mjx-d">\[ x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\varepsilon,\qquad \varepsilon\sim N(0,I),\qquad \bar\alpha_t=\prod_{s=1}^{t}(1-\beta_s). \]</div>
+      <p>So \(x_t\) is a shrunken copy of the data plus noise. \(\sqrt{\bar\alpha_t}\) says how much signal is left and \(\sqrt{1-\bar\alpha_t}\) how much noise has been added; they are the two curves in Figure 1.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 2 ======================== -->
+<section class="part" id="s2">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">2</span>Training: guess the noise</h2>
+      <p>To run the process backwards, the model has to answer one question at every step: given the noisy point \(x_t\), what noise was added? A neural network \(\varepsilon_\theta(x_t,t)\) is trained to answer it. Training repeats three simple moves:</p>
+      <ol>
+        <li>take a real data point \(x_0\) and a random step \(t\);</li>
+        <li>draw noise \(\varepsilon\) and form the noisy point \(x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\varepsilon\);</li>
+        <li>let the network guess \(\varepsilon\) from \(x_t\) and \(t\), and adjust its weights to reduce the squared error.</li>
+      </ol>
+      <p>Guessing the noise is the same as guessing the clean point, because \(\hat x_0=\bigl(x_t-\sqrt{1-\bar\alpha_t}\,\hat\varepsilon\bigr)/\sqrt{\bar\alpha_t}\). Figure 2 shows the guesses as clean points, which are easier to picture.</p>
+    </div>
+    <aside class="side">
+      <p><b>It is just regression.</b> The inputs are \(x_t\) and \(t\), the target is \(\varepsilon\) and the loss is the squared error. The only twist is that the training examples are made on the fly, by adding fresh noise to real data, so their supply is unlimited.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="f2-title">
+    <div class="plate-head"><span class="plate-title" id="f2-title">Figure 2 · One training example</span><span class="plate-hint">Use the walkthrough, or click a point to pick another day</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="pair">
+          <div class="fig">
+            <div class="key"><span class="c-data"><i class="ring"></i><span>real day x₀</span></span><span class="c-ball"><i></i><span>noise</span></span><span class="c-fn"><i class="dot"></i><span>network's guess</span></span></div>
+            <svg id="f2-scat" class="plot" viewBox="0 0 340 340" role="img" aria-label="A data point, its noisy version and the network's guess of the clean point"></svg>
+          </div>
+          <div class="fig">
+            <div class="key"><span class="c-fn"><i></i><span>average error of the guess</span></span></div>
+            <svg id="f2-err" class="plot" viewBox="0 0 300 340" role="img" aria-label="Average error of the best guess against the step t"></svg>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="f2-t">Step <span style="font-style:italic;font-family:var(--serif)">t</span></label><input id="f2-t" type="range" min="10" max="1000" step="10" value="300"><output id="f2-tout" for="f2-t">300</output></div>
+          <div class="ctl btns"><button id="f2-new" class="btn" type="button">Draw new noise</button></div>
+        </div>
+        <div class="readout">
+          <span>true noise ε = <b id="f2-eps" class="c-ball"></b></span>
+          <span>guess ε̂ = <b id="f2-epsh" class="c-fn"></b></span>
+          <span>squared error ‖ε − ε̂‖² = <b id="f2-loss" class="c-ink"></b></span>
+        </div>
+      </div>
+      <div class="steps" id="f2-steps"></div>
+    </div>
+  </figure>
+
+  <template id="f2-steps-t">
+    <div class="step" data-title="Pick a day and a step">
+      <p>Training starts from a real data point \(x_0\) (the ringed point, here a stressed day) and a random step, here \(t=300\).</p>
+    </div>
+    <div class="step" data-title="Add noise">
+      <p>Shrink the point by \(\sqrt{\bar\alpha_t}\) (dashed grey) and add noise \(\sqrt{1-\bar\alpha_t}\,\varepsilon\) (gold arrow). The result \(x_t\) is all the network gets to see; it never sees \(x_0\) or \(\varepsilon\).</p>
+    </div>
+    <div class="step" data-title="The network guesses">
+      <p>From \(x_t\) and \(t\) alone, the network guesses the noise, or equivalently the clean point (black).</p>
+      <p>The squared error \(\|\varepsilon-\hat\varepsilon\|^2\) is the loss for this example. Training nudges the network's weights to make it smaller.</p>
+    </div>
+    <div class="step" data-title="Little noise: an easy guess">
+      <p>At \(t=50\) only a little noise has been added, and the guess lands close to the real day.</p>
+    </div>
+    <div class="step" data-title="Much noise: a cautious guess">
+      <p>At \(t=800\) the noisy point could have come from either kind of day. The best possible guess is then an average of all the days that could have produced it, and it lies between the two clusters.</p>
+      <p>This is what a well-trained network learns: the expected clean point, given what it sees.</p>
+      <p>The readout shows the flip side: the noise guess itself is now almost exact, because \(x_t\) is nearly pure noise. What is hard to recover is the small amount of signal left.</p>
+    </div>
+    <div class="step" data-title="The training loss">
+      <p>Averaging the squared error over days, steps and noise gives the loss</p>
+      <div class="mjx-d">\[ L(\theta)=\mathbb E\,\bigl\|\varepsilon-\varepsilon_\theta\bigl(\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\varepsilon,\;t\bigr)\bigr\|^2, \]</div>
+      <p>which is minimised with stochastic gradient descent. The chart shows how far the best guess is from the real day: close at early steps, and at late steps no better than guessing the overall average.</p>
+    </div>
+  </template>
+</section>
+
+<!-- ======================== PART 3 ======================== -->
+<section class="part" id="s3">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">3</span>Generating: walk back from noise</h2>
+      <p>With a trained network, generating new data is a loop. Start from pure noise \(x_T\sim N(0,I)\) and, for \(t=T,\dots,1\), take one small step back:</p>
+      <div class="mjx-d">\[ x_{t-1}=\frac{1}{\sqrt{1-\beta_t}}\Bigl(x_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\;\varepsilon_\theta(x_t,t)\Bigr)+\sqrt{\beta_t}\;z,\qquad z\sim N(0,I). \]</div>
+      <p>The first part removes a little of the predicted noise. The second part adds back a little fresh noise, which keeps the samples spread out like the data instead of collapsing onto the average.</p>
+    </div>
+    <aside class="side">
+      <p><b>Why so many small steps?</b> Over one small step the change is nearly Gaussian, which a network can learn well; one giant leap from noise to data would not be.</p>
+      <p>The price is speed: Ho et al. needed 1000 network evaluations per sample. Later methods such as DDIM reach similar quality in far fewer steps.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="f3-title">
+    <div class="plate-head"><span class="plate-title" id="f3-title">Figure 3 · The reverse process: noise to data</span><span class="plate-hint">Use the walkthrough, or drag the slider</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="pair">
+          <div class="fig">
+            <div class="key"><span class="c-mag"><i class="dot"></i><span>samples</span></span><span class="c-data"><i class="dot" style="opacity:.45"></i><span>real data</span></span><span class="c-fn"><i></i><span>network's guess</span></span></div>
+            <svg id="f3-scat" class="plot" viewBox="0 0 340 340" role="img" aria-label="Samples moving from noise to data"></svg>
+          </div>
+          <div class="fig">
+            <div class="key"><span class="c-mag"><i class="sq"></i><span>samples</span></span><span class="c-data"><i class="dash"></i><span>real data</span></span></div>
+            <svg id="f3-hist" class="plot" viewBox="0 0 300 340" role="img" aria-label="Histogram of the price change of the samples against the data density"></svg>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="f3-p">Denoising progress</label><input id="f3-p" type="range" min="0" max="100" step="1" value="0"><output id="f3-pout" for="f3-p">t = 1000</output></div>
+          <div class="ctl check"><input id="f3-arrows" type="checkbox"><label for="f3-arrows">Show the network's guesses</label></div>
+          <div class="ctl btns"><button id="f3-new" class="btn" type="button">Draw new samples</button></div>
+        </div>
+        <div class="readout">
+          <span>stressed days among the samples <b id="f3-share" class="c-mag"></b></span>
+          <span>in the data <b class="c-ink">30%</b></span>
+        </div>
+      </div>
+      <div class="steps" id="f3-steps"></div>
+    </div>
+  </figure>
+
+  <template id="f3-steps-t">
+    <div class="step" data-title="Start from noise">
+      <p>Draw 500 points from the standard normal distribution. They know nothing about the data yet. The faint grey points show the real data, for comparison.</p>
+    </div>
+    <div class="step" data-title="The network's guesses">
+      <p>The black arrows point from each location towards the network's guess of the clean point. With this much noise it cannot tell the two kinds of days apart, so every arrow points to the overall centre.</p>
+    </div>
+    <div class="step" data-title="Small steps back">
+      <p>Each step moves the points a little along the arrows and adds a little fresh noise. The red lines trace a few points on their way. After 200 steps not much has happened yet.</p>
+    </div>
+    <div class="step" data-title="Two clusters appear">
+      <p>By \(t=300\) the guesses have become specific: points on the upper left are pulled towards the stressed days, the rest towards the calm days.</p>
+    </div>
+    <div class="step" data-title="New data">
+      <p>At \(t=0\) the samples look like the data. The histogram of their price changes matches the shape of the data, and about 30% of them are stressed days, as in the data.</p>
+    </div>
+    <div class="step" data-title="Many futures, not one">
+      <p>The average of the samples (the cross) lies between the clusters, where hardly any real day lies. A model that only predicts the average would miss the stressed days entirely.</p>
+      <p>Press "Draw new samples": every run gives different points, but the same proportions.</p>
+    </div>
+  </template>
+
+  <div class="row">
+    <div class="prose">
+      <h3>Back to the order book</h3>
+      <p>For forecasting we want not just any realistic order book, but one that fits the current market. That only requires giving the network one more input: it becomes \(\varepsilon_\theta(x_t,t,c)\), where \(c\) is the recent history. The same loop then draws from the conditional distribution of the future given the past, many possible futures given today.</p>
+      <p>The spread of these samples is the forecast uncertainty, and the share of stressed scenarios is a risk estimate. For sequences such as order books, the network inside is often a <a href="transformer.html">Transformer</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="summary" aria-labelledby="sum-title">
+  <h2 id="sum-title">In short</h2>
+  <p>A diffusion model learns a distribution by learning to remove noise. The forward process slowly mixes data with Gaussian noise until only noise is left; it has no parameters, and any step can be reached in one jump. A network is trained, by plain least squares, to guess the noise that was added at each step. To generate, start from noise and repeatedly remove a little of the predicted noise while adding back a little fresh randomness. The result is not one forecast but many realistic samples, so rare outcomes such as a stressed market keep their probability instead of being averaged away.</p>
+</section>
+
+<footer>
+  <p>The figures use a toy distribution with two clusters. Instead of a trained network they use the exact best guess for that distribution, so they show what a perfectly trained network would do. The noise schedule is the one of Ho, Jain and Abbeel: β grows linearly from 0.0001 to 0.02 over T = 1000 steps.</p>
+  <p>Reference: J. Ho, A. Jain and P. Abbeel (2020), "Denoising diffusion probabilistic models", <i>Advances in Neural Information Processing Systems</i>.</p>
+</footer>
+</div>
+<script>
+(function(){
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+function E(tag,attrs,parent){const e=document.createElementNS(NS,tag);let st="";if(attrs)for(const k in attrs){const v=String(attrs[k]);if((k==="fill"||k==="stroke")&&v.indexOf("var(")>=0)st+=k+":"+v+";";else e.setAttribute(k,v);}if(st)e.setAttribute("style",st);if(parent)parent.appendChild(e);return e;}
+function TX(parent,x,y,txt,attrs){const t=E("text",Object.assign({x:x,y:y,fill:"var(--muted)","font-size":"11.5"},attrs||{}),parent);t.textContent=txt;return t;}
+function lin(d0,d1,r0,r1){return function(v){return r0+(v-d0)/(d1-d0)*(r1-r0);};}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function minus(s){return String(s).replace(/-/g,"−");}
+function f2(v){return minus(v.toFixed(2));}
+function vec(v){return "("+f2(v[0])+", "+f2(v[1])+")";}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(rng){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function marker(defs,id,col){const m=E("marker",{id:id,viewBox:"0 0 10 10",refX:8,refY:5,markerWidth:8,markerHeight:8,markerUnits:"userSpaceOnUse",orient:"auto-start-reverse"},defs);E("path",{d:"M0,0L10,5L0,10z",fill:col},m);}
+
+/* axes: frame, grid, ticks and titles from one pair of scales */
+function axes(svg,o){
+  const X0=o.xs(o.x0),X1=o.xs(o.x1),Y0=o.ys(o.y0),Y1=o.ys(o.y1);
+  (o.yt||[]).forEach(function(t){E("line",{x1:X0,x2:X1,y1:o.ys(t[0]),y2:o.ys(t[0]),stroke:"var(--grid)"},svg);});
+  (o.xt||[]).forEach(function(t){E("line",{x1:o.xs(t[0]),x2:o.xs(t[0]),y1:Y0,y2:Y1,stroke:"var(--grid)"},svg);});
+  E("line",{x1:X0,x2:X1,y1:Y0,y2:Y0,stroke:"var(--muted)"},svg);
+  E("line",{x1:X0,x2:X0,y1:Y0,y2:Y1,stroke:"var(--muted)"},svg);
+  (o.xt||[]).forEach(function(t){E("line",{x1:o.xs(t[0]),x2:o.xs(t[0]),y1:Y0,y2:Y0+5,stroke:"var(--muted)"},svg);TX(svg,o.xs(t[0]),Y0+18,t[1],{"text-anchor":"middle",class:"mono","font-size":"11"});});
+  (o.yt||[]).forEach(function(t){E("line",{x1:X0-5,x2:X0,y1:o.ys(t[0]),y2:o.ys(t[0]),stroke:"var(--muted)"},svg);TX(svg,X0-8,o.ys(t[0])+4,t[1],{"text-anchor":"end",class:"mono","font-size":"11"});});
+  if(o.xtitle)TX(svg,(X0+X1)/2,Y0+(o.xtitleDy||36),o.xtitle,{"text-anchor":"middle",fill:"var(--ink)","font-size":"12"});
+  if(o.ytitle)TX(svg,4,Y1-12,o.ytitle,{"text-anchor":"start",fill:"var(--ink)","font-size":"12"});
+}
+
+/* typeset maths that a step inserts after MathJax has started */
+function typeset(el){const M=window.MathJax;if(M&&M.typesetPromise&&M.startup&&M.startup.promise){M.startup.promise.then(function(){return M.typesetPromise([el]);}).catch(function(){});}}
+
+/* stepper: reads its steps from a <template>, calls apply(i) on every change */
+function makeStepper(rootId,tplId,applies){
+  const root=document.getElementById(rootId);
+  const steps=Array.from(document.getElementById(tplId).content.querySelectorAll(".step"));
+  let i=0;
+  root.innerHTML='<div class="steps-top"><span class="steps-count"></span><div class="dots"></div></div><h4></h4><div class="body"></div><div class="nav"><button class="btn prev" type="button">Previous</button><button class="btn primary next" type="button">Next</button></div>';
+  const cnt=root.querySelector(".steps-count"),dots=root.querySelector(".dots"),h=root.querySelector("h4"),body=root.querySelector(".body"),prev=root.querySelector(".prev"),next=root.querySelector(".next");
+  steps.forEach(function(s,k){const b=document.createElement("button");b.type="button";b.setAttribute("aria-label","Step "+(k+1)+": "+s.dataset.title);b.addEventListener("click",function(){go(k);});dots.appendChild(b);});
+  function go(k){
+    i=Math.max(0,Math.min(steps.length-1,k));const s=steps[i];
+    cnt.textContent="Step "+(i+1)+" of "+steps.length;h.textContent=s.dataset.title;
+    body.replaceChildren.apply(body,Array.from(s.childNodes).map(function(n){return n.cloneNode(true);}));
+    typeset(body);
+    Array.from(dots.children).forEach(function(b,j){if(j===i)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+    prev.disabled=i===0;next.disabled=i===steps.length-1;applies[i]();
+  }
+  prev.addEventListener("click",function(){go(i-1);});next.addEventListener("click",function(){go(i+1);});
+  go(0);
+}
+
+/* =================== the toy distribution and the exact best guess =================== */
+const COMPS=[{w:0.7,m:[0.5,-0.4],s:0.3},{w:0.3,m:[-1.3,1.1],s:0.35}];   /* calm days, stressed days */
+const T=1000,beta=new Float64Array(T+1),alpha=new Float64Array(T+1),abar=new Float64Array(T+1);
+abar[0]=1;alpha[0]=1;
+for(let t=1;t<=T;t++){beta[t]=1e-4+(0.02-1e-4)*(t-1)/(T-1);alpha[t]=1-beta[t];abar[t]=abar[t-1]*alpha[t];}
+/* E[x0 | x_t] for the two-cluster mixture: x_t | cluster k ~ N(a m_k, (a^2 s_k^2 + 1 - a^2) I) */
+function post(x,y,t){
+  const a=Math.sqrt(abar[t]),b2=1-abar[t],lw=[],mk=[];
+  COMPS.forEach(function(c){const v=a*a*c.s*c.s+b2,dx=x-a*c.m[0],dy=y-a*c.m[1];
+    lw.push(Math.log(c.w)-Math.log(v)-(dx*dx+dy*dy)/(2*v));const g=a*c.s*c.s/v;mk.push([c.m[0]+g*dx,c.m[1]+g*dy]);});
+  const mx=Math.max(lw[0],lw[1]),r0=Math.exp(lw[0]-mx),r1=Math.exp(lw[1]-mx),Z=r0+r1;
+  return {x0:[(r0*mk[0][0]+r1*mk[1][0])/Z,(r0*mk[0][1]+r1*mk[1][1])/Z],stressed:r1/Z};
+}
+function x0hat(x,y,t){return t===0?[x,y]:post(x,y,t).x0;}
+function epsHat(x,y,t){const h=x0hat(x,y,t),a=Math.sqrt(abar[t]),b=Math.sqrt(1-abar[t]);return [(x-a*h[0])/b,(y-a*h[1])/b];}
+
+const N=500,DATA=[];
+(function(){const rng=mulberry32(20200619);for(let i=0;i<N;i++){const k=rng()<COMPS[0].w?0:1,c=COMPS[k];DATA.push({x:c.m[0]+c.s*gauss(rng),y:c.m[1]+c.s*gauss(rng),k:k});}})();
+const sx=lin(-3.2,3.2,44,330),sy=lin(-3.2,3.2,302,16);
+const TK=[[-3,"−3"],[-2,"−2"],[-1,"−1"],[0,"0"],[1,"1"],[2,"2"],[3,"3"]];
+function scatterAxes(svg){axes(svg,{xs:sx,ys:sy,x0:-3.2,x1:3.2,y0:-3.2,y1:3.2,xt:TK,yt:TK,xtitle:"price change",xtitleDy:34});TX(svg,4,10,"bid–ask spread",{fill:"var(--ink)","font-size":"12"});}
+function dataFaint(svg){DATA.forEach(function(p){E("circle",{cx:sx(p.x),cy:sy(p.y),r:1.8,fill:"var(--data)","fill-opacity":0.38},svg);});}
+
+/* =================== FIGURE 1: forward process =================== */
+(function(){
+  const rng=mulberry32(77),EPS=DATA.map(function(){return [gauss(rng),gauss(rng)];});
+  const S=document.getElementById("f1-scat"),C=document.getElementById("f1-sched"),slider=document.getElementById("f1-t");
+  let t=0,mode={};
+  const cx=lin(0,1000,48,286),cy=lin(0,1,280,40);
+  function draw(){
+    const a=Math.sqrt(abar[t]),b=Math.sqrt(1-abar[t]);
+    clear(S);scatterAxes(S);
+    if(mode.target||t>=500){[1,2].forEach(function(r){E("circle",{cx:sx(0),cy:sy(0),r:sx(r)-sx(0),fill:"none",stroke:"var(--ball)","stroke-width":1.4,"stroke-dasharray":"5 4"},S);});
+      TX(S,sx(1.45),sy(-1.6),"standard normal",{fill:"var(--ball)","font-size":"11",class:"halo"});}
+    DATA.forEach(function(p,i){E("circle",{cx:sx(a*p.x+b*EPS[i][0]),cy:sy(a*p.y+b*EPS[i][1]),r:2.3,fill:"var(--data)","fill-opacity":0.85},S);});
+    if(t<=60){TX(S,sx(0.5),sy(-1.25),"calm days",{"text-anchor":"middle",fill:"var(--ink)","font-size":"12",class:"halo"});TX(S,sx(-1.3),sy(1.85),"stressed days",{"text-anchor":"middle",fill:"var(--ink)","font-size":"12",class:"halo"});}
+    TX(S,sx(3.1),sy(3.0),"t = "+t,{"text-anchor":"end",fill:"var(--ink)","font-size":"12","font-weight":"600",class:"mono halo"});
+
+    clear(C);
+    axes(C,{xs:cx,ys:cy,x0:0,x1:1000,y0:0,y1:1,xt:[[0,"0"],[250,"250"],[500,"500"],[750,"750"],[1000,"1000"]],yt:[[0,"0"],[0.25,"0.25"],[0.5,"0.5"],[0.75,"0.75"],[1,"1"]],xtitle:"step t",xtitleDy:34});
+    let ds="",dn="";for(let s=0;s<=T;s+=5){ds+=(s?"L":"M")+cx(s).toFixed(1)+","+cy(Math.sqrt(abar[s])).toFixed(1);dn+=(s?"L":"M")+cx(s).toFixed(1)+","+cy(Math.sqrt(1-abar[s])).toFixed(1);}
+    E("path",{d:ds,fill:"none",stroke:"var(--data)","stroke-width":2.4},C);
+    E("path",{d:dn,fill:"none",stroke:"var(--ball)","stroke-width":2.4},C);
+    TX(C,cx(520),cy(0.32),"signal kept √ᾱₜ",{fill:"var(--ink)","font-size":"11.5",class:"halo"});
+    TX(C,cx(520),cy(0.88),"noise added √(1−ᾱₜ)",{fill:"var(--ball)","font-size":"11.5",class:"halo"});
+    E("line",{x1:cx(t),x2:cx(t),y1:cy(0),y2:cy(1),stroke:"var(--muted)","stroke-dasharray":"3 3"},C);
+    E("circle",{cx:cx(t),cy:cy(a),r:4.5,fill:"var(--data)",stroke:"var(--surface)","stroke-width":1.5},C);
+    E("circle",{cx:cx(t),cy:cy(b),r:4.5,fill:"var(--ball)",stroke:"var(--surface)","stroke-width":1.5},C);
+    document.getElementById("f1-tout").textContent=t;
+    document.getElementById("f1-sig").textContent=a.toFixed(3);
+    document.getElementById("f1-noi").textContent=b.toFixed(3);
+  }
+  function setT(v){t=v;slider.value=v;}
+  slider.addEventListener("input",function(){t=+slider.value;draw();});
+  makeStepper("f1-steps","f1-steps-t",[
+    function(){mode={};setT(0);draw();},
+    function(){mode={};setT(20);draw();},
+    function(){mode={};setT(150);draw();},
+    function(){mode={};setT(400);draw();},
+    function(){mode={target:true};setT(1000);draw();}
+  ]);
+})();
+
+/* =================== FIGURE 2: one training example =================== */
+(function(){
+  const S=document.getElementById("f2-scat"),C=document.getElementById("f2-err"),slider=document.getElementById("f2-t");
+  let t=300,mode={},eps=[0.9,-0.75];
+  let idx=0;{let best=1e9;DATA.forEach(function(p,i){if(p.k!==1)return;const d=Math.hypot(p.x-COMPS[1].m[0],p.y-COMPS[1].m[1]);if(d<best){best=d;idx=i;}});}
+  /* average error of the best guess, E|x0 - E[x0|x_t]|^2, by simulation */
+  const rng=mulberry32(4242),NZ=DATA.map(function(){return [gauss(rng),gauss(rng)];});
+  function avgErr(s){const a=Math.sqrt(abar[s]),b=Math.sqrt(1-abar[s]);let e=0;DATA.forEach(function(p,i){const h=x0hat(a*p.x+b*NZ[i][0],a*p.y+b*NZ[i][1],s);e+=(h[0]-p.x)*(h[0]-p.x)+(h[1]-p.y)*(h[1]-p.y);});return e/N;}
+  const tg=[];for(let s=10;s<=1000;s+=30)tg.push(s);if(tg[tg.length-1]!==1000)tg.push(1000);
+  const curve=tg.map(function(s){return [s,avgErr(s)];});
+  let mxm=0,mym=0;DATA.forEach(function(p){mxm+=p.x/N;mym+=p.y/N;});
+  let tv=0;DATA.forEach(function(p){tv+=((p.x-mxm)*(p.x-mxm)+(p.y-mym)*(p.y-mym))/N;});
+  const cx=lin(0,1000,48,286),cy=lin(0,1.6,280,40);
+  function draw(){
+    const p=DATA[idx],a=Math.sqrt(abar[t]),b=Math.sqrt(1-abar[t]);
+    const ax=a*p.x,ay=a*p.y,xt=[ax+b*eps[0],ay+b*eps[1]],h=x0hat(xt[0],xt[1],t),eh=epsHat(xt[0],xt[1],t);
+    clear(S);
+    const defs=E("defs",{},S);marker(defs,"f2-ball","var(--ball)");
+    scatterAxes(S);dataFaint(S);
+    if(mode.noise){
+      if(Math.hypot(sx(ax)-sx(p.x),sy(ay)-sy(p.y))>5)E("line",{x1:sx(p.x),y1:sy(p.y),x2:sx(ax),y2:sy(ay),stroke:"var(--data)","stroke-width":1.6,"stroke-dasharray":"4 3"},S);
+      E("circle",{cx:sx(ax),cy:sy(ay),r:3,fill:"var(--surface)",stroke:"var(--data)","stroke-width":1.4},S);
+      const ex=sx(xt[0]),ey=sy(xt[1]),dx=ex-sx(ax),dy=ey-sy(ay),dl=Math.hypot(dx,dy);
+      if(dl>10)E("line",{x1:sx(ax),y1:sy(ay),x2:ex-dx/dl*7,y2:ey-dy/dl*7,stroke:"var(--ball)","stroke-width":2.2,"marker-end":"url(#f2-ball)"},S);
+    }
+    if(mode.guess){
+      E("line",{x1:sx(xt[0]),y1:sy(xt[1]),x2:sx(h[0]),y2:sy(h[1]),stroke:"var(--fn)","stroke-width":1.6,"stroke-dasharray":"5 3"},S);
+      E("circle",{cx:sx(h[0]),cy:sy(h[1]),r:5.5,fill:"var(--fn)",stroke:"var(--surface)","stroke-width":1.5},S);
+      TX(S,sx(h[0])-9,sy(h[1])+18,"guess x̂₀",{"text-anchor":"end",fill:"var(--fn)","font-size":"12","font-weight":"600",class:"halo"});
+    }
+    E("circle",{cx:sx(p.x),cy:sy(p.y),r:6,fill:"var(--data)",stroke:"var(--ink)","stroke-width":1.6},S);
+    TX(S,sx(p.x)-9,sy(p.y)-8,"x₀",{"text-anchor":"end",fill:"var(--ink)","font-size":"13","font-weight":"600",class:"halo"});
+    if(mode.noise){E("circle",{cx:sx(xt[0]),cy:sy(xt[1]),r:5.5,fill:"var(--ball)",stroke:"var(--surface)","stroke-width":1.5},S);
+      TX(S,sx(xt[0])+9,sy(xt[1])-7,"xₜ",{fill:"var(--ball)","font-size":"13","font-weight":"600",class:"halo"});}
+    TX(S,sx(3.1),sy(3.0),"t = "+t,{"text-anchor":"end",fill:"var(--ink)","font-size":"12","font-weight":"600",class:"mono halo"});
+
+    clear(C);
+    axes(C,{xs:cx,ys:cy,x0:0,x1:1000,y0:0,y1:1.6,xt:[[0,"0"],[250,"250"],[500,"500"],[750,"750"],[1000,"1000"]],yt:[[0,"0"],[0.5,"0.5"],[1,"1"],[1.5,"1.5"]],xtitle:"step t",xtitleDy:34,ytitle:"average error ‖x₀ − x̂₀‖²"});
+    E("line",{x1:cx(0),x2:cx(1000),y1:cy(tv),y2:cy(tv),stroke:"var(--data)","stroke-dasharray":"6 4","stroke-width":1.3},C);
+    TX(C,cx(20),cy(tv)-7,"guessing the overall average",{fill:"var(--muted)","font-size":"11",class:"halo"});
+    let d="";curve.forEach(function(q,i){d+=(i?"L":"M")+cx(q[0]).toFixed(1)+","+cy(q[1]).toFixed(1);});
+    E("path",{d:d,fill:"none",stroke:"var(--fn)","stroke-width":2.4,"stroke-linejoin":"round"},C);
+    E("line",{x1:cx(t),x2:cx(t),y1:cy(0),y2:cy(1.6),stroke:"var(--muted)","stroke-dasharray":"3 3"},C);
+    E("circle",{cx:cx(t),cy:cy(avgErr(t)),r:4.5,fill:"var(--fn)",stroke:"var(--surface)","stroke-width":1.5},C);
+
+    document.getElementById("f2-tout").textContent=t;
+    document.getElementById("f2-eps").textContent=vec(eps);
+    document.getElementById("f2-epsh").textContent=mode.guess?vec(eh):"–";
+    document.getElementById("f2-loss").textContent=mode.guess?((eps[0]-eh[0])*(eps[0]-eh[0])+(eps[1]-eh[1])*(eps[1]-eh[1])).toFixed(2):"–";
+  }
+  function setT(v){t=v;slider.value=v;}
+  slider.addEventListener("input",function(){t=+slider.value;draw();});
+  const nrng=mulberry32(99);
+  document.getElementById("f2-new").addEventListener("click",function(){eps=[gauss(nrng),gauss(nrng)];draw();});
+  S.addEventListener("click",function(ev){const m=S.getScreenCTM();if(!m)return;const pt=S.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(m.inverse());
+    let best=1e9;DATA.forEach(function(p,i){const dd=Math.hypot(sx(p.x)-q.x,sy(p.y)-q.y);if(dd<best){best=dd;idx=i;}});draw();});
+  const ALL={noise:true,guess:true};
+  makeStepper("f2-steps","f2-steps-t",[
+    function(){mode={};setT(300);draw();},
+    function(){mode={noise:true};setT(300);draw();},
+    function(){mode=ALL;setT(300);draw();},
+    function(){mode=ALL;setT(50);draw();},
+    function(){mode=ALL;setT(800);draw();},
+    function(){mode=ALL;draw();}
+  ]);
+})();
+
+/* =================== FIGURE 3: reverse process =================== */
+(function(){
+  const S=document.getElementById("f3-scat"),Hs=document.getElementById("f3-hist"),slider=document.getElementById("f3-p"),chk=document.getElementById("f3-arrows");
+  let frames=[],prog=0,showArrows=false,mode={},seed=1;
+  /* DDPM ancestral sampling with the exact noise guess; keeps every 10th step */
+  function run(sd){
+    const rng=mulberry32(sd),x=new Float64Array(N),y=new Float64Array(N);
+    for(let i=0;i<N;i++){x[i]=gauss(rng);y[i]=gauss(rng);}
+    frames=new Array(101);
+    function keep(t){const f=new Float32Array(2*N);for(let i=0;i<N;i++){f[2*i]=x[i];f[2*i+1]=y[i];}frames[t/10]=f;}
+    keep(T);
+    for(let t=T;t>=1;t--){
+      const c1=1/Math.sqrt(alpha[t]),c2=beta[t]/Math.sqrt(1-abar[t]),sg=Math.sqrt(beta[t]);
+      for(let i=0;i<N;i++){const e=epsHat(x[i],y[i],t);let nx=c1*(x[i]-c2*e[0]),ny=c1*(y[i]-c2*e[1]);if(t>1){nx+=sg*gauss(rng);ny+=sg*gauss(rng);}x[i]=nx;y[i]=ny;}
+      if((t-1)%10===0)keep(t-1);
+    }
+  }
+  const hx=lin(-3.2,3.2,40,290),hy=lin(0,1.2,290,40),BW=0.2;
+  function dens(v){let s=0;COMPS.forEach(function(c){s+=c.w*Math.exp(-(v-c.m[0])*(v-c.m[0])/(2*c.s*c.s))/(Math.sqrt(2*Math.PI)*c.s);});return s;}
+  function draw(){
+    const t=1000-10*prog,f=frames[t/10];
+    clear(S);
+    const defs=E("defs",{},S);marker(defs,"f3-fn","var(--fn)");
+    scatterAxes(S);dataFaint(S);
+    if(showArrows&&t>0){
+      for(let gx=-2.8;gx<=2.81;gx+=0.56)for(let gy=-2.8;gy<=2.81;gy+=0.56){const h=x0hat(gx,gy,t);let dx=0.28*(h[0]-gx),dy=0.28*(h[1]-gy);const L=Math.hypot(dx,dy);if(L<0.04)continue;if(L>0.42){dx*=0.42/L;dy*=0.42/L;}
+        E("line",{x1:sx(gx),y1:sy(gy),x2:sx(gx+dx),y2:sy(gy+dy),stroke:"var(--fn)","stroke-width":1.4,"stroke-opacity":0.8,"marker-end":"url(#f3-fn)"},S);}
+    }
+    if(t<T){for(let i=0;i<4;i++){let d="";const kt=t/10;for(let k=100;k>=kt;k-=2){d+=(k===100?"M":"L")+sx(frames[k][2*i]).toFixed(1)+","+sy(frames[k][2*i+1]).toFixed(1);}if((100-kt)%2)d+="L"+sx(frames[kt][2*i]).toFixed(1)+","+sy(frames[kt][2*i+1]).toFixed(1);E("path",{d:d,fill:"none",stroke:"var(--mag)","stroke-width":1.1,"stroke-opacity":0.45},S);}}
+    let mx=0,my=0;
+    for(let i=0;i<N;i++){const px=f[2*i],py=f[2*i+1];mx+=px/N;my+=py/N;E("circle",{cx:sx(px),cy:sy(py),r:2.3,fill:"var(--mag)","fill-opacity":0.8},S);}
+    if(mode.mean){E("path",{d:"M"+(sx(mx)-8)+","+(sy(my)-8)+"L"+(sx(mx)+8)+","+(sy(my)+8)+"M"+(sx(mx)-8)+","+(sy(my)+8)+"L"+(sx(mx)+8)+","+(sy(my)-8),stroke:"var(--ink)","stroke-width":2.6},S);
+      TX(S,sx(mx)+11,sy(my)-9,"average",{fill:"var(--ink)","font-size":"12","font-weight":"600",class:"halo"});}
+    TX(S,sx(3.1),sy(3.0),"t = "+t,{"text-anchor":"end",fill:"var(--ink)","font-size":"12","font-weight":"600",class:"mono halo"});
+
+    clear(Hs);
+    axes(Hs,{xs:hx,ys:hy,x0:-3.2,x1:3.2,y0:0,y1:1.2,xt:[[-3,"−3"],[-2,"−2"],[-1,"−1"],[0,"0"],[1,"1"],[2,"2"],[3,"3"]],yt:[[0,"0"],[0.5,"0.5"],[1,"1"]],xtitle:"price change",xtitleDy:34,ytitle:"density"});
+    const nb=32,cnt=new Array(nb).fill(0);
+    for(let i=0;i<N;i++){const b=Math.floor((f[2*i]+3.2)/BW);if(b>=0&&b<nb)cnt[b]++;}
+    cnt.forEach(function(c,b){if(!c)return;const dv=Math.min(1.2,c/(N*BW));E("rect",{x:hx(-3.2+b*BW),y:hy(dv),width:hx(BW)-hx(0)-1,height:hy(0)-hy(dv),fill:"var(--mag-fill)",stroke:"var(--mag)","stroke-width":1},Hs);});
+    let dd="";for(let k=0;k<=160;k++){const v=-3.2+6.4*k/160;dd+=(k?"L":"M")+hx(v).toFixed(1)+","+hy(Math.min(1.2,dens(v))).toFixed(1);}
+    E("path",{d:dd,fill:"none",stroke:"var(--data)","stroke-width":2,"stroke-dasharray":"6 4"},Hs);
+    if(mode.mean){E("line",{x1:hx(mx),x2:hx(mx),y1:hy(0),y2:hy(1.2),stroke:"var(--ink)","stroke-width":1.8},Hs);TX(Hs,hx(mx)+5,hy(1.12),"average",{fill:"var(--ink)","font-size":"11.5","font-weight":"600",class:"halo"});}
+
+    document.getElementById("f3-pout").textContent="t = "+t;
+    if(t===0){let st=0;for(let i=0;i<N;i++){if(post(f[2*i],f[2*i+1],1).stressed>0.5)st++;}document.getElementById("f3-share").textContent=Math.round(100*st/N)+"%";}
+    else document.getElementById("f3-share").textContent="shown at t = 0";
+  }
+  function setProg(v){prog=v;slider.value=v;}
+  function setArrows(on){showArrows=on;chk.checked=on;}
+  slider.addEventListener("input",function(){prog=+slider.value;draw();});
+  chk.addEventListener("change",function(){showArrows=chk.checked;draw();});
+  document.getElementById("f3-new").addEventListener("click",function(){seed+=1;run(seed*7919);draw();});
+  run(seed*7919);
+  makeStepper("f3-steps","f3-steps-t",[
+    function(){mode={};setArrows(false);setProg(0);draw();},
+    function(){mode={};setArrows(true);setProg(0);draw();},
+    function(){mode={};setArrows(true);setProg(20);draw();},
+    function(){mode={};setArrows(true);setProg(70);draw();},
+    function(){mode={};setArrows(false);setProg(100);draw();},
+    function(){mode={mean:true};setArrows(false);setProg(100);draw();}
+  ]);
+})();
+})();
+</script>
+</body>
+</html>
