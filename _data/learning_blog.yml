@@ -15,7 +15,7 @@
   fig: transformer
   title:
     en: Transformers
-    zh: 人工智能Transformer架构
+    zh: 人工智能 Transformer 架构
   text:
     en: How the underlying LLM reads your words and relates with other context.
     zh: 大语言模型是如何读懂你的文字，并把它与上下文联系起来的。
