@@ -131,7 +131,7 @@ plugins:
 jekyll-minifier:
   compress_javascript: false
   compress_css: false
-  exclude: ["robots.txt"]
+  exclude: ["robots.txt", "blog/*.html"]
 
 terser:
   compress:

@@ -1,0 +1,39 @@
+# Learning blog cards at the bottom of the home page (English and Chinese).
+# "fig" picks the live preview drawn by assets/js/blog-cards.js: covering, transformer or ddpm.
+# A new post without a preview can leave "fig" out; its card then shows text only.
+
+- url: /blog/covering-numbers.html
+  fig: covering
+  title:
+    en: Covering Numbers
+    zh: 机器学习理论：覆盖数（Covering Numbers）
+  text:
+    en: Let's measure the capacity of your deep neural network functions!
+    zh: 一起来衡量深度神经网络函数的容量吧！
+
+- url: /blog/transformer.html
+  fig: transformer
+  title:
+    en: Transformers
+    zh: 人工智能Transformer架构
+  text:
+    en: How the underlying LLM reads your words and relates with other context.
+    zh: 大语言模型是如何读懂你的文字，并把它与上下文联系起来的。
+
+- url: /blog/ddpm.html
+  fig: ddpm
+  title:
+    en: Diffusion Models (DDPM)
+    zh: 人工智能扩散模型（DDPM）
+  text:
+    en: How a model learns to turn noise into realistic data.
+    zh: 模型如何学会把噪声变成逼真的数据。
+
+- url: /blog/covar.html
+  fig: covar
+  title:
+    en: CoVaR
+    zh: 金融计量：条件风险价值（CoVaR）
+  text:
+    en: When one bank is in trouble, how much risk does it pass on to the whole financial system?
+    zh: 一家银行陷入困境时，会把多少风险传给整个金融系统？

@@ -1,10 +1,32 @@
 <header>
   <!-- Nav Bar -->
   <nav id="navbar" class="navbar navbar-light navbar-expand-sm {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %}" role="navigation">
-    <div class="container">
-      <a class="navbar-brand title" style="font-size: inherit; font-weight: normal;" href="{% if page.lang == 'zh' %}{{ '/zh/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">
-        {% if page.lang == 'zh' %}陈俊宇{% else %}Junyu Chen{% endif %}
-      </a>
+    <div class="container masthead">
+      <!-- Nameplate: vertical red plate, always the Chinese name -->
+      <a class="navbar-brand title" lang="zh" href="{% if page.lang == 'zh' %}{{ '/zh/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">陈俊宇</a>
+
+      <div class="masthead-meta">
+        <div class="masthead-top">
+          <span class="masthead-en">JUNYU CHEN</span>
+          {% if page.lang_url %}
+            <a class="lang-toggle" href="{{ page.lang_url | relative_url }}"
+               title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
+               aria-label="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}">
+              {% if page.lang == 'zh' %}English{% else %}中文{% endif %}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Dateline: places -->
+        <div class="dateline">
+          {% if page.lang == 'zh' %}
+            <span>荷兰 · 格罗宁根</span>
+            <span>中国 · 北京</span>
+          {% else %}
+            <span>Groningen, The Netherlands</span>
+            <span>Beijing, China</span>
+          {% endif %}
+        </div>
 
       <div class="navbar-collapse navbar-collapse-main" id="navbarNav">
         <ul class="navbar-nav navbar-menu-list flex-nowrap">
@@ -103,15 +125,7 @@
         </ul>
       </div>
 
-      <!-- Language toggle (far right) -->
-      {% if page.lang_url %}
-        <a class="lang-toggle" href="{{ page.lang_url | relative_url }}"
-           title="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}"
-           aria-label="{% if page.lang == 'zh' %}Switch to English{% else %}切换到中文{% endif %}">
-          <i class="fa-solid fa-globe" aria-hidden="true"></i>
-          <span class="lang-toggle-label">{% if page.lang == 'zh' %}EN{% else %}中{% endif %}</span>
-        </a>
-      {% endif %}
+      </div>
     </div>
   </nav>
   {% if site.enable_progressbar %}

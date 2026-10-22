@@ -15,7 +15,7 @@ _styles: |
 
 - **December 2026 – February 2027**: Will be visiting Tsinghua University, Beijing.
 
-- **November 16**: The [ACM International Conference on AI in Finance](https://icaif2026.org/) accepted our work, LOB Diffusion Models, for publication in its proceedings. I may also be in Milan, Italy, presenting the paper.
+- {:.headline} **November 16**: The [ACM International Conference on AI in Finance](https://icaif2026.org/) accepted our work, LOB Diffusion Models, for publication in its proceedings. I may also be in Milan, Italy, presenting the paper.
 
 - **November 12**: Invited by [Prof. Julia Schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
 
@@ -31,13 +31,13 @@ _styles: |
 
 - **July 08**: Attended the [Bristol Econometric Study Group Annual Conference](https://www.econometricstudygroup.org/), where I presented our *Transformer-based CoVaR* work.
 
-- **June 16**: Presented *Transformer-based CoVaR* at the [18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session). Nobel laureate Prof. Robert F. Engle attended my talk : )
+- {:.headline} **June 16**: Presented *Transformer-based CoVaR* at the [18th Society for Financial Econometrics (SoFiE) Annual Conference](https://fba.um.edu.mo/sofie2026/) in Macau (main session). Nobel laureate Prof. Robert F. Engle attended my talk : )
 
 - **May 23**: Our work *LOB Diffusion Models* was accepted by the [ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling](https://spigmworkshop2026.github.io/).
 
 - **May 21**: Poster presentation of *LOB Diffusion Models* at the [NESG Workshop](https://sbe.maastrichtuniversity.nl/nesg/) at Tilburg University.
 
-- **May 03**: Got married, a big life milestone!
+- {:.headline .wide} **May 03**: Got married, a big life milestone!
 
 - **April 08**: Represented Groningen in the [26th Econometric Game](https://wceconometrics.com/) with my colleague Martijn de Werd!
 
@@ -51,6 +51,6 @@ _styles: |
 
 #### 2024
 
-- **September 01**: Started my PhD in Economics at the U Groningen. On the very first day, I attended the workshop on [Causal Inference and Machine Learning](https://www.groningenmetricsmeet.com).
+- {:.headline .wide} **September 01**: Started my PhD in Economics at the U Groningen. On the very first day, I attended the workshop on [Causal Inference and Machine Learning](https://www.groningenmetricsmeet.com).
 
 - **February**: Graduated with my Master's degree from TU Berlin under the supervision of [Prof. Dr. Axel Werwatz](https://www.tu.berlin/statistik/ueber-uns/leitung/prof-axel-werwatz-phd).

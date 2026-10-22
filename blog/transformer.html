@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Transformers</title>
+<meta name="description" content="An interactive, intuitive guide to the Transformer, motivated by reading financial news: what attention does, why word order needs a position signal, and how the pieces fit together.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap">
+<script>
+window.MathJax={tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]},svg:{fontCache:"global"},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code","template"]}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+/* Layout: an essay column (about 66ch) with a margin rail for side notes on wide screens;
+   each interactive plate breaks out to the full width, figures on the left and a step-by-step walkthrough on the right.
+   Colour roles are fixed across the whole post, printed in the site's inks: the selected (query) word = black ink, attention weights = red,
+   the result of attention = gold, other words = grey. */
+:root{
+  --bg:#f4f0e4; --surface:#fdfbf6; --ink:#1d1a16; --muted:#5a5246; --rule:#dcd5c5; --grid:#ebe5d7; --line:rgba(60,90,160,.16); --shade:rgba(23,33,44,.05);
+  --fn:#1d1a16; --fn-soft:rgba(29,26,22,.18);
+  --ball:#b22a1f; --ball-fill:rgba(178,42,31,.10); --ball-soft:rgba(178,42,31,.5);
+  --mag:#a8751a; --mag-fill:rgba(168,117,26,.12);
+  --data:#8a8275; --accent:#b22a1f; --accent-soft:rgba(178,42,31,.16);
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"IBM Plex Sans","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#191813; --surface:#211f1a; --ink:#ece6d8; --muted:#a39d92; --rule:#38352d; --grid:#2a2822; --line:rgba(140,170,230,.08); --shade:rgba(228,233,239,.05);
+  --fn:#ece6d8; --fn-soft:rgba(236,230,216,.22);
+  --ball:#e8705f; --ball-fill:rgba(232,112,95,.14); --ball-soft:rgba(232,112,95,.6);
+  --mag:#d9a64a; --mag-fill:rgba(217,166,74,.15);
+  --data:#9a9284; --accent:#e8705f; --accent-soft:rgba(232,112,95,.2);
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#191813; --surface:#211f1a; --ink:#ece6d8; --muted:#a39d92; --rule:#38352d; --grid:#2a2822; --line:rgba(140,170,230,.08); --shade:rgba(228,233,239,.05);
+  --fn:#ece6d8; --fn-soft:rgba(236,230,216,.22);
+  --ball:#e8705f; --ball-fill:rgba(232,112,95,.14); --ball-soft:rgba(232,112,95,.6);
+  --mag:#d9a64a; --mag-fill:rgba(217,166,74,.15);
+  --data:#9a9284; --accent:#e8705f; --accent-soft:rgba(232,112,95,.2);
+  color-scheme:dark; }
+
+[hidden]{display:none!important;}
+/* telegram paper: warm newsprint with faint blue typing rules */
+body{margin:0;background-color:var(--bg);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--line) 27px,var(--line) 28px);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;font-optical-sizing:auto;-webkit-font-smoothing:antialiased;}
+.page{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:44px 80px;display:grid;gap:56px;}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px;}
+a:hover{text-decoration-thickness:2px;}
+
+/* masthead */
+.masthead{display:grid;gap:16px;max-width:780px;}
+.eyebrow{font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0;}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.4vw,54px);line-height:1.08;letter-spacing:-.012em;margin:0;text-wrap:balance;}
+.byline{font-family:var(--sans);font-size:13.5px;color:var(--muted);margin:0;display:flex;flex-wrap:wrap;gap:4px 14px;}
+.back{justify-self:start;margin-bottom:8px;font-family:var(--sans);font-size:13.5px;color:var(--muted);text-decoration:none;}
+.back:hover{color:var(--accent);text-decoration:underline;}
+
+/* essay rows: prose + side note */
+.part{display:grid;gap:30px;scroll-margin-top:24px;}
+.row{display:grid;grid-template-columns:minmax(0,680px) minmax(0,1fr);column-gap:52px;row-gap:18px;align-items:start;}
+.prose{display:grid;gap:18px;min-width:0;}
+.prose p{margin:0;}
+.side{font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--muted);border-top:2px solid var(--accent);padding-top:10px;display:grid;gap:8px;min-width:0;max-width:340px;}
+.side p{margin:0;}
+.side b{color:var(--ink);font-weight:600;}
+@media (max-width:1000px){
+  .row{grid-template-columns:minmax(0,1fr);}
+  .side{max-width:680px;border-top:0;border-left:2px solid var(--accent);padding:2px 0 2px 14px;}
+}
+h2{font-family:var(--serif);font-weight:500;font-size:clamp(27px,3.4vw,34px);line-height:1.18;letter-spacing:-.006em;margin:0;text-wrap:balance;display:flex;gap:14px;align-items:baseline;}
+h2 .num{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 7px;line-height:1.6;transform:translateY(-4px);}
+h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.3;margin:6px 0 0;text-wrap:balance;}
+.mjx-d{overflow-x:auto;overflow-y:hidden;padding:4px 0;text-align:center;max-width:100%;}
+.mjx-d svg{max-width:none;}
+.mjx-d mjx-container[display="true"]{margin:0!important;}
+.prose ol,.prose ul{margin:0;padding-left:1.3em;display:grid;gap:10px;}
+
+/* plates */
+.plate{margin:0;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px;display:grid;gap:16px;}
+.plate-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-family:var(--sans);}
+.plate-title{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+.plate-hint{font-size:12.5px;color:var(--muted);}
+.lab{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(0,1fr);gap:20px;align-items:start;}
+@media (max-width:900px){.lab{grid-template-columns:minmax(0,1fr);}}
+.figs{display:grid;gap:14px;min-width:0;}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:end;}
+@media (max-width:560px){.pair{grid-template-columns:minmax(0,1fr);}}
+.fig{display:grid;gap:4px;min-width:0;transition:opacity .35s ease;}
+.fig.dim{opacity:.3;}
+@media (prefers-reduced-motion:reduce){.fig{transition:none;}}
+.fig-cap{font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--muted);}
+.fig-cap b{color:var(--ink);font-weight:600;}
+svg.plot{display:block;}
+.fig svg.plot{width:100%;height:auto;overflow:visible;}
+.fig svg.plot.narrow{max-width:440px;}
+/* wide diagrams keep a readable size on phones and scroll sideways instead */
+.hscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
+.hscroll>svg.plot{min-width:540px;}
+svg text{font-family:var(--sans);}
+svg .mono{font-family:var(--mono);}
+svg .it{font-family:var(--serif);font-style:italic;}
+svg text.halo{paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round;}
+svg .hit{cursor:pointer;fill:transparent;}
+svg .hit:focus{outline:none;}
+svg .hit:focus-visible{stroke:var(--accent);stroke-width:2;}
+.key{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--sans);font-size:12.5px;color:var(--muted);}
+.key>span{display:inline-flex;align-items:center;gap:6px;}
+.key i{display:inline-block;width:18px;height:0;border-top:2.5px solid currentColor;}
+.key i.dash{border-top-style:dashed;}
+.key i.dot{width:8px;height:8px;border:0;border-radius:50%;background:currentColor;}
+.key i.sq{width:11px;height:11px;border:1.5px solid currentColor;background:var(--ball-fill);}
+.key i.dia{width:9px;height:9px;border:0;background:currentColor;transform:rotate(45deg);}
+.controls{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;font-family:var(--sans);font-size:13.5px;padding-top:12px;border-top:1px solid var(--rule);}
+.ctl{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
+.ctl input[type=range]{width:150px;max-width:44vw;accent-color:var(--accent);}
+.ctl output{font-family:var(--mono);font-size:13px;min-width:4em;font-variant-numeric:tabular-nums;}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:5px;overflow:hidden;}
+.seg button{border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;padding:5px 11px;cursor:pointer;}
+.seg button+button{border-left:1px solid var(--rule);}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface);}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--sans);font-size:13.5px;}
+.readout b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;}
+.c-fn{color:var(--fn);} .c-ball{color:var(--ball);} .c-mag{color:var(--mag);} .c-data{color:var(--data);} .c-ink{color:var(--ink);}
+@media (max-width:560px){
+  .ctl{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:2px;}
+  .ctl>label,.ctl>span:first-child{grid-column:1/-1;}
+  .ctl input[type=range]{width:100%;max-width:none;}
+}
+
+/* walkthrough */
+.steps{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start;}
+@media (min-width:901px){.steps{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));}}
+.steps-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--sans);}
+.steps-count{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.04em;}
+.dots{display:flex;gap:6px;flex-wrap:wrap;}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--muted);background:transparent;padding:0;cursor:pointer;}
+.dots button[aria-current="step"]{background:var(--accent);border-color:var(--accent);}
+.steps h4{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.35;margin:0;text-wrap:balance;}
+.steps .body{display:grid;gap:10px;font-size:16.5px;line-height:1.58;min-width:0;}
+.steps .body p{margin:0;}
+.steps .mjx-d{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
+.nav{display:flex;gap:8px;font-family:var(--sans);}
+.btn{font:inherit;font-size:13.5px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:5px;padding:6px 14px;cursor:pointer;}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface);}
+.btn:disabled{opacity:.4;cursor:default;}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* closing */
+.summary{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:22px 24px;display:grid;gap:12px;max-width:760px;}
+.summary h2{font-size:clamp(23px,2.8vw,28px);}
+.summary p{margin:0;}
+footer{font-family:var(--sans);font-size:12.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;max-width:760px;display:grid;gap:6px;}
+footer p{margin:0;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <a class="back" id="back-link" href="/#learning-blog">← Back to the Learning Blog</a>
+  <script>(function(){try{if(/\/zh\//.test(document.referrer)){var a=document.getElementById("back-link");a.href="/zh/#%E5%AD%A6%E4%B9%A0%E5%8D%9A%E5%AE%A2";a.textContent="← 返回学习博客";}}catch(e){}})();</script>
+  <p class="eyebrow">Deep learning</p>
+  <h1>Transformers</h1>
+  <p class="byline"><span>Junyu Chen</span><span>22 October 2026</span></p>
+</header>
+
+<section class="part" aria-labelledby="mot-title">
+  <div class="row">
+    <div class="prose">
+      <h2 id="mot-title">A motivating example</h2>
+      <p>News moves markets. A headline such as <i>the bank raised rates after loan losses</i> matters for bank risk; a story about a boat drifting to a river bank does not. To use news in a risk model, such as the CoVaR model from the <a href="covering-numbers.html">post on covering numbers</a>, the text first has to be turned into numbers.</p>
+      <p>The difficulty is that a word's meaning depends on the words around it. "Bank" means different things in the two sentences above. The Transformer (Vaswani et al., 2017) is a neural network built for exactly this: it lets every word look at every other word and update its own meaning. It is the architecture behind today's language models.</p>
+      <h3>The setup</h3>
+      <p>A sentence is split into tokens \(w_1,\dots,w_n\), which are roughly words. Each token gets a vector of numbers, its embedding \(x_i\in\mathbb R^d\), learned from data. Words with related meanings get nearby vectors.</p>
+      <p>On its own, \(x_i\) is the same in every sentence: "bank" always starts from the same vector. The Transformer's job is to turn these into new vectors in which each word has absorbed what it needs from the rest of the sentence:</p>
+      <div class="mjx-d">\[ (x_1,\dots,x_n)\;\longmapsto\;(z_1,\dots,z_n). \]</div>
+      <p>The main tool for this is called attention.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 1 ======================== -->
+<section class="part" id="s1">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">1</span>Attention: every word looks at the others</h2>
+      <p>Attention builds each word's new vector as a blend of the words in the sentence. The blend weights say how much each word matters for it. To set the weights, every word plays three roles, each obtained by multiplying its embedding by a learned matrix:</p>
+      <ul>
+        <li>a <b>query</b> \(q_i=W_Qx_i\): the question the word asks, such as "which words tell me what I mean?";</li>
+        <li>a <b>key</b> \(k_j=W_Kx_j\): the label a word shows to the others, used to match questions;</li>
+        <li>a <b>value</b> \(v_j=W_Vx_j\): the information a word hands over when it is chosen.</li>
+      </ul>
+      <p>Figure 1 uses vectors with only two coordinates, so they can be drawn: how much a word is about finance, and how much it is about rivers and nature. To keep the picture simple, the keys and values are the embeddings themselves.</p>
+    </div>
+    <aside class="side">
+      <p><b>A library analogy.</b> The query is what you type into the catalogue, the keys are the titles on the shelves and the values are the books' contents. An ordinary search returns the single best match. Attention returns a blend of all the books, weighted by how well each title matches.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="s1-title">
+    <div class="plate-head"><span class="plate-title" id="s1-title">Figure 1 · Attention gives "bank" its meaning</span><span class="plate-hint">Use the walkthrough, or click a word</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="fig">
+          <div class="key"><span class="c-fn"><i class="sq" style="background:var(--fn)"></i><span>selected word</span></span><span class="c-ball"><i></i><span>attention weight</span></span></div>
+          <div class="hscroll"><svg id="s1-sent" class="plot" viewBox="0 0 560 178" role="img" aria-label="The sentence, with the attention weights from the selected word to every word"></svg></div>
+        </div>
+        <div class="controls">
+          <div class="ctl"><span>Sentence</span><span class="seg" role="group" aria-label="Sentence"><button id="s1-fin" type="button" aria-pressed="true">Finance news</button><button id="s1-riv" type="button" aria-pressed="false">River story</button></span></div>
+          <div class="ctl"><label for="s1-tau">Sharpness</label><input id="s1-tau" type="range" min="0" max="4" step="0.1" value="1"><output id="s1-tauout" for="s1-tau">×1.0</output></div>
+        </div>
+        <div class="fig">
+          <div class="key"><span class="c-data"><i class="dot"></i><span>words</span></span><span class="c-fn"><i></i><span>query direction</span></span><span class="c-ball"><i class="sq"></i><span>weight</span></span><span class="c-mag"><i class="dia"></i><span>after attention</span></span></div>
+          <svg id="s1-map" class="plot narrow" viewBox="0 0 350 340" role="img" aria-label="Map of word vectors: finance on the horizontal axis, rivers and nature on the vertical axis"></svg>
+        </div>
+        <div class="readout">
+          <span>word <b id="s1-word" class="c-fn"></b></span>
+          <span>before <b id="s1-before" class="c-ink"></b></span>
+          <span>after attention <b id="s1-after" class="c-mag"></b></span>
+          <span>largest weight <b id="s1-top" class="c-ball"></b></span>
+        </div>
+      </div>
+      <div class="steps" id="s1-steps"></div>
+    </div>
+  </figure>
+
+  <template id="s1-steps-t">
+    <div class="step" data-title="Words become points">
+      <p>Each word starts as a vector. Here a vector has two coordinates, so each word is a point on the map: finance words lie to the right, river words higher up.</p>
+      <p>"Bank" sits in the middle. On its own it is ambiguous.</p>
+    </div>
+    <div class="step" data-title="The query meets the keys">
+      <p>"Bank" sends out its query (the black arrow). Each word gets a score: the dot product of the query with that word's key,</p>
+      <div class="mjx-d">\[ s_j=\frac{q\cdot k_j}{\sqrt d}. \]</div>
+      <p>A key that points the same way as the query, and is long, scores high. The dotted lines show this: the further along the arrow a word lands, the higher its score.</p>
+    </div>
+    <div class="step" data-title="Scores become weights">
+      <p>The softmax function turns the scores into weights:</p>
+      <div class="mjx-d">\[ a_j=\frac{e^{s_j}}{\sum_m e^{s_m}}. \]</div>
+      <p>Every weight is positive and together they add up to one. Higher scores get more weight. The arcs, bars and red circles show the weights.</p>
+    </div>
+    <div class="step" data-title="Blend the values">
+      <p>The new vector for "bank" is the weighted average of the values:</p>
+      <div class="mjx-d">\[ z=\sum_j a_j\,v_j. \]</div>
+      <p>Most weight goes to rates, loan and losses, so "bank" moves towards finance (the gold diamond).</p>
+    </div>
+    <div class="step" data-title="Same word, other sentence">
+      <p>In the river story the weight goes to boat and river instead, and "bank" moves towards nature.</p>
+      <p>Same word, same starting vector, different meaning: the context decided.</p>
+    </div>
+    <div class="step" data-title="How sharp the focus is">
+      <p>The slider multiplies all scores before the softmax. Turn it up and the weight piles onto the best-matching words; turn it to zero and every word gets the same weight.</p>
+      <p>Dividing by \(\sqrt d\) stops the scores from growing with the vector length \(d\), so in large models the focus does not become extreme by accident. Click other words to see what they look at.</p>
+    </div>
+  </template>
+
+  <div class="row">
+    <div class="prose">
+      <p>All words do this at the same time. Stack the queries, keys and values of the sentence as the rows of matrices \(Q\), \(K\) and \(V\). Then attention is one line,</p>
+      <div class="mjx-d">\[ \operatorname{Attention}(Q,K,V)=\operatorname{softmax}\!\Bigl(\frac{QK^{\top}}{\sqrt d}\Bigr)V, \]</div>
+      <p>with the softmax taken row by row. Two features make this powerful. Every word can look at every other word directly, however far apart they are; older models had to pass information along the sentence one word at a time. And it is just matrix products, which computers do quickly and in parallel.</p>
+      <p>In a real model the matrices \(W_Q\), \(W_K\) and \(W_V\) are not chosen by hand as in Figure 1. They are learned from data, so the model itself discovers which questions are worth asking.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 2 ======================== -->
+<section class="part" id="s2">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">2</span>Word order needs a signal</h2>
+      <p>Attention has a blind spot: the weights depend only on the vectors, not on where the words stand. "The bank sued the regulator" and "the regulator sued the bank" contain the same words, so attention gives "bank" exactly the same new vector in both. For risk, who sued whom matters.</p>
+      <p>The fix is to add a position vector \(p_i\) to each embedding before attention, so the model works with \(x_i+p_i\). The original Transformer builds \(p_i\) from sines and cosines that turn at different speeds:</p>
+      <div class="mjx-d">\[ p_{i,2k}=\sin(i\,\omega_k),\qquad p_{i,2k+1}=\cos(i\,\omega_k),\qquad \omega_k=10000^{-2k/d}. \]</div>
+      <p>Each pair of coordinates behaves like the hand of a clock that turns by \(\omega_k\) per position. Figure 2 shows what this achieves.</p>
+    </div>
+    <aside class="side">
+      <p><b>Why not just write down the position number?</b> Adding 1, 2, 3, … would grow without bound and swamp the word vectors, and a model trained on short texts would never have seen position 500.</p>
+      <p>Sines and cosines stay between −1 and 1 and repeat in a regular way, so the model can learn rules such as "look at the word just before me" that work at every position.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="s2-title">
+    <div class="plate-head"><span class="plate-title" id="s2-title">Figure 2 · Telling attention where each word is</span><span class="plate-hint">Use the walkthrough, or drag the slider</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="fig" id="s2-figpair">
+          <div class="key"><span class="c-fn"><i class="sq" style="background:var(--fn)"></i><span>"bank"</span></span><span class="c-data"><i class="sq" style="background:transparent"></i><span>other words</span></span></div>
+          <div class="hscroll"><svg id="s2-pair" class="plot" viewBox="0 0 560 124" role="img" aria-label="Two sentences with the same words in a different order"></svg></div>
+        </div>
+        <div class="controls">
+          <div class="ctl"><span>Position vectors</span><span class="seg" role="group" aria-label="Position vectors"><button id="s2-off" type="button" aria-pressed="true">Off</button><button id="s2-on" type="button" aria-pressed="false">On</button></span></div>
+          <div class="ctl"><label for="s2-i">Position <span style="font-style:italic;font-family:var(--serif)">i</span></label><input id="s2-i" type="range" min="0" max="49" step="1" value="1"><output id="s2-iout" for="s2-i">1</output></div>
+        </div>
+        <div class="readout">
+          <span>output for "bank", sentence 1 versus sentence 2: <b id="s2-diff" class="c-mag"></b></span>
+        </div>
+        <div class="pair">
+          <div class="fig" id="s2-figclock">
+            <div class="fig-cap"><b>Clocks.</b> Each pair of coordinates of \(p_i\) is a clock hand.</div>
+            <svg id="s2-clock" class="plot" viewBox="0 0 300 170" role="img" aria-label="Four clock hands turning at different speeds"></svg>
+          </div>
+          <div class="fig" id="s2-figsim">
+            <div class="fig-cap"><b>Similarity</b> of \(p_i\) with the vector of every other position.</div>
+            <svg id="s2-sim" class="plot" viewBox="0 0 300 170" role="img" aria-label="Similarity of position vectors against position"></svg>
+          </div>
+        </div>
+        <div class="fig" id="s2-figheat">
+          <div class="fig-cap"><b>All position vectors.</b> One column per position, one row per coordinate. Red is positive, black negative.</div>
+          <div class="hscroll"><svg id="s2-heat" class="plot" viewBox="0 0 560 196" role="img" aria-label="Heat map of the position vectors"></svg></div>
+        </div>
+      </div>
+      <div class="steps" id="s2-steps"></div>
+    </div>
+  </figure>
+
+  <template id="s2-steps-t">
+    <div class="step" data-title="A bag of words">
+      <p>Without positions, the two sentences are the same bag of words. Attention gives "bank" exactly the same output in both: the readout shows no difference.</p>
+    </div>
+    <div class="step" data-title="Add a position signal">
+      <p>Now each word enters as \(x_i+p_i\). "Bank" is at position 1 in the first sentence and at position 4 in the second, so its vector differs, and so do its weights and its output.</p>
+    </div>
+    <div class="step" data-title="Clocks at different speeds">
+      <p>Each pair of coordinates of \(p_i\) is a clock hand. The fast hand turns about 57° per position and tells neighbouring words apart. The slow hands barely move and tell far-apart words apart.</p>
+      <p>Drag the slider to walk along the sentence.</p>
+    </div>
+    <div class="step" data-title="The full pattern">
+      <p>Put all the position vectors side by side. The top rows change quickly from one position to the next, the bottom rows slowly.</p>
+      <p>No two columns are the same, so every position has its own signature.</p>
+    </div>
+    <div class="step" data-title="Neighbours stand out">
+      <p>The similarity of a position vector with itself is 1. It drops quickly for the neighbouring positions, and positions further away all look about equally different.</p>
+      <p>The step from one position to the next is always the same turn of the clock hands, so the model can learn rules such as "pay attention to the previous word" that work anywhere in the sentence.</p>
+    </div>
+  </template>
+
+  <div class="row">
+    <div class="prose">
+      <p>Many newer models learn their position vectors from data, or encode only the distance between two words. The idea is the same: attention has to be told where each word is.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 3 ======================== -->
+<section class="part" id="s3">
+  <div class="row">
+    <div class="prose">
+      <h2><span class="num">3</span>Putting it together</h2>
+      <p>A Transformer combines attention with a few simple pieces into a block, and repeats the block several times. Figure 3 walks through one block from the bottom up.</p>
+    </div>
+    <aside class="side">
+      <p><b>How big are real models?</b> The original Transformer had 6 blocks, 8 attention heads and vectors of 512 numbers, about 65 million parameters in total. Today's large language models use the same kind of block, many more of them, and billions of parameters.</p>
+    </aside>
+  </div>
+
+  <figure class="plate" aria-labelledby="s3-title">
+    <div class="plate-head"><span class="plate-title" id="s3-title">Figure 3 · One Transformer block, repeated</span><span class="plate-hint">Use the walkthrough</span></div>
+    <div class="lab">
+      <div class="figs">
+        <div class="fig">
+          <div class="hscroll"><svg id="s3-diag" class="plot" viewBox="0 0 560 480" role="img" aria-label="Diagram of a Transformer block"></svg></div>
+        </div>
+      </div>
+      <div class="steps" id="s3-steps"></div>
+    </div>
+  </figure>
+
+  <template id="s3-steps-t">
+    <div class="step" data-title="Words in, vectors out">
+      <p>Each token is turned into its embedding plus its position vector, as in Figure 2. From here on, every word is a vector of \(d\) numbers.</p>
+    </div>
+    <div class="step" data-title="Several heads at once">
+      <p>A block runs several attentions in parallel, each with its own \(W_Q\), \(W_K\) and \(W_V\). These are the heads.</p>
+      <p>Each head can learn to look for something different, for example the topic, the previous word, or a broad overview. Their outputs are put side by side and mixed by one more matrix.</p>
+    </div>
+    <div class="step" data-title="Keep the original, fix the scale">
+      <p>The attention output is added to the word's own vector, \(x+\operatorname{Attention}(x)\). Thanks to this skip connection, a block only has to learn a correction, and the original information is never lost.</p>
+      <p>Layer normalisation then rescales each vector to a standard size, which keeps training stable.</p>
+    </div>
+    <div class="step" data-title="Each word thinks on its own">
+      <p>Next, a small two-layer neural network is applied to each word separately, with the same weights for every word. Attention gathered information from the other words; this network processes it.</p>
+      <p>Again the result is added to the input and normalised.</p>
+    </div>
+    <div class="step" data-title="Repeat the block">
+      <p>The block is repeated \(L\) times, each time with its own weights. Roughly, early blocks pick up local patterns such as nearby words and grammar, and later blocks broader meaning, such as the topic and who did what to whom.</p>
+    </div>
+    <div class="step" data-title="From vectors to a forecast">
+      <p>The final vectors describe each word in its context. For a risk model, a common choice is to average them into one vector for the whole text, which then enters the forecast, for example a CoVaR model, as an input.</p>
+      <p>The text model and the forecast can be trained together, so that the summary of the news is tuned to the risk question.</p>
+    </div>
+  </template>
+</section>
+
+<section class="summary" aria-labelledby="sum-title">
+  <h2 id="sum-title">In short</h2>
+  <p>A Transformer turns a sequence of words into a sequence of vectors in which every word knows its context. The key step is attention: each word asks a question (its query), compares it with every word's label (its key), turns the matches into weights with a softmax, and takes the weighted average of their information (their values). Attention ignores order, so a position signal is added to each word. Attention, a small per-word network, skip connections and normalisation form a block, and blocks are stacked. In a text-based risk model, the result is a numerical summary of the news that a forecast such as CoVaR can use.</p>
+</section>
+
+<footer>
+  <p>The vectors in Figures 1 and 2 are small hand-picked examples; real models learn vectors with hundreds of coordinates. The head patterns in Figure 3 are illustrations.</p>
+  <p>Reference: A. Vaswani et al. (2017), "Attention is all you need", <i>Advances in Neural Information Processing Systems</i>.</p>
+</footer>
+</div>
+<script>
+(function(){
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+function E(tag,attrs,parent){const e=document.createElementNS(NS,tag);let st="";if(attrs)for(const k in attrs){const v=String(attrs[k]);if((k==="fill"||k==="stroke")&&v.indexOf("var(")>=0)st+=k+":"+v+";";else e.setAttribute(k,v);}if(st)e.setAttribute("style",st);if(parent)parent.appendChild(e);return e;}
+function TX(parent,x,y,txt,attrs){const t=E("text",Object.assign({x:x,y:y,fill:"var(--muted)","font-size":"11.5"},attrs||{}),parent);t.textContent=txt;return t;}
+function lin(d0,d1,r0,r1){return function(v){return r0+(v-d0)/(d1-d0)*(r1-r0);};}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function minus(s){return String(s).replace(/-/g,"−");}
+function f2(v){return minus(v.toFixed(2));}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(rng){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function marker(defs,id,col){const m=E("marker",{id:id,viewBox:"0 0 10 10",refX:8,refY:5,markerWidth:8,markerHeight:8,markerUnits:"userSpaceOnUse",orient:"auto-start-reverse"},defs);E("path",{d:"M0,0L10,5L0,10z",fill:col},m);}
+
+/* axes: frame, grid, ticks and titles from one pair of scales */
+function axes(svg,o){
+  const X0=o.xs(o.x0),X1=o.xs(o.x1),Y0=o.ys(o.y0),Y1=o.ys(o.y1);
+  (o.yt||[]).forEach(function(t){E("line",{x1:X0,x2:X1,y1:o.ys(t[0]),y2:o.ys(t[0]),stroke:"var(--grid)"},svg);});
+  (o.xt||[]).forEach(function(t){E("line",{x1:o.xs(t[0]),x2:o.xs(t[0]),y1:Y0,y2:Y1,stroke:"var(--grid)"},svg);});
+  E("line",{x1:X0,x2:X1,y1:Y0,y2:Y0,stroke:"var(--muted)"},svg);
+  E("line",{x1:X0,x2:X0,y1:Y0,y2:Y1,stroke:"var(--muted)"},svg);
+  (o.xt||[]).forEach(function(t){E("line",{x1:o.xs(t[0]),x2:o.xs(t[0]),y1:Y0,y2:Y0+5,stroke:"var(--muted)"},svg);TX(svg,o.xs(t[0]),Y0+18,t[1],{"text-anchor":"middle",class:"mono","font-size":"11"});});
+  (o.yt||[]).forEach(function(t){E("line",{x1:X0-5,x2:X0,y1:o.ys(t[0]),y2:o.ys(t[0]),stroke:"var(--muted)"},svg);TX(svg,X0-8,o.ys(t[0])+4,t[1],{"text-anchor":"end",class:"mono","font-size":"11"});});
+  if(o.xtitle)TX(svg,(X0+X1)/2,Y0+(o.xtitleDy||36),o.xtitle,{"text-anchor":"middle",fill:"var(--ink)","font-size":"12"});
+  if(o.ytitle)TX(svg,o.ytitleX!==undefined?o.ytitleX:X0,Y1-13,o.ytitle,{"text-anchor":o.ytitleAnchor||"middle",fill:"var(--ink)","font-size":"12"});
+}
+
+/* typeset maths that a step inserts after MathJax has started */
+function typeset(el){const M=window.MathJax;if(M&&M.typesetPromise&&M.startup&&M.startup.promise){M.startup.promise.then(function(){return M.typesetPromise([el]);}).catch(function(){});}}
+
+/* stepper: reads its steps from a <template>, calls apply(i) on every change */
+function makeStepper(rootId,tplId,applies){
+  const root=document.getElementById(rootId);
+  const steps=Array.from(document.getElementById(tplId).content.querySelectorAll(".step"));
+  let i=0;
+  root.innerHTML='<div class="steps-top"><span class="steps-count"></span><div class="dots"></div></div><h4></h4><div class="body"></div><div class="nav"><button class="btn prev" type="button">Previous</button><button class="btn primary next" type="button">Next</button></div>';
+  const cnt=root.querySelector(".steps-count"),dots=root.querySelector(".dots"),h=root.querySelector("h4"),body=root.querySelector(".body"),prev=root.querySelector(".prev"),next=root.querySelector(".next");
+  steps.forEach(function(s,k){const b=document.createElement("button");b.type="button";b.setAttribute("aria-label","Step "+(k+1)+": "+s.dataset.title);b.addEventListener("click",function(){go(k);});dots.appendChild(b);});
+  function go(k){
+    i=Math.max(0,Math.min(steps.length-1,k));const s=steps[i];
+    cnt.textContent="Step "+(i+1)+" of "+steps.length;h.textContent=s.dataset.title;
+    body.replaceChildren.apply(body,Array.from(s.childNodes).map(function(n){return n.cloneNode(true);}));
+    typeset(body);
+    Array.from(dots.children).forEach(function(b,j){if(j===i)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+    prev.disabled=i===0;next.disabled=i===steps.length-1;applies[i]();
+  }
+  prev.addEventListener("click",function(){go(i-1);});next.addEventListener("click",function(){go(i+1);});
+  go(0);
+}
+
+/* =================== PART 1: attention =================== */
+const EMB={the:[0.04,0.1],bank:[0.6,0.6],raised:[0.45,0],rates:[1.3,0.05],after:[0.12,-0.04],loan:[1.0,0.25],losses:[1.2,-0.05],
+           boat:[0.25,1.0],drifted:[0,0.5],to:[0.08,-0.03],river:[0.05,1.3]};
+const SENT={fin:["the","bank","raised","rates","after","loan","losses"],riv:["the","boat","drifted","to","the","river","bank"]};
+const CQ=2.5;   /* W_Q = 2.5 I, W_K = W_V = I */
+function attend(words,i,tau){
+  const x=EMB[words[i]],q=[CQ*x[0],CQ*x[1]];
+  const s=words.map(function(w){const k=EMB[w];return (q[0]*k[0]+q[1]*k[1])/Math.SQRT2;});
+  const m=Math.max.apply(null,s.map(function(v){return v*tau;}));
+  const e=s.map(function(v){return Math.exp(v*tau-m);}),Z=e.reduce(function(a,b){return a+b;},0),a=e.map(function(v){return v/Z;});
+  const z=[0,0];words.forEach(function(w,j){z[0]+=a[j]*EMB[w][0];z[1]+=a[j]*EMB[w][1];});
+  return {q:q,s:s,a:a,z:z};
+}
+(function(){
+  let sent="fin",sel=1,tau=1,mode={};
+  const S=document.getElementById("s1-sent"),Mp=document.getElementById("s1-map"),slider=document.getElementById("s1-tau");
+  const SX0=78,SX1=552;
+  const mx=lin(-0.1,1.45,60,334),my=lin(-0.1,1.45,300,26);
+  const LAB={the:[6,-7,"start"],after:[8,4,"start"],to:[8,4,"start"],raised:[0,-9,"middle"],bank:[9,4,"start"],rates:[8,4,"start"],loan:[8,4,"start"],losses:[8,5,"start"],boat:[8,4,"start"],river:[8,4,"start"],drifted:[8,4,"start"]};
+
+  function drawSent(r){
+    clear(S);
+    const words=SENT[sent],n=words.length,slot=(SX1-SX0)/n,cx=function(j){return SX0+slot*(j+0.5);};
+    TX(S,8,82,"word",{"font-size":"11"});
+    if(mode.weights){
+      words.forEach(function(w,j){
+        const a=r.a[j],sw=0.8+14*a;
+        if(j===sel){const c=cx(j);E("path",{d:"M"+(c-9)+",62 C"+(c-18)+",30 "+(c+18)+",30 "+(c+9)+",62",fill:"none",stroke:"var(--ball)","stroke-width":sw,"stroke-opacity":0.75,"stroke-linecap":"round"},S);}
+        else{const x0=cx(sel),x1=cx(j),hh=Math.min(56,16+0.33*Math.abs(x1-x0));E("path",{d:"M"+x0.toFixed(1)+",62 Q"+((x0+x1)/2).toFixed(1)+","+(62-2*hh).toFixed(1)+" "+x1.toFixed(1)+",62",fill:"none",stroke:"var(--ball)","stroke-width":sw,"stroke-opacity":0.75,"stroke-linecap":"round"},S);}
+      });
+    }
+    words.forEach(function(w,j){
+      const c=cx(j),isSel=j===sel;
+      E("rect",{x:c-slot/2+4,y:64,width:slot-8,height:28,rx:4,fill:isSel?"var(--fn)":"var(--surface)",stroke:isSel?"var(--fn)":"var(--rule)","stroke-width":1.2},S);
+      TX(S,c,82.5,w,{"text-anchor":"middle",fill:isSel?"var(--surface)":"var(--ink)","font-size":"13","font-weight":isSel?"600":"400"});
+      const hit=E("rect",{x:c-slot/2+4,y:64,width:slot-8,height:28,rx:4,class:"hit",tabindex:"0",role:"button","aria-label":"Select the word "+w},S);
+      hit.addEventListener("click",function(){sel=j;draw();});
+      hit.addEventListener("keydown",function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();sel=j;draw();}});
+    });
+    if(mode.scores){
+      TX(S,8,114,"score",{"font-size":"11"});
+      words.forEach(function(w,j){TX(S,cx(j),114,f2(r.s[j]),{"text-anchor":"middle",class:"mono","font-size":"11.5",fill:"var(--ink)"});});
+    }
+    if(mode.weights){
+      TX(S,8,152,"weight",{"font-size":"11"});
+      E("line",{x1:SX0,x2:SX1,y1:160,y2:160,stroke:"var(--rule)"},S);
+      words.forEach(function(w,j){const hgt=Math.min(36,70*r.a[j]);E("rect",{x:cx(j)-9,y:160-hgt,width:18,height:hgt,fill:"var(--ball-fill)",stroke:"var(--ball)","stroke-width":1.2},S);
+        TX(S,cx(j),174,r.a[j].toFixed(2),{"text-anchor":"middle",class:"mono","font-size":"10.5",fill:"var(--ball)"});});
+    }
+  }
+
+  function drawMap(r){
+    clear(Mp);
+    const defs=E("defs",{},Mp);marker(defs,"s1m-fn","var(--fn)");marker(defs,"s1m-mag","var(--mag)");
+    axes(Mp,{xs:mx,ys:my,x0:-0.1,x1:1.45,y0:-0.1,y1:1.45,xt:[[0,"0"],[0.5,"0.5"],[1,"1"]],yt:[[0,"0"],[0.5,"0.5"],[1,"1"]],xtitle:"about finance →"});
+    TX(Mp,14,14,"about rivers & nature ↑",{fill:"var(--ink)","font-size":"12"});
+    const words=SENT[sent],wsel=words[sel],xs=EMB[wsel];
+    const agg={};words.forEach(function(w,j){agg[w]=(agg[w]||0)+r.a[j];});
+    const uniq=Object.keys(agg);
+    const qn=Math.hypot(r.q[0],r.q[1])||1,qh=[r.q[0]/qn,r.q[1]/qn];
+    if(mode.query){
+      uniq.forEach(function(w){const k=EMB[w],t=k[0]*qh[0]+k[1]*qh[1];E("line",{x1:mx(k[0]),y1:my(k[1]),x2:mx(t*qh[0]),y2:my(t*qh[1]),stroke:"var(--ball-soft)","stroke-width":1.1,"stroke-dasharray":"2 3"},Mp);
+        E("circle",{cx:mx(t*qh[0]),cy:my(t*qh[1]),r:2,fill:"var(--ball)"},Mp);});
+      const L=1.32;E("line",{x1:mx(0),y1:my(0),x2:mx(L*qh[0]),y2:my(L*qh[1]),stroke:"var(--fn)","stroke-width":2.2,"marker-end":"url(#s1m-fn)"},Mp);
+      TX(Mp,mx(L*qh[0])+(qh[0]>0.9?-4:6),my(L*qh[1])+(qh[0]>0.9?-10:2),"query",{fill:"var(--fn)","font-weight":"600","text-anchor":qh[0]>0.9?"end":"start",class:"halo"});
+    }
+    if(mode.weights){uniq.forEach(function(w){const k=EMB[w];E("circle",{cx:mx(k[0]),cy:my(k[1]),r:4+26*Math.sqrt(agg[w]),fill:"var(--ball-fill)",stroke:"var(--ball-soft)","stroke-width":1.2},Mp);});}
+    uniq.forEach(function(w){const k=EMB[w],l=LAB[w]||[8,4,"start"],isSel=w===wsel;
+      E("circle",{cx:mx(k[0]),cy:my(k[1]),r:isSel?5:3.8,fill:isSel?"var(--fn)":"var(--data)",stroke:"var(--surface)","stroke-width":1.2},Mp);
+      TX(Mp,mx(k[0])+l[0],my(k[1])+l[1],w,{"text-anchor":l[2],fill:isSel?"var(--fn)":"var(--ink)","font-size":"12","font-weight":isSel?"600":"400",class:"halo"});});
+    if(mode.output){
+      const X=mx(r.z[0]),Y=my(r.z[1]),X0=mx(xs[0]),Y0=my(xs[1]),dx=X-X0,dy=Y-Y0,dl=Math.hypot(dx,dy);
+      if(dl>14)E("line",{x1:X0,y1:Y0,x2:X-dx/dl*9,y2:Y-dy/dl*9,stroke:"var(--mag)","stroke-width":1.8,"stroke-dasharray":"5 3","marker-end":"url(#s1m-mag)"},Mp);
+      E("path",{d:"M"+X+","+(Y-7)+"L"+(X+7)+","+Y+"L"+X+","+(Y+7)+"L"+(X-7)+","+Y+"Z",fill:"var(--mag)",stroke:"var(--surface)","stroke-width":1.2},Mp);
+      const right=X<200;TX(Mp,X+(right?11:-11),Y+4,wsel+" (after)",{fill:"var(--mag)","font-weight":"600","text-anchor":right?"start":"end",class:"halo"});
+    }
+  }
+
+  function draw(){
+    const words=SENT[sent],r=attend(words,sel,tau);
+    drawSent(r);drawMap(r);
+    document.getElementById("s1-tauout").textContent="×"+tau.toFixed(1);
+    document.getElementById("s1-word").textContent=words[sel];
+    const x=EMB[words[sel]];
+    document.getElementById("s1-before").textContent="("+f2(x[0])+", "+f2(x[1])+")";
+    document.getElementById("s1-after").textContent="("+f2(r.z[0])+", "+f2(r.z[1])+")";
+    let jm=0;r.a.forEach(function(v,j){if(v>r.a[jm])jm=j;});
+    document.getElementById("s1-top").textContent=words[jm]+" "+r.a[jm].toFixed(2);
+  }
+  function setSent(s){sent=s;sel=SENT[s].indexOf("bank");document.getElementById("s1-fin").setAttribute("aria-pressed",s==="fin");document.getElementById("s1-riv").setAttribute("aria-pressed",s==="riv");}
+  function setTau(t){tau=t;slider.value=t;}
+  slider.addEventListener("input",function(){tau=+slider.value;draw();});
+  document.getElementById("s1-fin").addEventListener("click",function(){setSent("fin");draw();});
+  document.getElementById("s1-riv").addEventListener("click",function(){setSent("riv");draw();});
+  const ALL={query:true,scores:true,weights:true,output:true};
+  makeStepper("s1-steps","s1-steps-t",[
+    function(){mode={};setSent("fin");setTau(1);draw();},
+    function(){mode={query:true,scores:true};setSent("fin");setTau(1);draw();},
+    function(){mode={query:true,scores:true,weights:true};setSent("fin");setTau(1);draw();},
+    function(){mode=ALL;setSent("fin");setTau(1);draw();},
+    function(){mode=ALL;setSent("riv");setTau(1);draw();},
+    function(){mode=ALL;setTau(3);draw();}
+  ]);
+})();
+
+/* =================== PART 2: positions =================== */
+(function(){
+  const d=16,NP=50;
+  function pe(i){const p=new Array(d);for(let k=0;k<d/2;k++){const w=Math.pow(10000,-2*k/d);p[2*k]=Math.sin(i*w);p[2*k+1]=Math.cos(i*w);}return p;}
+  const PE=[];for(let i=0;i<NP;i++)PE.push(pe(i));
+  const rng=mulberry32(20171206),W={};
+  ["the","bank","sued","regulator"].forEach(function(w){W[w]=Array.from({length:d},function(){return gauss(rng);});});
+  const S1=["the","bank","sued","the","regulator"],S2=["the","regulator","sued","the","bank"];
+  function out(words,i,pos){
+    const X=words.map(function(w,j){return W[w].map(function(v,c){return v+(pos?PE[j][c]:0);});});
+    const q=X[i],s=X.map(function(k){let t=0;for(let c=0;c<d;c++)t+=q[c]*k[c];return t/Math.sqrt(d);});
+    const m=Math.max.apply(null,s),e=s.map(function(v){return Math.exp(v-m);}),Z=e.reduce(function(a,b){return a+b;},0);
+    const z=new Array(d).fill(0);X.forEach(function(x,j){for(let c=0;c<d;c++)z[c]+=e[j]/Z*x[c];});return z;
+  }
+  function norm(v){return Math.sqrt(v.reduce(function(a,b){return a+b*b;},0));}
+  let posOn=false,pi=1;
+  const P=document.getElementById("s2-pair"),C=document.getElementById("s2-clock"),Sm=document.getElementById("s2-sim"),H=document.getElementById("s2-heat"),slider=document.getElementById("s2-i");
+  const figs={pair:"s2-figpair",clock:"s2-figclock",sim:"s2-figsim",heat:"s2-figheat"};
+  function focus(list){Object.keys(figs).forEach(function(k){document.getElementById(figs[k]).classList.toggle("dim",!!list&&list.indexOf(k)<0);});}
+
+  function drawPair(){
+    clear(P);
+    [S1,S2].forEach(function(words,row){
+      const y=row?66:10;
+      TX(P,14,y+18,String(row+1),{class:"mono","font-size":"12",fill:"var(--muted)"});
+      words.forEach(function(w,j){const c=50+100*(j+0.5),isB=w==="bank";
+        E("rect",{x:c-44,y:y,width:88,height:26,rx:4,fill:isB?"var(--fn)":"var(--surface)",stroke:isB?"var(--fn)":"var(--rule)","stroke-width":1.2},P);
+        TX(P,c,y+17.5,w,{"text-anchor":"middle",fill:isB?"var(--surface)":"var(--ink)","font-size":"13","font-weight":isB?"600":"400"});
+        if(posOn)TX(P,c,y+42,"+ p"+String.fromCharCode(8320+j),{"text-anchor":"middle",fill:"var(--ball)","font-size":"11.5",class:"mono"});
+      });
+    });
+    const z1=out(S1,1,posOn),z2=out(S2,4,posOn),dz=z1.map(function(v,c){return v-z2[c];});
+    const rel=norm(dz)/norm(z1);
+    document.getElementById("s2-diff").textContent=rel<1e-9?"identical (0% difference)":"differ by "+Math.round(100*rel)+"%";
+  }
+  function drawClock(){
+    clear(C);
+    const ks=[0,2,4,6],labels=["coords 0–1","coords 4–5","coords 8–9","coords 12–13"];
+    ks.forEach(function(k,n){
+      const cx=40+73*n,cy=62,R=28,w=Math.pow(10000,-2*k/d),th=pi*w;
+      E("circle",{cx:cx,cy:cy,r:R,fill:"var(--surface)",stroke:"var(--rule)","stroke-width":1.4},C);
+      for(let t=0;t<12;t++){const a=t*Math.PI/6;E("line",{x1:cx+R*Math.sin(a),y1:cy-R*Math.cos(a),x2:cx+(R-4)*Math.sin(a),y2:cy-(R-4)*Math.cos(a),stroke:"var(--muted)","stroke-width":t===0?1.6:0.8},C);}
+      E("line",{x1:cx,y1:cy,x2:cx+(R-6)*Math.sin(th),y2:cy-(R-6)*Math.cos(th),stroke:"var(--fn)","stroke-width":2.6,"stroke-linecap":"round"},C);
+      E("circle",{cx:cx,cy:cy,r:3,fill:"var(--fn)"},C);
+      TX(C,cx,cy+R+18,labels[n],{"text-anchor":"middle","font-size":"10.5",fill:"var(--ink)"});
+      const deg=w*180/Math.PI;TX(C,cx,cy+R+32,deg.toPrecision(2)+"°/step",{"text-anchor":"middle","font-size":"10.5",class:"mono"});
+    });
+    TX(C,40,16,"fast",{"text-anchor":"middle","font-size":"11",fill:"var(--fn)"});TX(C,259,16,"slow",{"text-anchor":"middle","font-size":"11",fill:"var(--fn)"});
+    E("line",{x1:62,x2:236,y1:12,y2:12,stroke:"var(--rule)","stroke-dasharray":"3 3"},C);
+  }
+  function drawSim(){
+    clear(Sm);
+    const sx=lin(0,49,44,290),sy=lin(-0.2,1,128,18);
+    axes(Sm,{xs:sx,ys:sy,x0:0,x1:49,y0:-0.2,y1:1,xt:[[0,"0"],[10,"10"],[20,"20"],[30,"30"],[40,"40"]],yt:[[0,"0"],[0.5,"0.5"],[1,"1"]],xtitle:"position",xtitleDy:34});
+    const a=PE[pi];let dd="";
+    for(let s=0;s<NP;s++){let t=0;for(let c=0;c<d;c++)t+=a[c]*PE[s][c];const v=t/(d/2);dd+=(s?"L":"M")+sx(s).toFixed(1)+","+sy(v).toFixed(1);}
+    E("path",{d:dd,fill:"none",stroke:"var(--fn)","stroke-width":2,"stroke-linejoin":"round"},Sm);
+    E("circle",{cx:sx(pi),cy:sy(1),r:4.5,fill:"var(--fn)",stroke:"var(--surface)","stroke-width":1.5},Sm);
+    TX(Sm,sx(pi)+(pi>34?-8:8),sy(1)+14,"i = "+pi,{"text-anchor":pi>34?"end":"start",fill:"var(--fn)","font-size":"11",class:"mono halo"});
+  }
+  function drawHeat(){
+    clear(H);
+    const x0=70,cw=9.6,y0=12,ch=9;
+    for(let s=0;s<NP;s++)for(let c=0;c<d;c++){const v=PE[s][c];E("rect",{x:x0+s*cw,y:y0+c*ch,width:cw+0.3,height:ch+0.3,fill:v>=0?"var(--ball)":"var(--fn)","fill-opacity":Math.abs(v).toFixed(3)},H);}
+    E("rect",{x:x0+pi*cw-1,y:y0-2,width:cw+2,height:d*ch+4,fill:"none",stroke:"var(--ink)","stroke-width":1.6},H);
+    TX(H,x0-8,y0+ch*0.5+4,"coord 0",{"text-anchor":"end","font-size":"10.5"});
+    TX(H,x0-8,y0+ch*15.5+4,"coord 15",{"text-anchor":"end","font-size":"10.5"});
+    TX(H,x0-8,y0+ch*8+4,"fast ↑ slow ↓",{"text-anchor":"end","font-size":"10"});
+    [0,10,20,30,40,49].forEach(function(s){TX(H,x0+(s+0.5)*cw,y0+d*ch+16,String(s),{"text-anchor":"middle",class:"mono","font-size":"11"});});
+    TX(H,x0+NP*cw/2,y0+d*ch+34,"position i",{"text-anchor":"middle",fill:"var(--ink)","font-size":"12"});
+  }
+  function draw(){document.getElementById("s2-iout").textContent=pi;drawPair();drawClock();drawSim();drawHeat();}
+  function setPos(on){posOn=on;document.getElementById("s2-off").setAttribute("aria-pressed",!on);document.getElementById("s2-on").setAttribute("aria-pressed",on);}
+  function setI(i){pi=i;slider.value=i;}
+  slider.addEventListener("input",function(){pi=+slider.value;focus(null);draw();});
+  document.getElementById("s2-off").addEventListener("click",function(){setPos(false);draw();});
+  document.getElementById("s2-on").addEventListener("click",function(){setPos(true);draw();});
+  makeStepper("s2-steps","s2-steps-t",[
+    function(){setPos(false);setI(1);focus(["pair"]);draw();},
+    function(){setPos(true);setI(1);focus(["pair"]);draw();},
+    function(){setPos(true);setI(3);focus(["clock"]);draw();},
+    function(){setPos(true);setI(20);focus(["heat"]);draw();},
+    function(){setPos(true);setI(20);focus(["sim"]);draw();}
+  ]);
+})();
+
+/* =================== PART 3: the block =================== */
+(function(){
+  const D=document.getElementById("s3-diag");
+  let active="input";
+  const words=SENT.fin;
+  const heads=[
+    words.map(function(_,i){return attend(words,i,1).a;}),
+    words.map(function(_,i){return words.map(function(__,j){return j===Math.max(0,i-1)?0.76:0.04;});}),
+    words.map(function(){return words.map(function(){return 1/words.length;});})
+  ];
+  function isOn(k){return Array.isArray(k)?k.indexOf(active)>=0:active===k;}
+  function box(k,x,y,w,h,label,ty){
+    const on=isOn(k);
+    E("rect",{x:x,y:y,width:w,height:h,rx:5,fill:on?"var(--accent-soft)":"var(--surface)",stroke:on?"var(--accent)":"var(--rule)","stroke-width":on?1.8:1.2},D);
+    TX(D,x+w/2,ty!==undefined?ty:y+h/2+4.5,label,{"text-anchor":"middle",fill:on?"var(--ink)":"var(--muted)","font-size":"13","font-weight":on?"600":"500"});
+  }
+  function arrow(x1,y1,x2,y2,on){E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:on?"var(--accent)":"var(--muted)","stroke-width":on?1.8:1.3,"marker-end":"url(#"+(on?"s3a-on":"s3a")+")"},D);}
+  function bars(x,y,vals,col){vals.forEach(function(v,i){const h=Math.max(1,Math.abs(v)*16);E("rect",{x:x+i*6,y:v>=0?y-h:y,width:5,height:h,fill:col},D);});E("line",{x1:x-2,x2:x+vals.length*6+1,y1:y,y2:y,stroke:"var(--rule)"},D);}
+
+  function inset(){
+    const X=338;
+    if(active==="input"){
+      const rng=mulberry32(5),emb=Array.from({length:8},function(){return gauss(rng)*0.8;});
+      const pos=[];for(let k=0;k<4;k++){const w=Math.pow(10000,-2*k/8);pos.push(Math.sin(w),Math.cos(w));}
+      TX(D,X+8,150,'the word "bank" (position 1)',{fill:"var(--ink)","font-size":"12.5"});
+      bars(X+10,230,emb,"var(--data)");TX(D,X+66,236,"+",{"font-size":"16",fill:"var(--ink)"});
+      bars(X+82,230,pos,"var(--ball)");TX(D,X+138,236,"=",{"font-size":"16",fill:"var(--ink)"});
+      bars(X+154,230,emb.map(function(v,i){return v+pos[i];}),"var(--accent)");
+      TX(D,X+33,282,"embedding",{"text-anchor":"middle","font-size":"11"});TX(D,X+105,282,"position",{"text-anchor":"middle","font-size":"11",fill:"var(--ball)"});TX(D,X+177,282,"input",{"text-anchor":"middle","font-size":"11",fill:"var(--accent)"});
+      TX(D,X+8,320,"Here d = 8 numbers per word;",{"font-size":"11.5"});TX(D,X+8,336,"real models use hundreds.",{"font-size":"11.5"});
+    }else if(active==="attn"){
+      const names=["head 1 · topic","head 2 · previous word","head 3 · broad"];
+      heads.forEach(function(Mx,h){
+        const y0=36+h*128,x0=X+52,cs=10;
+        TX(D,X+8,y0-8,names[h],{fill:"var(--ink)","font-size":"12","font-weight":"600"});
+        words.forEach(function(w,i){TX(D,x0-5,y0+i*cs+8,w,{"text-anchor":"end","font-size":"8.5"});
+          words.forEach(function(_,j){E("rect",{x:x0+j*cs,y:y0+i*cs,width:cs-1,height:cs-1,fill:"var(--ball)","fill-opacity":(0.06+0.94*Math.min(1,Mx[i][j]/0.5)).toFixed(3)},D);});});
+      });
+      TX(D,X+8,418,"Row: the word asking.",{"font-size":"11"});TX(D,X+8,434,"Column: the word it looks at.",{"font-size":"11"});TX(D,X+8,450,"Darker: more weight.",{"font-size":"11"});
+    }else if(active==="add"){
+      const ox=X+24,oy=330,ax=X+104,ay=230,bx=X+196,by=252;
+      E("line",{x1:ox,y1:oy,x2:ax,y2:ay,stroke:"var(--data)","stroke-width":2.4,"marker-end":"url(#s3a-g)"},D);
+      E("line",{x1:ax,y1:ay,x2:bx,y2:by,stroke:"var(--mag)","stroke-width":2.4,"marker-end":"url(#s3a-m)"},D);
+      E("line",{x1:ox,y1:oy,x2:bx,y2:by,stroke:"var(--accent)","stroke-width":2.4,"stroke-dasharray":"6 4","marker-end":"url(#s3a-on)"},D);
+      TX(D,(ox+ax)/2-8,(oy+ay)/2,"x",{"text-anchor":"end",class:"it","font-size":"15",fill:"var(--ink)"});
+      TX(D,(ax+bx)/2,ay-8,"attention output",{"text-anchor":"middle","font-size":"11.5",fill:"var(--mag)"});
+      TX(D,(ox+bx)/2+14,(oy+by)/2+18,"x + output",{"text-anchor":"start","font-size":"11.5",fill:"var(--accent)"});
+      TX(D,X+8,150,"Skip connection: keep x,",{fill:"var(--ink)","font-size":"12.5"});TX(D,X+8,167,"add only a correction.",{fill:"var(--ink)","font-size":"12.5"});
+      TX(D,X+8,380,"Then each vector is rescaled",{"font-size":"11.5"});TX(D,X+8,396,"to a standard size.",{"font-size":"11.5"});
+    }else if(active==="ff"){
+      const L=[[X+40,3],[X+108,5],[X+176,3]],cy=250,gap=30,pts=L.map(function(l){const out=[];for(let i=0;i<l[1];i++)out.push([l[0],cy+(i-(l[1]-1)/2)*gap]);return out;});
+      for(let a=0;a<2;a++)pts[a].forEach(function(p){pts[a+1].forEach(function(q){E("line",{x1:p[0],y1:p[1],x2:q[0],y2:q[1],stroke:"var(--rule)","stroke-width":1},D);});});
+      pts.forEach(function(l){l.forEach(function(p){E("circle",{cx:p[0],cy:p[1],r:7,fill:"var(--surface)",stroke:"var(--accent)","stroke-width":1.6},D);});});
+      TX(D,X+8,150,"The same small network",{fill:"var(--ink)","font-size":"12.5"});TX(D,X+8,167,"for every word,",{fill:"var(--ink)","font-size":"12.5"});TX(D,X+8,184,"one word at a time.",{fill:"var(--ink)","font-size":"12.5"});
+      TX(D,X+40,348,"in",{"text-anchor":"middle","font-size":"11"});TX(D,X+108,348,"hidden layer",{"text-anchor":"middle","font-size":"11"});TX(D,X+176,348,"out",{"text-anchor":"middle","font-size":"11"});
+    }else if(active==="stack"){
+      const lab=["block 1","block 2","…","block L"];
+      lab.forEach(function(l,n){const y=330-n*56;E("rect",{x:X+40,y:y,width:140,height:36,rx:5,fill:n===2?"none":"var(--accent-soft)",stroke:n===2?"none":"var(--accent)","stroke-width":1.4},D);
+        TX(D,X+110,y+23,l,{"text-anchor":"middle",fill:"var(--ink)","font-size":"12.5"});
+        if(n<3)arrow(X+110,y,X+110,y-18,true);});
+      TX(D,X+110,382,"early: nearby words, grammar",{"text-anchor":"middle","font-size":"11"});
+      TX(D,X+110,150,"later: topic, who did what",{"text-anchor":"middle","font-size":"11"});
+    }else if(active==="out"){
+      const rng=mulberry32(11);
+      for(let w=0;w<4;w++)for(let c=0;c<6;c++)E("rect",{x:X+16+w*22,y:200+c*14,width:16,height:12,fill:"var(--accent)","fill-opacity":(0.2+0.75*rng()).toFixed(2)},D);
+      TX(D,X+56,300,"one vector per word",{"text-anchor":"middle","font-size":"11"});
+      arrow(X+110,242,X+138,242,true);TX(D,X+124,232,"average",{"text-anchor":"middle","font-size":"10.5"});
+      for(let c=0;c<6;c++)E("rect",{x:X+146,y:200+c*14,width:16,height:12,fill:"var(--mag)","fill-opacity":(0.35+0.1*c).toFixed(2)},D);
+      TX(D,X+154,300,"the text",{"text-anchor":"middle","font-size":"11"});
+      arrow(X+154,312,X+154,346,true);
+      E("rect",{x:X+86,y:350,width:124,height:36,rx:5,fill:"var(--mag-fill)",stroke:"var(--mag)","stroke-width":1.4},D);
+      TX(D,X+148,373,"risk forecast",{"text-anchor":"middle",fill:"var(--ink)","font-size":"12.5"});
+    }
+  }
+
+  function draw(){
+    clear(D);
+    const defs=E("defs",{},D);marker(defs,"s3a","var(--muted)");marker(defs,"s3a-on","var(--accent)");marker(defs,"s3a-g","var(--data)");marker(defs,"s3a-m","var(--mag)");
+    const stackOn=active==="stack";
+    E("rect",{x:30,y:70,width:272,height:302,rx:9,fill:"none",stroke:stackOn?"var(--accent)":"var(--rule)","stroke-width":stackOn?1.8:1.3,"stroke-dasharray":"6 5"},D);
+    TX(D,42,92,"one block",{"font-size":"11",fill:stackOn?"var(--accent)":"var(--muted)"});
+    TX(D,312,228,"× L",{class:"mono","font-size":"20",fill:stackOn?"var(--accent)":"var(--muted)","font-weight":"500"});
+    /* residual (skip) paths */
+    const addOn=active==="add";
+    [[358,259],[234,141]].forEach(function(p){const c=addOn?"var(--accent)":"var(--muted)";
+      E("path",{d:"M165,"+p[0]+"H290V"+p[1]+"H286",fill:"none",stroke:c,"stroke-width":addOn?1.8:1.2,"stroke-dasharray":addOn?"":"4 3","marker-end":"url(#"+(addOn?"s3a-on":"s3a")+")"},D);
+      E("circle",{cx:165,cy:p[0],r:3,fill:c},D);});
+    /* boxes, bottom to top */
+    words.slice(0,4).forEach(function(w,j){const on=active==="input";E("rect",{x:55+j*57,y:446,width:52,height:24,rx:4,fill:"var(--surface)",stroke:on?"var(--accent)":"var(--rule)"},D);TX(D,81+j*57,462,w,{"text-anchor":"middle",fill:"var(--ink)","font-size":"12"});});
+    arrow(165,446,165,424,active==="input");
+    box("input",52,392,226,30,"Embedding + position");
+    arrow(165,392,165,344,active==="input"||active==="attn");
+    box("attn",52,292,226,50,"Multi-head attention",308);
+    [0,1,2].forEach(function(h){const on=active==="attn";E("rect",{x:66+h*68,y:316,width:62,height:18,rx:3,fill:on?"var(--ball-fill)":"none",stroke:on?"var(--ball)":"var(--rule)"},D);TX(D,97+h*68,329,"head "+(h+1),{"text-anchor":"middle","font-size":"10.5",fill:on?"var(--ball)":"var(--muted)"});});
+    arrow(165,292,165,274,active==="attn"||addOn);
+    box(["add"],52,246,226,26,"Add & normalise");
+    arrow(165,246,165,222,active==="ff");
+    box("ff",52,178,226,42,"Feed-forward network");
+    arrow(165,178,165,156,active==="ff"||addOn);
+    box(["add","ff"],52,128,226,26,"Add & normalise");
+    arrow(165,128,165,50,active==="out"||stackOn);
+    box("out",52,14,226,34,"Summary → forecast");
+    inset();
+  }
+  makeStepper("s3-steps","s3-steps-t",["input","attn","add","ff","stack","out"].map(function(k){return function(){active=k;draw();};}));
+})();
+})();
+</script>
+</body>
+</html>

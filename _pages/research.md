@@ -12,35 +12,44 @@ _styles: |
 
 #### Published
 
+<div class="papers papers--lead" markdown="1">
+
 **Probabilistic Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>Junyu Chen, Franklin Liu (U Chicago), Moshu Xu (Tsinghua U), Lijian Yang (Tsinghua U)</small>  
 <small>*Accepted, ICML 2026 Workshop on Structured Probabilistic Inference & Generative Modeling*</small>  
 <small>*To appear in the proceedings of the 2026 ACM International Conference on AI in Finance (ICAIF)*</small>  
 <small>[arXiv](https://arxiv.org/abs/2610.25495v1){:target="_blank"} &nbsp;·&nbsp; [ICML](https://icml.cc/virtual/2026/74197){:target="_blank"} &nbsp;·&nbsp; [GitHub](https://github.com/junyuchen-econ/LOBGrad){:target="_blank"}</small>
+<span class="seal">Published</span>
 
-<br>
+</div>
 
 #### Working Papers
+
+<div class="papers" markdown="1">
 
 **Transformer-based CoVaR: Systemic Risk in Textual Information**  
 <small>Junyu Chen, Tom Boot (U Groningen), Lingwei Kong (U Groningen), Weining Wang (U Bristol)</small>    
 <small>*R&R, Journal of Financial Econometrics*</small>  
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
+<span class="seal">R&amp;R</span>
 
 **Statistical Theory for SGD**  
 <small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>   
-<small>*submitted*</small>  
+<small>*submitted*</small>
 
 **Patching the Transformer**  
 <small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>  
-<small>*submitted*</small>  
+<small>*submitted*</small>
 
-<br>
+</div>
 
 #### Work in Progress
+
+<div class="papers" markdown="1">
 
 **Diffusion Models with Images**  
 <small>Junyu Chen, Andres Pinchao Rosero (Texas A&M)</small>
 
 **Extension on Transformer-based CoVaR**
 
+</div>

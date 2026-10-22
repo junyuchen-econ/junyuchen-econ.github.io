@@ -10,6 +10,19 @@ _styles: |
   .post-header { display: none; }
 ---
 
+#### Mathematics Genealogy
+
+<div class="lead-story" markdown="1">
+My academic lineage can trace to Carl Friedrich Gauss.
+
+Traces also to Jan Tinbergen.
+
+See the full advisor chain on the [Mathematics Genealogy Project](https://www.mathgenealogy.org/id.php?id=167612).
+
+<img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy">
+
+</div>
+
 #### Advisors
 
 - [Tom Boot](https://sites.google.com/view/tomboot) (U Groningen) 
@@ -20,18 +33,6 @@ _styles: |
 
 - [Weining Wang](https://sites.google.com/site/weiningwanghu/) (U Bristol) 
     - Econometrics, machine learning methods, high dimensional statistics
-
-<br>
-
-#### Mathematics Genealogy
-
-My academic lineage can trace through Weining Wang to Carl Friedrich Gauss. See the full advisor chain on the [Mathematics Genealogy Project](https://www.mathgenealogy.org/id.php?id=167612).
-
-Traces through Tom and Lingwei to Jan Tinbergen.
-
-<img class="site-figure site-figure--wide" src="/assets/img/math_genealogy_en.jpeg" alt="Mathematics Genealogy">
-
-<br>
 
 #### Personal
 

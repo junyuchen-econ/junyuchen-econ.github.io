@@ -11,36 +11,44 @@ _styles: |
 
 #### 已发表
 
+<div class="papers papers--lead" markdown="1">
+
 **Probabilistic Limit Order Book Forecasting with Conditional Diffusion Models**  
 <small>(基于条件去噪扩散概率模型的限价订单簿预测)</small>  
 <small>Junyu Chen, Franklin Liu (芝加哥大学), Moshu Xu (清华大学), Lijian Yang (清华大学)</small>  
 <small>*已接收，2026国际机器学习大会（ICML）结构化概率推断与生成模型研讨会*</small>  
 <small>*将收录于2026美国计算机学会人工智能与金融国际会议 (ACM ICAIF) 论文集中*</small>  
 <small>[arXiv](https://arxiv.org/abs/2610.25495v1){:target="_blank"} &nbsp;·&nbsp; [ICML](https://icml.cc/virtual/2026/74197){:target="_blank"} &nbsp;·&nbsp; [GitHub](https://github.com/junyuchen-econ/LOBGrad){:target="_blank"}</small>
+<span class="seal">已发表</span>
 
-<br>
+</div>
 
 #### 工作论文
+
+<div class="papers" markdown="1">
 
 **Transformer-based CoVaR: Systemic Risk in Textual Information**   
 <small>(基于人工智能 Transformer 架构的风险价值 CoVaR 模型：文本信息在系统性风险度量中的应用)</small>  
 <small>Junyu Chen, Tom Boot (格罗宁根大学), Lingwei Kong (格罗宁根大学), Weining Wang (布里斯托大学)</small>  
 <small>*外审 (R&R)，《金融计量经济学杂志》（Journal of Financial Econometrics）*</small>  
 <small>[arXiv](https://arxiv.org/abs/2602.12490){:target="_blank"} &nbsp;·&nbsp; [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6231278){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2602.12490){:target="_blank"}</small>
- 
- **Statistical Theory for SGD**  
+<span class="seal">外审</span>
+
+**Statistical Theory for SGD**  
 <small>(随机梯度下降的统计理论)</small>  
 <small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>   
-<small>已投稿</small>  
+<small>*已投稿*</small>
 
 **Patching the Transformer**  
 <small>(人工智能 Transformer 架构词元切块方法的理论支持)</small>  
 <small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>   
-<small>已投稿</small>  
+<small>*已投稿*</small>
 
-<br>
+</div>
 
 #### 正在进行中
+
+<div class="papers" markdown="1">
 
 **Diffusion Models with Images**  
 <small>(基于图像的扩散模型)</small>  
@@ -49,4 +57,4 @@ _styles: |
 **Extension on Transformer-based CoVaR**  
 <small>(拓展基于 Transformer 的 CoVaR 模型)</small>
 
-
+</div>
