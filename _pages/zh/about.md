@@ -50,6 +50,9 @@ announcements:
 - 布里斯托大学经济学院（2026）
 - 芝加哥大学统计系（2025）
 
+#### 语言
+
+英语（流利）、德语（流利）、中文（母语）。
 
 简历下载：  
 <a href="/assets/pdf/resume.pdf" class="cv-btn" role="button" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> 下载简历 (PDF)</a>

@@ -41,8 +41,8 @@ Financial Econometrics and Machine Learning.
 
 #### Previous Education
 
-- M.Sc. in Industrial Engineering, Technische Universität Berlin
-- B.Sc. in Industrial Engineering, Technische Universität Berlin
+- M.Sc. in Industrial Engineering, Technical University of Berlin
+- B.Sc. in Industrial Engineering, Technical University of Berlin
 
 #### Research Visits
 
@@ -50,6 +50,9 @@ Financial Econometrics and Machine Learning.
 - School of Economics, University of Bristol (2026)
 - Department of Statistics, University of Chicago (2025)
 
+#### Languages
+
+English (full professional proficiency), German (full professional proficiency), Chinese (native)
 
 You can find my CV here:  
 <a href="/assets/pdf/resume.pdf" class="cv-btn" role="button" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> Download CV (PDF)</a>
