@@ -13,8 +13,6 @@ _styles: |
 
 #### Upcoming
 
-- **December 2026 – February 2027**: Will be visiting Tsinghua University, Beijing.
-
 - {:.headline} **November 16**: The [ACM International Conference on AI in Finance](https://icaif2026.org/) accepted our work, LOB Diffusion Models, for publication in its proceedings. I may also be in Milan, Italy, presenting the paper.
 
 - **November 12**: Invited by [Prof. Julia Schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
