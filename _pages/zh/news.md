@@ -12,6 +12,9 @@ _styles: |
 
 #### 即将到来
 
+- **明年一月 - 三月**：访问清华大学。
+
+
 - {:.headline} **十一月十六日**： [ACM International Conference on AI in Finance](https://icaif2026.org/) 接受了我们的工作 LOB Diffusion Models，并将其收录在会议信论文集中；我将在意大利米兰做该论文的报告。
 
 - **十一月十二日**： [Julia Schaumburg 教授](https://juliaschaumburg.com/) 邀请我去阿姆斯特丹自由大学就我的 Diffusion LOBGrad 模型做研讨报告。
