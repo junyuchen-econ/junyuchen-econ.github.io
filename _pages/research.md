@@ -37,9 +37,10 @@ _styles: |
 <small>Junyu Chen, Weining Wang (U Bristol), Ziyang Wei (U Chicago), Wei Biao Wu (U Chicago)</small>   
 <small>*submitted*</small>
 
-**Patching the Transformer**  
+**Patch Attention Wisely: Understanding Patch Length in Attention-Based Forecasting**  
 <small>Junyu Chen, Likai Chen (Wash U in St. Louis), Weining Wang (U Bristol) </small>  
-<small>*submitted*</small>
+<small>*submitted*</small>  
+<small>[arXiv](https://arxiv.org/abs/2611.08160){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2611.08160){:target="_blank"}</small>
 
 </div>
 

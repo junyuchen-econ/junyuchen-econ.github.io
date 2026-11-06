@@ -39,10 +39,11 @@ _styles: |
 <small>Junyu Chen, Weining Wang (布里斯托大学), Ziyang Wei (芝加哥大学), Wei Biao Wu (芝加哥大学)</small>   
 <small>*已投稿*</small>
 
-**Patching the Transformer**  
-<small>(人工智能 Transformer 架构词元切块方法的理论支持)</small>  
+**Patch Attention Wisely: Understanding Patch Length in Attention-Based Forecasting**  
+<small>(人工智能注意力机制在时间序列预测中分块长度的理论分析)</small>  
 <small>Junyu Chen, Likai Chen (圣路易斯华盛顿大学), Weining Wang (布里斯托大学)</small>   
-<small>*已投稿*</small>
+<small>*已投稿*</small>  
+<small>[arXiv](https://arxiv.org/abs/2611.08160){:target="_blank"} &nbsp;·&nbsp; [DOI](https://doi.org/10.48550/arXiv.2611.08160){:target="_blank"}</small>
 
 </div>
 
