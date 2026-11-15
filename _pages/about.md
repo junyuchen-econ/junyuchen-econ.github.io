@@ -46,6 +46,7 @@ Financial Econometrics and Machine Learning.
 
 #### Research Visits
 
+- Department of Statistics and Data Science, Tshinghua University (2027)
 - School of Economics, University College London (2026)
 - School of Economics, University of Bristol (2026)
 - Department of Statistics, University of Chicago (2025)
