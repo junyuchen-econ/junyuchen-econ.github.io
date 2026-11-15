@@ -15,11 +15,11 @@ _styles: |
 
 - - **Planed**：Research visit to Tsinghua University in Beijing.
 
-- {:.headline} **November 16**: The [ACM International Conference on AI in Finance](https://icaif2026.org/) accepted our work, LOB Diffusion Models, for publication in its proceedings. I will be in Milan, Italy, presenting the paper.
-
-- **November 12**: Invited by [Prof. Julia Schaumburg](https://juliaschaumburg.com/) to give a seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
-
 #### 2026
+
+- {:.headline} **November 16**: I will be in Milan, Italy, presenting the paper LOB Diffusion at the [ACM International Conference on AI in Finance](https://icaif2026.org/) 
+
+- **November 12**: Invited by [Prof. Julia Schaumburg](https://juliaschaumburg.com/) to give a 45-min seminar talk about our Diffusion LOBGrad model at Vrije Universiteit Amsterdam.
 
 - **September 13**: Attend the Macro Finance Conference at the Southwestern University of Finance and Economics (SWUFE), Chengdu.
 
